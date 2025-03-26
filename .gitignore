@@ -1,0 +1,9 @@
+.env
+.env.test
+.env.development
+.env.production
+
+.venv
+node_modules
+
+**/__pycache__
