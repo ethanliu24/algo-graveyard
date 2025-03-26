@@ -1,5 +1,4 @@
-from __future__ import annotations, field_validator
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 from typing import Any
 
 class TestCase(BaseModel):
