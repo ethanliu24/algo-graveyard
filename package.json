@@ -1,0 +1,19 @@
+{
+  "name": "algo-graveyard",
+  "version": "1.0.0",
+  "description": "A full stack application where my inefficient and disappointing algorithms rests.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ethanliu24/algo-graveyard.git"
+  },
+  "author": "Ethan Liu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ethanliu24/algo-graveyard/issues"
+  },
+  "homepage": "https://github.com/ethanliu24/algo-graveyard#readme"
+}
