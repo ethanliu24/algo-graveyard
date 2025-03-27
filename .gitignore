@@ -6,6 +6,7 @@ node_modules
 **/__pycache__
 
 # Firebase
-firebase-admin-key.json
+firebase-key.json
+firebase-dev-key.json
 firebase-debug.log
 firestore-debug.log
