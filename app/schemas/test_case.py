@@ -1,4 +1,5 @@
-from pydantic import BaseModel, field_validator
+from __future__ import annotations
+from pydantic import BaseModel, model_validator
 from typing import Any
 
 class TestCase(BaseModel):
@@ -7,7 +8,8 @@ class TestCase(BaseModel):
     result: Any
     explaination: str
 
-    @field_validator("parameters")
-    def check_param_value_is_parallel(parameters: list[str], fields: dict):
-        values = fields.data.get("values")
-        return len(values) == parameters
+    @model_validator(mode="after")
+    def check_passwords_match(self) -> TestCase:
+        if len(self.parameters) != len(self.values):
+            raise ValueError("Paramter and values should have the same length.")
+        return self
