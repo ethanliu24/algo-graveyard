@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from .ai_analysis import AiAnalysis
 
 class Solution(BaseModel):
-    id: str | None
+    id: str
     summary: str
     explanation: str
     language: Language
