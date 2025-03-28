@@ -44,4 +44,6 @@ class QuestionManager(object):
         return cls.db.delete(cls.question_collection, id)
 
     def _format_question(cls, doc) -> Question:
-        return Question(**(doc.to_dict().update({ "id": doc.id })))
+        question_data = doc.to_dict()
+        question_data.update({ "id": doc.id })
+        return Question(**question_data)
