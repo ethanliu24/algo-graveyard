@@ -34,7 +34,7 @@ async def get_question(
 
 @router.put("/{question_id}")
 async def get_question(
-    question_id: QuestionCreate,
+    question_id: str,
     data: dict,
     question_service: Annotated[QuestionManager, Depends(get_question_service)]
 ) -> None:
@@ -42,7 +42,7 @@ async def get_question(
 
 @router.delete("/{question_id}")
 async def get_question(
-    question_id: QuestionCreate,
+    question_id: str,
     question_service: Annotated[QuestionManager, Depends(get_question_service)]
 ) -> None:
     await question_service.delete_question(question_id)
