@@ -32,8 +32,17 @@ class FirebaseManager(object):
     def get_all_questions(cls) -> list[Question]:
         # TODO implement filter, use where() function
         docs = cls.db.collection(cls.question_collection).stream()
-        return [Question(**(doc.to_dict().update({ "id": doc.id }))) for doc in docs]
+        return [cls._format_doc(doc) for doc in docs]
+
+    def get_question(cls, id: str) -> Question:
+        doc = cls.db.collection(cls.question_collection).document(id).get()
+        if not doc.exists:
+            raise ValueError("Invalid question ID.")
+        return Question(**doc.to_dict())
 
     def create_question(cls, question: dict) -> str:
         _, doc = cls.db.collection(cls.question_collection).add(question)
         return doc.id
+
+    def _format_doc(cls, doc) -> Question:
+        return Question(**(doc.to_dict().update({ "id": doc.id })))

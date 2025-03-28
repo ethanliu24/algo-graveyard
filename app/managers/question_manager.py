@@ -13,7 +13,10 @@ class QuestionManager(object):
         return cls.instance
 
     def get_all_questions(self) -> list[Question]:
-        return self.db.get_questions()
+        return self.db.get_all_question()
+
+    def get_question(self, id: str) -> Question:
+        return self.db.get_question(id)
 
     def create_question(self, data: QuestionCreate) -> str:
         question = data.model_dump()
