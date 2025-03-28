@@ -19,7 +19,10 @@ class QuestionManager(object):
         return [cls._format_question(doc) for doc in docs]
 
     async def get_question(cls, id: str) -> Question:
-        return cls.db.get(cls.question_collection, id)
+        doc = cls.db.get(cls.question_collection, id)
+        if not doc.exists:
+            raise ValueError("Invalid question ID.")
+        return Question(**doc)
 
     async def create_question(cls, data: QuestionCreate, id: str = None) -> str:
         question = data.model_dump()

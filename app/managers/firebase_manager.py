@@ -29,10 +29,7 @@ class FirebaseManager(object):
         return cls.db.collection(collection).stream()
 
     def get(cls, collection: str, id: str):
-        doc = cls.db.collection(collection).document(id).get()
-        if not doc.exists:
-            raise ValueError("Invalid ID.")
-        return doc
+        return cls.db.collection(collection).document(id).get()
 
     def create(cls, data: dict, collection: str, id: str = None) -> str:
         collection = cls.db.collection(collection)
