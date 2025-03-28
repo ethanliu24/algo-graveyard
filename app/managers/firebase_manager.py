@@ -3,7 +3,7 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 from os.path import join, dirname
 from ..env_vars import ENV_VARS
-from ..schemas.question import Question, QuestionCreate
+from ..schemas.question import Question
 
 class FirebaseManager(object):
     instance = None
@@ -48,6 +48,9 @@ class FirebaseManager(object):
             _, doc = collection.add(question)
 
         return doc.id
+
+    def delete(cls, id: str):
+        cls.db.collection(cls.question_collection).document(id).delete()
 
     def _format_doc(cls, doc) -> Question:
         return Question(**(doc.to_dict().update({ "id": doc.id })))

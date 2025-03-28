@@ -27,3 +27,6 @@ class QuestionManager(object):
         question.update({ "created_at": creation_time, "last_modified": creation_time })
 
         return self.db.create_question(question)
+
+    def delete_question(self, id: str) -> None:
+        return self.db.delete(id)
