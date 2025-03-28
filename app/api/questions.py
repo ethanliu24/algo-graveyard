@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from typing import Annotated
 from ..config import get_question_service
 from ..managers.question_manager import QuestionManager
-from ..schemas.question import Question
+from ..schemas.question import Question, QuestionCreate
 
 router = APIRouter(
     prefix="/questions",
@@ -24,3 +24,10 @@ async def get_question(
         return await question_service.get_question(question_id)
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
+
+@router.post("")
+async def get_question(
+    question_data: QuestionCreate,
+    question_service: Annotated[QuestionManager, Depends(get_question_service)]
+) -> str:
+    return await question_service.create_question(data=question_data)
