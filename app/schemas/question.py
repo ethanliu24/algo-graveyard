@@ -30,7 +30,6 @@ class QuestionCreate(BaseModel):
     notes: list[str]
     hints: list[str]
     tags: list[str]
-    solutions: list[Solution]
 
 
 class Source(Enum):
