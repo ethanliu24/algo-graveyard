@@ -12,7 +12,7 @@ class QuestionManager(object):
             cls.db = db
         return cls.instance
 
-    def get_questions(self) -> list[Question]:
+    def get_all_questions(self) -> list[Question]:
         return self.db.get_questions()
 
     def create_question(self, data: QuestionCreate) -> str:

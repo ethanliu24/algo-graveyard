@@ -29,7 +29,7 @@ class FirebaseManager(object):
 
         return cls.instance
 
-    def get_questions(cls) -> list[Question]:
+    def get_all_questions(cls) -> list[Question]:
         # TODO implement filter, use where() function
         docs = cls.db.collection(cls.question_collection).stream()
         return [Question(**(doc.to_dict().update({ "id": doc.id }))) for doc in docs]
