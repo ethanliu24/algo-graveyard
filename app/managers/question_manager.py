@@ -14,13 +14,13 @@ class QuestionManager(object):
             cls.question_collection = question_collection
         return cls.instance
 
-    def get_all_questions(cls) -> list[Question]:
+    async def get_all_questions(cls) -> list[Question]:
         return cls.db.get_all(cls.question_collection)
 
-    def get_question(cls, id: str) -> Question:
+    async def get_question(cls, id: str) -> Question:
         return cls.db.get(cls.question_collection, id)
 
-    def create_question(cls, data: QuestionCreate, id: str = None) -> str:
+    async def create_question(cls, data: QuestionCreate, id: str = None) -> str:
         question = data.model_dump()
         question["source"] = question["source"].value
         question["status"] = question["status"].value
@@ -30,11 +30,11 @@ class QuestionManager(object):
 
         return cls.db.create(question, cls.question_collection, id)
 
-    def update_question(cls, data: dict, id: str) -> None:
+    async def update_question(cls, data: dict, id: str) -> None:
         question_data = cls.get_question(id).model_dump()
         question_data.update(data)
         _ = Question(**question_data) # validate data
         cls.db.update(cls.question_collection, id, question_data)
 
-    def delete_question(cls, id: str) -> None:
+    async def delete_question(cls, id: str) -> None:
         return cls.db.delete(cls.question_collection, id)
