@@ -15,7 +15,8 @@ class QuestionManager(object):
         return cls.instance
 
     async def get_all_questions(cls) -> list[Question]:
-        return cls.db.get_all(cls.question_collection)
+        docs = cls.db.get_all(cls.question_collection)
+        return [cls._format_question(doc) for doc in docs]
 
     async def get_question(cls, id: str) -> Question:
         return cls.db.get(cls.question_collection, id)
@@ -38,3 +39,6 @@ class QuestionManager(object):
 
     async def delete_question(cls, id: str) -> None:
         return cls.db.delete(cls.question_collection, id)
+
+    def _format_question(cls, doc) -> Question:
+        return Question(**(doc.to_dict().update({ "id": doc.id })))

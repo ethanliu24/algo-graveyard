@@ -3,7 +3,6 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 from os.path import join, dirname
 from ..env_vars import ENV_VARS
-from ..schemas.question import Question
 
 class FirebaseManager(object):
     instance = None
@@ -25,23 +24,22 @@ class FirebaseManager(object):
 
         return cls.instance
 
-    def get_all(cls, collection: str) -> list[Question]:
+    def get_all(cls, collection: str):
         # TODO implement filter, use where() function
-        docs = cls.db.collection(collection).stream()
-        return [cls._format_doc(doc) for doc in docs]
+        return cls.db.collection(collection).stream()
 
-    def get(cls, collection: str, id: str) -> Question:
+    def get(cls, collection: str, id: str):
         doc = cls.db.collection(collection).document(id).get()
         if not doc.exists:
-            raise ValueError("Invalid question ID.")
-        return Question(**doc.to_dict())
+            raise ValueError("Invalid ID.")
+        return doc
 
-    def create(cls, question: dict, collection: str, id: str = None) -> str:
+    def create(cls, data: dict, collection: str, id: str = None) -> str:
         collection = cls.db.collection(collection)
         if id:
-            _, doc = collection.document(id).set(question)
+            _, doc = collection.document(id).set(data)
         else:
-            _, doc = collection.add(question)
+            _, doc = collection.add(data)
 
         return doc.id
 
@@ -50,6 +48,3 @@ class FirebaseManager(object):
 
     def update(cls, collection: str, id: str, data: dict):
         cls.db.collection(collection).document(id).update(data)
-
-    def _format_doc(cls, doc) -> Question:
-        return Question(**(doc.to_dict().update({ "id": doc.id })))
