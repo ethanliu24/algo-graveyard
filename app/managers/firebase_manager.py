@@ -3,7 +3,7 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 from os.path import join, dirname
 from ..env_vars import ENV_VARS
-from ..schemas.question import Question
+from ..schemas.question import Question, QuestionCreate
 
 class FirebaseManager(object):
     instance = None
@@ -32,4 +32,8 @@ class FirebaseManager(object):
     def get_questions(cls) -> list[Question]:
         # TODO implement filter, use where() function
         docs = cls.db.collection(cls.question_collection).stream()
-        return [Question(**doc.to_dict()) for doc in docs]
+        return [Question(**(doc.to_dict().update({ "id": doc.id }))) for doc in docs]
+
+    def create_question(cls, question: dict) -> str:
+        _, doc = cls.db.collection(cls.question_collection).add(question)
+        return doc.id
