@@ -15,5 +15,5 @@ class Configs:
         else:
             question_collection = "test_db"
 
-        self.firebase_manager = FirebaseManager(question_collection=question_collection)
-        self.question_manager = QuestionManager(self.firebase_manager)
+        self.firebase_manager = FirebaseManager()
+        self.question_manager = QuestionManager(self.firebase_manager, question_collection)
