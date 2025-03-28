@@ -15,7 +15,7 @@ class Question(BaseModel):
     notes: list[str]
     hints: list[str]
     tags: list[str]
-    # solutions: list[Solution]
+    solutions: list[Solution]
     created_at: datetime
     last_modified: datetime
 
@@ -30,7 +30,6 @@ class QuestionCreate(BaseModel):
     notes: list[str]
     hints: list[str]
     tags: list[str]
-    # solutions: list[Solution]
 
 
 class Source(Enum):

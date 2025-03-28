@@ -9,14 +9,13 @@ class QuestionManager(object):
         self.question_dao = question_dao
 
     async def get_all_questions(self) -> list[Question]:
-        docs = self.question_dao.get_all_questions()
-        return [self._format_question(doc) for doc in docs]
+        return self.question_dao.get_all_questions()
 
     async def get_question(self, id: str) -> Question:
-        doc = self.question_dao.get_question(id)
-        if not doc.exists:
+        question = self.question_dao.get_question(id)
+        if not question:
             raise ValueError("Invalid question ID.")
-        return Question(**doc)
+        return question
 
     async def create_question(self, data: QuestionCreate, id: str = None) -> str:
         question = data.model_dump()
@@ -36,8 +35,3 @@ class QuestionManager(object):
 
     async def delete_question(self, id: str) -> None:
         return self.question_dao.delete_question(id)
-
-    def _format_question(cls, doc) -> Question:
-        question_data = doc.to_dict()
-        question_data.update({ "id": doc.id })
-        return Question(**question_data)
