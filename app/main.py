@@ -1,8 +1,8 @@
 from fastapi import FastAPI
-from .config import Configs
+from .routes import api_router
 
 app = FastAPI()
-configs = Configs()
+app.include_router(api_router)
 
 @app.get("/")
 def main():
