@@ -31,3 +31,11 @@ async def get_question(
     question_service: Annotated[QuestionManager, Depends(get_question_service)]
 ) -> str:
     return await question_service.create_question(data=question_data)
+
+@router.put("/{question_id}")
+async def get_question(
+    question_id: QuestionCreate,
+    data: dict,
+    question_service: Annotated[QuestionManager, Depends(get_question_service)]
+) -> str:
+    await question_service.update_question(data, question_id)
