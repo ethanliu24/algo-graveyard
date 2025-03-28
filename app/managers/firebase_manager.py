@@ -40,8 +40,13 @@ class FirebaseManager(object):
             raise ValueError("Invalid question ID.")
         return Question(**doc.to_dict())
 
-    def create_question(cls, question: dict) -> str:
-        _, doc = cls.db.collection(cls.question_collection).add(question)
+    def create_question(cls, question: dict, id: str = None) -> str:
+        collection = cls.db.collection(cls.question_collection)
+        if id:
+            _, doc = collection.document(id).set(question)
+        else:
+            _, doc = collection.add(question)
+
         return doc.id
 
     def _format_doc(cls, doc) -> Question:
