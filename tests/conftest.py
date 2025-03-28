@@ -19,13 +19,19 @@ def setup():
             # validate solutions
             for sln_data in q_data["solutions"]:
                 _ = Solution(**sln_data)
+                _ = [AiAnalysis(**analysis_data) for analysis_data in q_data["ai_analysis"]]
+
                 client.collection(configs.question_collection) \
                     .document(q_id) \
                     .collection(configs.solution_collection) \
                     .document(sln_data["id"]) \
                     .set(sln_data)
 
-            _ = Question(**q_data)  # validate
+            # validate test cases
+            _ = [TestCase(**test_data) for test_data in q_data["test_cases"]]
+
+
+            _ = Question(**q_data)  # validate question
             client.collection(configs.question_collection).document(q_id).set(q_data)
 
     def clear_database(batch_size: int = 20):
