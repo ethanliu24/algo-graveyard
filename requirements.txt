@@ -3,7 +3,7 @@ fastapi[standard]==0.113.0
 pydantic==2.10.5
 
 # Automated tests
-pytest==3.0.5
+pytest>=8.3.5
 
 # Database
 firebase-admin>=6.7.0
