@@ -6,19 +6,31 @@ from .solution import Solution
 from .test_case import TestCase
 
 class Question(BaseModel):
-    id: str | None
     source: Source
-    link: str | None
+    link: str
     status: Status
     title: str
     prompt: str
-    test_cases: list[TestCase] | None
-    notes: list[str] | None
-    hints: list[str] | None
-    tags: list[str] | None
-    solutions: list[Solution] | None
+    test_cases: list[TestCase]
+    notes: list[str]
+    hints: list[str]
+    tags: list[str]
+    solutions: list[Solution]
     created_at: datetime
     last_modified: datetime
+
+
+class QuestionCreate(BaseModel):
+    source: Source
+    link: str
+    status: Status
+    title: str
+    prompt: str
+    test_cases: list[TestCase]
+    notes: list[str]
+    hints: list[str]
+    tags: list[str]
+    solutions: list[Solution]
 
 
 class Source(Enum):
