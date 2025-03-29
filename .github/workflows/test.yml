@@ -85,4 +85,4 @@ jobs:
 
       - name: Exit the program
         run: |
-          if [ "$EXIT_CODE" -ne 0 ]; then exit "$EXIT_CODE" fi
+          if [ "$EXIT_CODE" -ne 0 ]; then exit "$EXIT_CODE"; fi
