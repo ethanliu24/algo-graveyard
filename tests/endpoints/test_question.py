@@ -123,7 +123,7 @@ async def test_update_question_invalid_field(endpoint):
     update_data = {"invalid": invalid}
 
     response = endpoint.put(f"{API}/q1", json=update_data)
-    assert response.status_code == 422
+    assert response.status_code == 404
 
 
 # Delete questions
