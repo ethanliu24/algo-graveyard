@@ -42,7 +42,10 @@ async def update_question(
     try:
         await question_service.update_question(data, question_id)
     except ValidationError:
-        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="Unprocessable entity.")
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Unprocessable entity. Check if field exists or its value is accepted by the backend."
+        )
 
 @router.delete("/{question_id}")
 async def delete_quesiton(
