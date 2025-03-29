@@ -66,20 +66,23 @@ jobs:
 
       - name: Run tests
         run: |
-          pytest --junitxml=pytest.xml --cov-report=term-missing:skip-covered --cov=app tests/
+          pytest --junitxml=pytest.xml --cov-report=term-missing:skip-covered --cov=app tests/ \
+            > pytest-coverage.txt
           EXIT_CODE=$(echo $?)
+          cat pytest-coverage.txt | echo
+        continue-on-error: true
 
       - name: Stop Firebase Emulator
         run: |
           pid=$(cat emulator_pid.txt)
           kill $pid
 
-      # - name: Post coverage comment
-      #   if: always()
-      #   uses: MishaKav/pytest-coverage-comment@main
-      #   with:
-      #     pytest-coverage-path: ./pytest-coverage.txt
-      #     junitxml-path: ./pytest.xml
+      - name: Post coverage comment
+        if: always()
+        uses: MishaKav/pytest-coverage-comment@main
+        with:
+          pytest-coverage-path: ./pytest-coverage.txt
+          junitxml-path: ./pytest.xml
 
       - name: Exit the program
         run: |
