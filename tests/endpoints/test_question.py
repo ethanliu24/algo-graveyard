@@ -31,6 +31,6 @@ async def test_get_question_exists(endpoint):
 
 @pytest.mark.asyncio
 async def test_get_question_doesnt_exist(endpoint):
-    """ Test if endpoint gets the right question if it exists in the database. """
+    """ Test if endpoint when question id doesn't exist in the database. """
     response = endpoint.get(f"{API}/question_dne")
     assert response.status_code == 404
