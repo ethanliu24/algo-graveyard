@@ -87,6 +87,6 @@ jobs:
       - name: Exit the program
         run: |
           if [ "$EXIT_CODE" -ne 0 ]; then \
-            echo "TEST_REPORT=$(cat pytest-coverage.txt)"" >> $GITHUB_OUTPUT
+            echo "TEST_REPORT=$(cat pytest-coverage.txt)" >> $GITHUB_OUTPUT
             exit "$EXIT_CODE"; \
           fi
