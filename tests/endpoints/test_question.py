@@ -108,9 +108,19 @@ async def test_update_question_basic(endpoint):
 
 @pytest.mark.asyncio
 async def test_update_question_invalid_data(endpoint):
-    """ Test updating a question. """
+    """ Test updating a question but the data is invalid. """
     source = "aslkdjf"
     update_data = {"source": source}
+
+    response = endpoint.put(f"{API}/q1", json=update_data)
+    assert response.status_code == 422
+
+
+@pytest.mark.asyncio
+async def test_update_question_invalid_field(endpoint):
+    """ Test updating a question but the field is invalid. """
+    invalid = "invalid"
+    update_data = {"invalid": invalid}
 
     response = endpoint.put(f"{API}/q1", json=update_data)
     assert response.status_code == 422
