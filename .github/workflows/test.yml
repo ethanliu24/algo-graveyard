@@ -25,6 +25,8 @@ jobs:
           pip install -r requirements.txt
       - name: Add Firebase secret
         run: echo "${{ secrets.FIREBASE_KEY }}" > $GITHUB_WORKSPACE/firebase-key.json
+      - name: Debug json
+        run: python -c "import json; f = open('$GITHUB_WORKSPACE/firebase-key.json'); json.load(f)"  # the secret is safe
       - name: Run tests
         run:  pytest --cov=app --cov-report=xml --cov-report=term
       - name: Post coverage comment
