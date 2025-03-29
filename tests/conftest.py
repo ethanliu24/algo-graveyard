@@ -14,22 +14,33 @@ def pytest_sessionstart(session):
     configs = Configs()
     client = configs.firebase_manager.get_client()
 
+    seen_q = set()
     for q_data in QUESTIONS:
+        # sanity check for duplication
         q_id = q_data["id"]
+        if q_id in seen_q:
+            raise ValueError("Duplicate ID. Check if database question IDs are unique.")
+        seen_q.add(q_id)
 
         # validate solutions
+        seen_sln = set()
         for sln_data in q_data["solutions"]:
+            # sanity check for duplication
+            sln_id = sln_data["id"]
+            if sln_id in seen_sln:
+                raise ValueError(f"Duplicate ID. Check if database solution IDs in question {q_id} are unique.")
+            seen_sln.add(sln_id)
+
             _ = Solution(**sln_data)
             _ = [AiAnalysis(**analysis_data) for analysis_data in q_data["ai_analysis"]]
 
             client.collection(configs.question_collection) \
                 .document(q_id) \
                 .collection(configs.solution_collection) \
-                .document(sln_data["id"]) \
+                .document(sln_id) \
                 .set(sln_data)
 
-        # validate test cases
-        _ = [TestCase(**test_data) for test_data in q_data["test_cases"]]
+        _ = [TestCase(**test_data) for test_data in q_data["test_cases"]] # validate test cases
 
         _ = Question(**q_data)  # validate question
         client.collection(configs.question_collection).document(q_id).set(q_data)
