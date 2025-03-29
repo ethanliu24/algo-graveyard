@@ -68,8 +68,9 @@ jobs:
         run: |
           pytest --junitxml=pytest.xml --cov-report=term-missing:skip-covered --cov=app tests/ \
             > pytest-coverage.txt
-          EXIT_CODE=$(echo $?)
-          cat pytest-coverage.txt | echo
+          echo $(cat pytest-coverage.txt)
+          EXIT_CODE=$?
+          echo $EXIT_CODE
         continue-on-error: true
 
       - name: Stop Firebase Emulator
