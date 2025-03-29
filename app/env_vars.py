@@ -2,11 +2,11 @@ from dotenv import load_dotenv
 import os
 from os.path import join, dirname
 
-enviornment = os.environ.get("APP_ENV")
-if enviornment not in ["production", "development", "test"]:
-    raise RuntimeError("Invalid app enviornment - should be production, development or test.")
+environment = os.environ.get("APP_ENV")
+if environment not in ["production", "development", "test"]:
+    raise RuntimeError(f"Invalid app environment {environment} - should be production, development or test.")
 
-dotenv_path = join(dirname(__file__), '..', f'.env.{enviornment}')
+dotenv_path = join(dirname(__file__), '..', f'.env.{environment}')
 loaded = load_dotenv(dotenv_path=dotenv_path, override=True)
 ENV_VARS = os.environ
 

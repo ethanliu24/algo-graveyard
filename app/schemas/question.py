@@ -6,6 +6,7 @@ from .solution import Solution
 from .test_case import TestCase
 
 class Question(BaseModel):
+    id: str
     source: Source
     link: str
     status: Status

@@ -10,6 +10,8 @@ class Configs:
     instance: Configs = None
     firebase_manager: FirebaseManager = None
     question_manager: QuestionManager = None
+    question_collection: str = ""
+    solution_collection: str = ""
 
     def __new__(cls):
         if not cls.instance:
@@ -17,16 +19,20 @@ class Configs:
 
             app_env = ENV_VARS.get("APP_ENV")
             if app_env == "production":
-                question_collection = "Questions"
+                cls.question_collection = "Questions"
             elif app_env == "development":
-                question_collection = "dev_questions"
+                cls.question_collection = "dev_questions"
             else:
-                question_collection = "test_db"
+                cls.question_collection = "test_db"
 
-            solution_collection = "Solutions"
+            cls.solution_collection = "Solutions"
 
             cls.firebase_manager = FirebaseManager()
-            cls.question_dao = QuestionDAO(cls.firebase_manager.get_client(), question_collection, solution_collection)
+            cls.question_dao = QuestionDAO(
+                cls.firebase_manager.get_client(),
+                cls.question_collection,
+                cls.solution_collection
+            )
             cls.question_manager = QuestionManager(cls.question_dao)
         return cls.instance
 

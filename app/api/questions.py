@@ -26,14 +26,14 @@ async def get_question(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
 
 @router.post("")
-async def get_question(
+async def create_question(
     question_data: QuestionCreate,
     question_service: Annotated[QuestionManager, Depends(get_question_service)]
 ) -> str:
     return await question_service.create_question(data=question_data)
 
 @router.put("/{question_id}")
-async def get_question(
+async def update_question(
     question_id: str,
     data: dict,
     question_service: Annotated[QuestionManager, Depends(get_question_service)]
@@ -41,7 +41,7 @@ async def get_question(
     await question_service.update_question(data, question_id)
 
 @router.delete("/{question_id}")
-async def get_question(
+async def delete_quesiton(
     question_id: str,
     question_service: Annotated[QuestionManager, Depends(get_question_service)]
 ) -> None:

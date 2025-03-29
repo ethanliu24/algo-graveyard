@@ -1,9 +1,11 @@
 # Flask framework & extensions
-fastapi[standard]==0.113.0
+fastapi[standard]>=0.115.12
 pydantic==2.10.5
+starlette>=0.46.1
 
 # Automated tests
-pytest==3.0.5
+pytest>=8.3.5
+pytest-env>=1.1.5
 
 # Database
 firebase-admin>=6.7.0
