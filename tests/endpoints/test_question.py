@@ -91,3 +91,25 @@ async def test_create_question_missing_fields(endpoint):
 
     response = endpoint.post(f"{API}", json=question)
     assert response.status_code == 422
+
+
+# Updating questions
+@pytest.mark.asyncio
+async def test_update_question_basic(endpoint):
+    """ Test updating a question with basic update values. """
+    title = "Updated title"
+    prompt = "Updated prompt"
+    tags = ["graph", "queue"]
+    update_data = {"title": title, "prompt": prompt, "tags": tags}
+
+    response = endpoint.put(f"{API}/q1", json=update_data)
+    assert response.status_code == 200
+
+@pytest.mark.asyncio
+async def test_update_question_invalid_data(endpoint):
+    """ Test updating a question. """
+    source = "aslkdjf"
+    update_data = {"source": source}
+
+    response = endpoint.put(f"{API}/q1", json=update_data)
+    assert response.status_code == 422
