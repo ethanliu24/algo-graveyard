@@ -1,10 +1,10 @@
 from __future__ import annotations
 from datetime import datetime
 from enum import Enum
-from pydantic import BaseModel
 from .ai_analysis import AiAnalysis
+from .base_config import BaseModelConfig
 
-class Solution(BaseModel):
+class Solution(BaseModelConfig):
     id: str
     summary: str
     explanation: str
