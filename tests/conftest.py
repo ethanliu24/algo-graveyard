@@ -1,6 +1,8 @@
+from fastapi.testclient import TestClient
 import pytest
 
 from app.config import Configs
+from app.main import app
 from app.schemas.ai_analysis import AiAnalysis
 from app.schemas.question import Question
 from app.schemas.solution import Solution
@@ -60,3 +62,9 @@ def setup():
 @pytest.fixture()
 def question_service(setup):
     yield setup.question_manager
+
+
+@pytest.fixture()
+def endpoint():
+    client = TestClient(app)
+    yield client
