@@ -9,54 +9,57 @@ from app.schemas.solution import Solution
 from app.schemas.test_case import TestCase
 from .seed import QUESTIONS
 
-@pytest.fixture()
-def setup():
+def pytest_sessionstart(session):
+    """ Populates the database when a test session starts. """
     configs = Configs()
     client = configs.firebase_manager.get_client()
 
+    for q_data in QUESTIONS:
+        q_id = q_data["id"]
 
-    def populate_database():
-        for q_data in QUESTIONS:
-            q_id = q_data["id"]
+        # validate solutions
+        for sln_data in q_data["solutions"]:
+            _ = Solution(**sln_data)
+            _ = [AiAnalysis(**analysis_data) for analysis_data in q_data["ai_analysis"]]
 
-            # validate solutions
-            for sln_data in q_data["solutions"]:
-                _ = Solution(**sln_data)
-                _ = [AiAnalysis(**analysis_data) for analysis_data in q_data["ai_analysis"]]
-
-                client.collection(configs.question_collection) \
-                    .document(q_id) \
-                    .collection(configs.solution_collection) \
-                    .document(sln_data["id"]) \
-                    .set(sln_data)
-
-            # validate test cases
-            _ = [TestCase(**test_data) for test_data in q_data["test_cases"]]
-
-            _ = Question(**q_data)  # validate question
-            client.collection(configs.question_collection).document(q_id).set(q_data)
-
-    def clear_database():
-        questions = client.collection(configs.question_collection).stream()
-
-        for question in questions:
-            # delete solutions subcollection
-            solutions = client \
-                .collection(configs.question_collection) \
-                .document(question.id) \
+            client.collection(configs.question_collection) \
+                .document(q_id) \
                 .collection(configs.solution_collection) \
-                .stream()
+                .document(sln_data["id"]) \
+                .set(sln_data)
 
-            for solution in solutions:
-                solution_ref = solution.reference
-                solution_ref.delete()
+        # validate test cases
+        _ = [TestCase(**test_data) for test_data in q_data["test_cases"]]
 
-            question_ref = question.reference
-            question_ref.delete()
+        _ = Question(**q_data)  # validate question
+        client.collection(configs.question_collection).document(q_id).set(q_data)
 
-    populate_database()
-    yield configs
-    clear_database()
+
+def pytest_sessionfinish(session, exitstatus):
+    """ Clears the database when a test session ends. """
+    configs = Configs()
+    client = configs.firebase_manager.get_client()
+    questions = client.collection(configs.question_collection).stream()
+
+    for question in questions:
+        # delete solutions subcollection
+        solutions = client \
+            .collection(configs.question_collection) \
+            .document(question.id) \
+            .collection(configs.solution_collection) \
+            .stream()
+
+        for solution in solutions:
+            solution_ref = solution.reference
+            solution_ref.delete()
+
+        question_ref = question.reference
+        question_ref.delete()
+
+
+@pytest.fixture()
+def setup():
+    yield Configs()
 
 
 @pytest.fixture()
