@@ -12,6 +12,7 @@ def setup():
     configs = Configs()
     client = configs.firebase_manager.get_client()
 
+
     def populate_database():
         for q_data in QUESTIONS:
             q_id = q_data["id"]
@@ -30,36 +31,30 @@ def setup():
             # validate test cases
             _ = [TestCase(**test_data) for test_data in q_data["test_cases"]]
 
-
             _ = Question(**q_data)  # validate question
             client.collection(configs.question_collection).document(q_id).set(q_data)
 
-    def clear_database(batch_size: int = 20):
-        if batch_size == 0:
-            return
-
-        questions = client.collection(configs.question_collection).list_documents(page_size=batch_size)
-        deleted = 0
+    def clear_database():
+        questions = client.collection(configs.question_collection).stream()
 
         for question in questions:
             # delete solutions subcollection
             solutions = client \
                 .collection(configs.question_collection) \
                 .document(question.id) \
-                .collection(configs.solution_collection)
+                .collection(configs.solution_collection) \
+                .stream()
 
             for solution in solutions:
-                solution.delete()
+                solution_ref = solution.reference
+                solution_ref.delete()
 
-            questions.delete()
-            deleted = deleted + 1
-
-        if deleted >= batch_size:
-            return clear_database(batch_size)
+            question_ref = question.reference
+            question_ref.delete()
 
     populate_database()
     yield configs
-    # clear_database()
+    clear_database()
 
 
 @pytest.fixture()
