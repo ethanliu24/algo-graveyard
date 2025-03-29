@@ -74,8 +74,8 @@ jobs:
           pid=$(cat emulator_pid.txt)
           kill $pid
 
-      - name: Post coverage comment
-        uses: MishaKav/pytest-coverage-comment@main
-        with:
-          pytest-coverage-path: ./pytest-coverage.txt
-          junitxml-path: ./pytest.xml
+      # - name: Post coverage comment
+      #   uses: MishaKav/pytest-coverage-comment@main
+      #   with:
+      #     pytest-coverage-path: ./pytest-coverage.txt
+      #     junitxml-path: ./pytest.xml
