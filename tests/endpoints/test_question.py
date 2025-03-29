@@ -105,6 +105,7 @@ async def test_update_question_basic(endpoint):
     response = endpoint.put(f"{API}/q1", json=update_data)
     assert response.status_code == 200
 
+
 @pytest.mark.asyncio
 async def test_update_question_invalid_data(endpoint):
     """ Test updating a question. """
@@ -113,3 +114,18 @@ async def test_update_question_invalid_data(endpoint):
 
     response = endpoint.put(f"{API}/q1", json=update_data)
     assert response.status_code == 422
+
+
+# Delete questions
+@pytest.mark.asyncio
+async def test_update_question_exists(endpoint):
+    """ Test deleting a question that exists in the database. """
+    response = endpoint.delete(f"{API}/delete_endpoint")
+    assert response.status_code == 200
+
+
+@pytest.mark.asyncio
+async def test_update_question_doesnt_exist(endpoint):
+    """ Test deleting a question that doesn't exist in the database. """
+    response = endpoint.delete(f"{API}/delete_dne")
+    assert response.status_code == 200

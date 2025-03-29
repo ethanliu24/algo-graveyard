@@ -16,5 +16,20 @@ QUESTIONS = [
         "solutions": [],
         "created_at": datetime(2011, 1, 1, 1, 1, 1, 1, tzinfo=timezone.utc),
         "last_modified": datetime(2011, 1, 1, 1, 1, 1, 1, tzinfo=timezone.utc),
+    },
+    {
+        "id": "delete_endpoint",
+        "source": Source.OTHER.value,
+        "link": "",
+        "status": Status.UNOPTIMIZED.value,
+        "title": "Test",
+        "prompt": "test",
+        "test_cases": [],
+        "notes": [],
+        "hints": [],
+        "tags": [],
+        "solutions": [],
+        "created_at": datetime(2011, 1, 1, 1, 1, 1, 1, tzinfo=timezone.utc),
+        "last_modified": datetime(2011, 1, 1, 1, 1, 1, 1, tzinfo=timezone.utc),
     }
 ]
