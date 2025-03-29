@@ -7,11 +7,10 @@ permissions:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.13"]  # save time, personal project so doesn't matter
+        python-version: ["3.13"]
 
     steps:
       - uses: actions/checkout@v4
