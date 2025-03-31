@@ -1,11 +1,11 @@
 from __future__ import annotations
 from datetime import datetime
 from enum import Enum
-from pydantic import BaseModel
+from .base_config import BaseModelConfig
 from .solution import Solution
 from .test_case import TestCase
 
-class Question(BaseModel):
+class Question(BaseModelConfig):
     id: str
     source: Source
     link: str
@@ -21,7 +21,7 @@ class Question(BaseModel):
     last_modified: datetime
 
 
-class QuestionCreate(BaseModel):
+class QuestionCreate(BaseModelConfig):
     source: Source
     link: str
     status: Status

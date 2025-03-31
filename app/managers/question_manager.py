@@ -18,6 +18,10 @@ class QuestionManager(object):
         return question
 
     async def create_question(self, data: QuestionCreate, id: str = None) -> str:
+        if id:
+            if self.question_dao.get_question(id):
+                raise ValueError("Question ID already exists")
+
         question = data.model_dump()
         question["source"] = question["source"].value
         question["status"] = question["status"].value
@@ -28,10 +32,11 @@ class QuestionManager(object):
         return self.question_dao.create_question(question, id)
 
     async def update_question(self, data: dict, id: str) -> None:
-        question_data = self.get_question(id).model_dump()
+        question = await self.get_question(id)
+        question_data = question.model_dump()
         question_data.update(data)
         _ = Question(**question_data) # validate data
-        self.question_dao.update_question(id, question_data)
+        self.question_dao.update_question(id, data)
 
     async def delete_question(self, id: str) -> None:
         return self.question_dao.delete_question(id)

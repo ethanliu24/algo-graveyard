@@ -1,8 +1,9 @@
 from __future__ import annotations
-from pydantic import BaseModel, model_validator
+from pydantic import model_validator
 from typing import Any
+from .base_config import BaseModelConfig
 
-class TestCase(BaseModel):
+class TestCase(BaseModelConfig):
     parameters: list[str]
     values: list[Any]
     result: Any
