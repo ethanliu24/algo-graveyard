@@ -1,4 +1,3 @@
-from fastapi import HTTPException
 import pytest
 
 from app.schemas.question import Question
