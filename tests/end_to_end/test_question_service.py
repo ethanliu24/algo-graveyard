@@ -3,6 +3,39 @@ import pytest
 from app.schemas.question import QuestionCreate
 
 @pytest.mark.asyncio
+async def test_all_crud_no_errors(question_service):
+    """ Test a standard CRUD operation flow with no errors from the user end """
+
+    data = {"source": "other", "link": "", "status": "completed", "title": "All CRUD end to end",
+            "prompt": "no user errors", "test_cases": [], "notes": [], "hints": [], "tags": []}
+    id = await question_service.create_question(QuestionCreate(**data))
+
+    q = await question_service.get_question(id)
+    assert q.id == id
+    assert q.title == "All CRUD end to end"
+
+    await question_service.update_question({ "title": "Modified" }, id)
+    q = await question_service.get_question(id)
+    assert q.title == "Modified"
+
+    await question_service.delete_question(id)
+    with pytest.raises(ValueError) as info:
+        await question_service.get_question(id)
+    assert str(info.value) == "Invalid question ID."
+
+@pytest.mark.asyncio
+async def test_create_with_duplicated_ids(question_service):
+    """ Testing creating a document with the same id more than once. """
+    data = {"source": "other", "link": "", "status": "completed", "title": "Duplicated",
+            "prompt": "duplicated id", "test_cases": [], "notes": [], "hints": [], "tags": []}
+    id = "duplicate_id"
+    await question_service.create_question(QuestionCreate(**data), id)
+
+    with pytest.raises(ValueError) as info:
+        await question_service.create_question(QuestionCreate(**data), id)
+    assert str(info.value) == "Question ID already exists"
+
+@pytest.mark.asyncio
 async def test_deleting_everything(question_service):
     questions = await question_service.get_all_questions()
     assert len(questions) > 0

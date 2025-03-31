@@ -18,6 +18,10 @@ class QuestionManager(object):
         return question
 
     async def create_question(self, data: QuestionCreate, id: str = None) -> str:
+        if id:
+            if self.question_dao.get_question(id):
+                raise ValueError("Question ID already exists")
+
         question = data.model_dump()
         question["source"] = question["source"].value
         question["status"] = question["status"].value
