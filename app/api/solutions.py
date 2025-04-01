@@ -54,4 +54,8 @@ async def delete_solution(
     solution_id: str,
     solution_service: Annotated[SolutionManager, Depends(get_solution_service)]
 ) -> None:
-    await solution_service.delete_solution(question_id, solution_id)
+    try:
+        await solution_service.delete_solution(question_id, solution_id)
+    except ValueError as e:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
+    
