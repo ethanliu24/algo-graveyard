@@ -34,5 +34,5 @@ async def create_question(
     solution_data: SolutionCreate,
     solution_service: Annotated[SolutionManager, Depends(get_solution_service)]
 ) -> str:
-    return await solution_service.create_solution(data=solution_data)
+    return await solution_service.create_solution(question_id=question_id, data=solution_data)
 
