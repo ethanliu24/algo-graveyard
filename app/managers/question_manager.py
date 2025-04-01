@@ -32,6 +32,7 @@ class QuestionManager(object):
     async def update_question(self, data: dict, id: str) -> None:
         question = await self.get_question(id)
         question_data = question.model_dump()
+        data.update({ "last_modified": datetime.now() })
         question_data.update(data)
         _ = Question(**question_data) # validate data
         self.question_dao.update_question(id, data)
