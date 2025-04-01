@@ -12,7 +12,10 @@ class SolutionManager(object):
         return self.solution_dao.get_all_solutions(question_id)
 
     async def get_solution(self, question_id: str, solution_id: str) -> Solution:
-        return self.solution_dao.get_solution(question_id, solution_id)
+        res = self.solution_dao.get_solution(question_id, solution_id)
+        if not res:
+            raise ValueError(f"Invalid solution ID for question {question_id}")
+        return res
 
     async def create_solution(self, question_id: str, data: SolutionCreate, id: str = None) -> str:
         solution = data.model_dump()
