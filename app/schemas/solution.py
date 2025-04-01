@@ -19,7 +19,7 @@ class Solution(BaseModelConfig):
 
 class SolutionCreate(BaseModelConfig):
     summary: str
-    explaination: str
+    explanation: str
     language: Language
     time_complexity: str
     space_complexity: str

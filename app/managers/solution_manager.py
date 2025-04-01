@@ -23,12 +23,25 @@ class SolutionManager(object):
         solution["language"] = solution["language"].value
 
         # TODO add ai analysis
-        solution.update({ "ai_analysis": "" })
+        solution.update({"ai_analysis": {
+            "time_complexity": "",
+            "space_complexity": "",
+            "feedback": ""
+        }})
 
         creation_time = datetime.now()
         solution.update({ "created_at": creation_time, "last_modified": creation_time })
 
         return self.solution_dao.create_solution(question_id, solution, id)
+
+    async def update_solution(self, question_id: str, solution_id: str, data: dict) -> Solution:
+        solution = await self.get_solution(question_id, solution_id)
+        solution_data = solution.model_dump()
+        data.update({ "last_modified": datetime.now() })
+        solution_data.update(data)
+        res = Solution(**solution_data) # validate data
+        self.solution_dao.update_solution(question_id, solution_id, data)
+        return res
 
     async def delete_solution(self, question_id: str, solution_id: str):
         self.solution_dao.delete_solution(question_id, solution_id)

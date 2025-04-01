@@ -11,14 +11,14 @@ router = APIRouter(
 )
 
 @router.get("", status_code=status.HTTP_200_OK)
-async def get_all_questions(
+async def get_all_solutions(
     question_id: str,
     solution_service: Annotated[SolutionManager, Depends(get_solution_service)]
 ) -> list[Solution]:
     return await solution_service.get_all_solutions(question_id)
 
 @router.get("/{solution_id}", status_code=status.HTTP_200_OK)
-async def get_question(
+async def get_solution(
     question_id: str,
     solution_id: str,
     solution_service: Annotated[SolutionManager, Depends(get_solution_service)]
@@ -29,15 +29,27 @@ async def get_question(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
 
 @router.post("")
-async def create_question(
+async def create_solution(
     question_id: str,
     solution_data: SolutionCreate,
     solution_service: Annotated[SolutionManager, Depends(get_solution_service)]
 ) -> str:
     return await solution_service.create_solution(question_id=question_id, data=solution_data)
 
+@router.put("/{solution_id}")
+async def update_solution(
+    question_id: str,
+    solution_id: str,
+    data: dict,
+    solution_service: Annotated[SolutionManager, Depends(get_solution_service)]
+) -> Solution:
+    try:
+        return await solution_service.update_solution(question_id, solution_id, data)
+    except ValueError as e:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
+
 @router.delete("/{solution_id}")
-async def delete_quesiton(
+async def delete_solution(
     question_id: str,
     solution_id: str,
     solution_service: Annotated[SolutionManager, Depends(get_solution_service)]
