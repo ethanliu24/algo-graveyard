@@ -31,15 +31,16 @@ async def test_deleting_all_questions(question_service):
     questions = await question_service.get_all_questions()
     assert len(questions) > 0
 
+    deleted = []
     for question in questions:
-        print(question.id)
+        deleted.append(await question_service.get_question(question.id))
         await question_service.delete_question(question.id)
 
     assert len(await question_service.get_all_questions()) == 0
 
     # Insert back to database for other tests
-    for q in questions:
+    for q in deleted:
         data = {"source": q.source, "link": q.link, "status": q.status, "title": q.title,
                 "prompt": q.prompt, "test_cases": q.test_cases, "notes": q.notes, "hints": q.hints,
                 "tags": q.tags}
-        await question_service.create_question(QuestionCreate(**data))
+        await question_service.create_question(QuestionCreate(**data), q.id)

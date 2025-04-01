@@ -1,7 +1,7 @@
 from datetime import datetime
 from ..daos.question_dao import QuestionDAO
 from ..exceptions.entity_not_found import EntityNotFoundError
-from ..schemas.question import Question, QuestionCreate
+from ..schemas.question import Question, QuestionCreate, QuestionBasicInfo
 
 class QuestionManager(object):
     question_dao: QuestionDAO
@@ -9,7 +9,7 @@ class QuestionManager(object):
     def __init__(self, question_dao: QuestionDAO):
         self.question_dao = question_dao
 
-    async def get_all_questions(self) -> list[Question]:
+    async def get_all_questions(self) -> list[QuestionBasicInfo]:
         return self.question_dao.get_all_questions()
 
     async def get_question(self, id: str) -> Question:

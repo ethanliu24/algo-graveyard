@@ -1,6 +1,6 @@
 import pytest
 
-from app.schemas.question import Question
+from app.schemas.question import Question, QuestionBasicInfo
 from tests.seed import QUESTIONS
 
 API = "/api/questions"
@@ -15,7 +15,7 @@ async def test_get_all_questions_no_filter(endpoint):
     assert len(data) > 0
     assert isinstance(data, list)
     for d in data:
-        Question(**d)  # validate
+        QuestionBasicInfo(**d)  # validate
 
 
 @pytest.mark.asyncio

@@ -1,5 +1,5 @@
 from typing import Any
-from ..schemas.question import Question
+from ..schemas.question import Question, QuestionBasicInfo
 
 class QuestionDAO:
     db: Any
@@ -13,13 +13,26 @@ class QuestionDAO:
 
     def get_all_questions(self) -> list[Question]:
         # TODO implement filter, use where() function
-        # questions_ref = self.db.collection(self.question_collection)
-        # return [self._format_question(q) for q in questions_ref.get()]
-        pass
+        # TODO implement pagination
+        questions = self.db.collection(self.question_collection).get()
+        res = []
+        for q_data in questions:
+            q = Question(**q_data.to_dict())
+            data = {"id": q.id, "source": q.source.value, "status": q.status.value, "title": q.title,
+                    "tags": q.tags, "created_at": q.created_at, "last_modified": q.last_modified}
+            res.append(QuestionBasicInfo(**data))
+        return res
 
     def get_question(self, id: str) -> Question:
         doc_ref = self.db.collection(self.question_collection).document(id)
-        return None if not doc_ref.get().exists else self._format_question(doc_ref)
+        if not doc_ref.get().exists:
+            return None
+
+        question_data = doc_ref.get().to_dict()
+        solutions_ref = doc_ref.collection(self.solution_collection)
+        solutions = [s.to_dict() for s in solutions_ref.get()]
+        question_data.update({ "solutions": solutions })
+        return Question(**question_data)
 
     def create_question(self, data: dict, id: str = None) -> Question:
         collection_ref = self.db.collection(self.question_collection)
@@ -39,10 +52,3 @@ class QuestionDAO:
         doc_ref = self.db.collection(self.question_collection).document(id)
         doc_ref.update(data)
         return Question(**doc_ref.get().to_dict())
-
-    def _format_question(self, doc_ref) -> Question:
-        question_data = doc_ref.get().to_dict()
-        solutions_ref = doc_ref.collection(self.solution_collection)
-        solutions = [s.to_dict() for s in solutions_ref.get()]
-        question_data.update({ "solutions": solutions })
-        return Question(**question_data)
