@@ -1,5 +1,5 @@
 from typing import Any
-from ..schemas.question import Question
+from ..schemas.question import Question, QuestionBasicInfo
 
 class QuestionDAO:
     db: Any
@@ -13,30 +13,42 @@ class QuestionDAO:
 
     def get_all_questions(self) -> list[Question]:
         # TODO implement filter, use where() function
-        questions = self.db.collection(self.question_collection).stream()
-        return [self._format_question(q) for q in questions]
+        # TODO implement pagination
+        questions = self.db.collection(self.question_collection).get()
+        res = []
+        for q_data in questions:
+            q = Question(**q_data.to_dict())
+            data = {"id": q.id, "source": q.source.value, "status": q.status.value, "title": q.title,
+                    "tags": q.tags, "created_at": q.created_at, "last_modified": q.last_modified}
+            res.append(QuestionBasicInfo(**data))
+        return res
 
     def get_question(self, id: str) -> Question:
-        doc = self.db.collection(self.question_collection).document(id).get()
-        return None if not doc.exists else self._format_question(doc)
+        doc_ref = self.db.collection(self.question_collection).document(id)
+        if not doc_ref.get().exists:
+            return None
 
-    def create_question(self, data: dict, id: str = None) -> str:
+        question_data = doc_ref.get().to_dict()
+        solutions_ref = doc_ref.collection(self.solution_collection)
+        solutions = [s.to_dict() for s in solutions_ref.get()]
+        question_data.update({ "solutions": solutions })
+        return Question(**question_data)
+
+    def create_question(self, data: dict, id: str = None) -> Question:
         collection_ref = self.db.collection(self.question_collection)
         doc_ref = collection_ref.document(id) if id else collection_ref.document()
 
         data.update({ "id": doc_ref.id })
         doc_ref.set(data)
-        return doc_ref.id
+        return Question(**data)
 
-    def delete_question(self, id: str) -> None:
-        self.db.collection(self.question_collection).document(id).delete()
+    def delete_question(self, id: str) -> bool:
+        doc_ref = self.db.collection(self.question_collection).document(id)
+        res = doc_ref.get().exists
+        doc_ref.delete()
+        return res
 
-    def update_question(self, id: str, data: dict) -> None:
-        self.db.collection(self.question_collection).document(id).update(data)
-
-    def _format_question(self, doc) -> Question:
-        question_data = doc.to_dict()
-        solutions_ref = self.db.collection(self.question_collection).document(doc.id).collection(self.solution_collection)
-        solutions = [s.to_dict() for s in solutions_ref.get()]
-        question_data.update({ "solutions": solutions })
-        return Question(**question_data)
+    def update_question(self, id: str, data: dict) -> Question:
+        doc_ref = self.db.collection(self.question_collection).document(id)
+        doc_ref.update(data)
+        return Question(**doc_ref.get().to_dict())

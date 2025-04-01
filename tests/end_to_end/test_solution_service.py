@@ -11,7 +11,8 @@ async def test_all_crud_solution_no_errors(question_service, solution_service):
     s_data = {"summary": "Created", "explanation": "created in test_create_solution_basic",
               "language": "python", "time_complexity": "n!", "space_complexity": "n!", "code": ""}
 
-    q_id = await question_service.create_question(QuestionCreate(**q_data))  # TODO update
+    q = await question_service.create_question(QuestionCreate(**q_data))
+    q_id = q.id
     s = await solution_service.create_solution(q_id, SolutionCreate(**s_data))
     s_id = s.id
 

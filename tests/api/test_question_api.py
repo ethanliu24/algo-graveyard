@@ -1,6 +1,6 @@
 import pytest
 
-from app.schemas.question import Question
+from app.schemas.question import Question, QuestionBasicInfo
 from tests.seed import QUESTIONS
 
 API = "/api/questions"
@@ -15,7 +15,7 @@ async def test_get_all_questions_no_filter(endpoint):
     assert len(data) > 0
     assert isinstance(data, list)
     for d in data:
-        Question(**d)  # validate
+        QuestionBasicInfo(**d)  # validate
 
 
 @pytest.mark.asyncio
@@ -54,8 +54,8 @@ async def test_create_question_basic(endpoint):
 
     response = endpoint.post(f"{API}", json=question)
     assert response.status_code == 200
-    assert isinstance(response.text, str)
-
+    q = Question(**response.json())
+    assert q.title == "Create Question Basic"
 
 @pytest.mark.asyncio
 async def test_create_question_invalid_input(endpoint):
@@ -103,6 +103,11 @@ async def test_update_question_basic(endpoint):
 
     response = endpoint.put(f"{API}/q1", json=update_data)
     assert response.status_code == 200
+    q = Question(**response.json())
+    assert q.title == "Updated title"
+    assert q.prompt == "Updated prompt"
+    assert q.tags == ["graph", "queue"]
+    assert q.source.value == "leetcode"
 
 
 @pytest.mark.asyncio
@@ -125,6 +130,15 @@ async def test_update_question_invalid_field(endpoint):
     assert response.status_code == 422
 
 
+@pytest.mark.asyncio
+async def test_update_question_invalid_id(endpoint):
+    """ Test updating a question but the question isn't in the db. """
+    update_data = {"title": "title"}
+
+    response = endpoint.put(f"{API}/question_dne", json=update_data)
+    assert response.status_code == 404
+
+
 # Delete questions
 @pytest.mark.asyncio
 async def test_update_question_exists(endpoint):
@@ -137,4 +151,4 @@ async def test_update_question_exists(endpoint):
 async def test_update_question_doesnt_exist(endpoint):
     """ Test deleting a question that doesn't exist in the database. """
     response = endpoint.delete(f"{API}/delete_dne")
-    assert response.status_code == 200
+    assert response.status_code == 404

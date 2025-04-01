@@ -33,6 +33,16 @@ class QuestionCreate(BaseModelConfig):
     tags: list[str]
 
 
+class QuestionBasicInfo(BaseModelConfig):
+    id: str
+    source: Source
+    status: Status
+    title: str
+    tags: list[str]
+    created_at: datetime
+    last_modified: datetime
+
+
 class Source(Enum):
     LEETCODE = "leetcode"
     OTHER = "other"
