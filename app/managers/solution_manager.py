@@ -12,7 +12,7 @@ class SolutionManager(object):
     async def get_all_solutions(self, question_id: str) -> list[Solution]:
         res = self.solution_dao.get_all_solutions(question_id)
         if res is None:
-            raise EntityNotFoundError("Invalid question ID")
+            raise EntityNotFoundError("Invalid question ID.")
         return res
 
     async def get_solution(self, question_id: str, solution_id: str) -> Solution:
@@ -38,7 +38,7 @@ class SolutionManager(object):
 
         res = self.solution_dao.create_solution(question_id, solution, id)
         if not res:
-            raise EntityNotFoundError("Invalid question ID")
+            raise EntityNotFoundError("Invalid question ID.")
         return res
 
     async def update_solution(self, question_id: str, solution_id: str, data: dict) -> Solution:
@@ -49,7 +49,7 @@ class SolutionManager(object):
         _ = Solution(**solution_data) # validate data
         res = self.solution_dao.update_solution(question_id, solution_id, data)
         if not res:
-            raise EntityNotFoundError("Invalid solution ID")
+            raise EntityNotFoundError("Invalid solution ID.")
         return res
 
     async def delete_solution(self, question_id: str, solution_id: str) -> None:

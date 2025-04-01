@@ -1,5 +1,6 @@
 from datetime import datetime
 from ..daos.question_dao import QuestionDAO
+from ..exceptions.entity_not_found import EntityNotFoundError
 from ..schemas.question import Question, QuestionCreate
 
 class QuestionManager(object):
@@ -14,7 +15,7 @@ class QuestionManager(object):
     async def get_question(self, id: str) -> Question:
         question = self.question_dao.get_question(id)
         if not question:
-            raise ValueError("Invalid question ID.")
+            raise EntityNotFoundError("Invalid question ID.")
         return question
 
     async def create_question(self, data: QuestionCreate, id: str = None) -> str:

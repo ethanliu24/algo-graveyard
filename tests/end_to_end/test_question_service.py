@@ -1,5 +1,6 @@
 import pytest
 
+from app.exceptions.entity_not_found import EntityNotFoundError
 from app.schemas.question import QuestionCreate
 
 @pytest.mark.asyncio
@@ -19,7 +20,7 @@ async def test_all_crud_question_no_errors(question_service):
     assert q.title == "Modified"
 
     await question_service.delete_question(id)
-    with pytest.raises(ValueError) as info:
+    with pytest.raises(EntityNotFoundError) as info:
         await question_service.get_question(id)
     assert str(info.value) == "Invalid question ID."
 

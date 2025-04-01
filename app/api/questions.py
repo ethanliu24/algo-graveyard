@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import ValidationError
 from typing import Annotated
 from ..config import get_question_service
+from ..exceptions.entity_not_found import EntityNotFoundError
 from ..managers.question_manager import QuestionManager
 from ..schemas.question import Question, QuestionCreate
 
@@ -23,7 +24,7 @@ async def get_question(
 ) -> Question:
     try:
         return await question_service.get_question(question_id)
-    except ValueError as e:
+    except EntityNotFoundError as e:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
 
 @router.post("")
