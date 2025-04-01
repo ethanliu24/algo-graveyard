@@ -17,6 +17,15 @@ class Solution(BaseModelConfig):
     last_modified: datetime
 
 
+class SolutionCreate(BaseModelConfig):
+    summary: str
+    explaination: str
+    language: Language
+    time_complexity: str
+    space_complexity: str
+    code: str
+
+
 class Language(Enum):
     PYTHON = "python"
     JAVA = "java"
