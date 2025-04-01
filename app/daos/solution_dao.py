@@ -49,9 +49,12 @@ class SolutionDAO:
             .update(data)
 
     def delete_solution(self, question_id: str, solution_id: str) -> None:
-        self.db \
+        doc_ref = self.db \
             .collection(self.question_collection) \
             .document(question_id) \
             .collection(self.solution_collection) \
             .document(solution_id) \
-            .delete()
+
+        res = doc_ref.get().exists
+        doc_ref.delete()
+        return res

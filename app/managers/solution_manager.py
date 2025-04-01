@@ -43,5 +43,6 @@ class SolutionManager(object):
         self.solution_dao.update_solution(question_id, solution_id, data)
         return res
 
-    async def delete_solution(self, question_id: str, solution_id: str):
-        self.solution_dao.delete_solution(question_id, solution_id)
+    async def delete_solution(self, question_id: str, solution_id: str) -> None:
+        if not self.solution_dao.delete_solution(question_id, solution_id):
+            raise ValueError("Invalid question or solution ID")
