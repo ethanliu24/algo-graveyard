@@ -29,7 +29,7 @@ async def test_get_q_has_many_solutions(endpoint):
     for d in data:
         s = Solution(**d)
         assert s.code == "print(\"hello world\")"
-        
+
 @pytest.mark.asyncio
 async def test_get_q_has_no_solutions(endpoint):
     """ Get all solutions of a question that has no solutions. """
@@ -38,24 +38,11 @@ async def test_get_q_has_no_solutions(endpoint):
     data = response.json()
     assert len(data) == 0
 
-
-
-# @pytest.mark.asyncio
-# async def test_get_question_exists(endpoint):
-#     """ Test if endpoint gets the right question if it exists in the database. """
-#     expected = Question(**QUESTIONS[0])
-
-#     response = endpoint.get(f"{API}/q1")
-#     assert response.status_code == 200
-#     actual = Question(**response.json())
-#     assert actual == expected
-
-
-# @pytest.mark.asyncio
-# async def test_get_question_doesnt_exist(endpoint):
-#     """ Test if endpoint when question id doesn't exist in the database. """
-#     response = endpoint.get(f"{API}/question_dne")
-#     assert response.status_code == 404
+@pytest.mark.asyncio
+async def test_get_solution_question_doesnt_exist(endpoint):
+    """ Get all solutions of a question that doesn't exist. """
+    response = endpoint.get(f"{API}/question_dne/solutions")
+    assert response.status_code == 404
 
 
 # # Creating questions

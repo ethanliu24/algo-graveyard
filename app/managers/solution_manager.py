@@ -13,6 +13,7 @@ class SolutionManager(object):
         res = self.solution_dao.get_all_solutions(question_id)
         if res is None:
             raise EntityNotFoundError("Invalid question ID")
+        return res
 
     async def get_solution(self, question_id: str, solution_id: str) -> Solution:
         res = self.solution_dao.get_solution(question_id, solution_id)
