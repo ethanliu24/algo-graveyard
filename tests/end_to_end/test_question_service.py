@@ -11,12 +11,13 @@ async def test_all_crud_question_no_errors(question_service):
             "prompt": "no user errors", "test_cases": [], "notes": [], "hints": [], "tags": []}
     q = await question_service.create_question(QuestionCreate(**data))
     id = q.id
-    
+
     q = await question_service.get_question(id)
     assert q.id == id
     assert q.title == "All CRUD end to end"
 
-    await question_service.update_question({ "title": "Modified" }, id)
+    q = await question_service.update_question({ "title": "Modified" }, id)
+    assert q.title == "Modified"
     q = await question_service.get_question(id)
     assert q.title == "Modified"
 

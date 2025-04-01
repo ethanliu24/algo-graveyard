@@ -103,6 +103,11 @@ async def test_update_question_basic(endpoint):
 
     response = endpoint.put(f"{API}/q1", json=update_data)
     assert response.status_code == 200
+    q = Question(**response.json())
+    assert q.title == "Updated title"
+    assert q.prompt == "Updated prompt"
+    assert q.tags == ["graph", "queue"]
+    assert q.source.value == "leetcode"
 
 
 @pytest.mark.asyncio

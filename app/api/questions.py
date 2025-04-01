@@ -39,9 +39,9 @@ async def update_question(
     question_id: str,
     data: dict,
     question_service: Annotated[QuestionManager, Depends(get_question_service)]
-) -> None:
+) -> Question:
     try:
-        await question_service.update_question(data, question_id)
+        return await question_service.update_question(data, question_id)
     except ValidationError as e:
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(e))
     except EntityNotFoundError as e:

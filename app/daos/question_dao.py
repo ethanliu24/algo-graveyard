@@ -31,8 +31,10 @@ class QuestionDAO:
     def delete_question(self, id: str) -> None:
         self.db.collection(self.question_collection).document(id).delete()
 
-    def update_question(self, id: str, data: dict) -> None:
-        self.db.collection(self.question_collection).document(id).update(data)
+    def update_question(self, id: str, data: dict) -> Question:
+        doc_ref = self.db.collection(self.question_collection).document(id)
+        doc_ref.update(data)
+        return Question(**doc_ref.get().to_dict())
 
     def _format_question(self, doc) -> Question:
         question_data = doc.to_dict()
