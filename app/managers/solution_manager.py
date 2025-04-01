@@ -29,3 +29,6 @@ class SolutionManager(object):
         solution.update({ "created_at": creation_time, "last_modified": creation_time })
 
         return self.solution_dao.create_solution(question_id, solution, id)
+
+    async def delete_solution(self, question_id: str, solution_id: str):
+        self.solution_dao.delete_solution(question_id, solution_id)

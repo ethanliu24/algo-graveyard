@@ -36,3 +36,10 @@ async def create_question(
 ) -> str:
     return await solution_service.create_solution(question_id=question_id, data=solution_data)
 
+@router.delete("/{solution_id}")
+async def delete_quesiton(
+    question_id: str,
+    solution_id: str,
+    solution_service: Annotated[SolutionManager, Depends(get_solution_service)]
+) -> None:
+    await solution_service.delete_solution(question_id, solution_id)
