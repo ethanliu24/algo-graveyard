@@ -125,6 +125,15 @@ async def test_update_question_invalid_field(endpoint):
     assert response.status_code == 422
 
 
+@pytest.mark.asyncio
+async def test_update_question_invalid_id(endpoint):
+    """ Test updating a question but the question isn't in the db. """
+    update_data = {"title": "title"}
+
+    response = endpoint.put(f"{API}/question_dne", json=update_data)
+    assert response.status_code == 404
+
+
 # Delete questions
 @pytest.mark.asyncio
 async def test_update_question_exists(endpoint):
