@@ -108,7 +108,7 @@ QUESTIONS = [
         "notes": [],
         "hints": [],
         "tags": [],
-        "solutions": [],
+        "solutions": [SOLUTIONS[0]],
         "created_at": datetime(2011, 1, 1, 1, 1, 1, 1, tzinfo=timezone.utc),
         "last_modified": datetime(2011, 1, 1, 1, 1, 1, 1, tzinfo=timezone.utc),
     },

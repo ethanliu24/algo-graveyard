@@ -125,37 +125,67 @@ async def test_create_solution_missing_fields(endpoint):
     assert response.status_code == 422
 
 
-# # Updating questions
-# @pytest.mark.asyncio
-# async def test_update_question_basic(endpoint):
-#     """ Test updating a question with basic update values. """
-#     title = "Updated title"
-#     prompt = "Updated prompt"
-#     tags = ["graph", "queue"]
-#     update_data = {"title": title, "prompt": prompt, "tags": tags}
+# Updating questions
+@pytest.mark.asyncio
+async def test_update_solution(endpoint):
+    """ Test updating a solution with different fields being updated. """
+    summary = "Updated title"
+    explanation = "Updated explaination"
+    language = "python"
+    time_complexity = "1"
+    space_complexity = "1"
+    code = "print()"
+    update_data = {
+        "summary": summary,
+        "explanation": explanation,
+        "language": language,
+        "time_complexity": time_complexity,
+        "space_complexity": space_complexity,
+        "code": code,
+    }
 
-#     response = endpoint.put(f"{API}/q1", json=update_data)
-#     assert response.status_code == 200
+    response = endpoint.put(f"{API}/modify/solutions/s1", json=update_data)
+    assert response.status_code == 200
+    s = Solution(**response.json())
+    assert s.summary == summary
+    assert s.explanation == explanation
+    assert s.language.value == language
+    assert s.time_complexity == time_complexity
+    assert s.space_complexity == space_complexity
+    assert s.code == code
 
 
-# @pytest.mark.asyncio
-# async def test_update_question_invalid_data(endpoint):
-#     """ Test updating a question but the data is invalid. """
-#     source = "aslkdjf"
-#     update_data = {"source": source}
+@pytest.mark.asyncio
+async def test_update_solution_invalid_data(endpoint):
+    """ Test updating a solution but the data is invalid. """
+    language = "asdfasd"
+    update_data = {"language": language}
 
-#     response = endpoint.put(f"{API}/q1", json=update_data)
-#     assert response.status_code == 422
+    response = endpoint.put(f"{API}/modify/solutions/s1", json=update_data)
+    assert response.status_code == 422
 
+@pytest.mark.asyncio
+async def test_update_solution_invalid_field(endpoint):
+    """ Test updating a solution but the field is invalid. """
+    invalid = "invalid"
+    update_data = {"invalid": invalid}
 
-# @pytest.mark.asyncio
-# async def test_update_question_invalid_field(endpoint):
-#     """ Test updating a question but the field is invalid. """
-#     invalid = "invalid"
-#     update_data = {"invalid": invalid}
+    response = endpoint.put(f"{API}/modify/solutions/s1", json=update_data)
+    assert response.status_code == 422
 
-#     response = endpoint.put(f"{API}/q1", json=update_data)
-#     assert response.status_code == 422
+@pytest.mark.asyncio
+async def test_update_solution_question_dne(endpoint):
+    """ Test updating a solution but the question id doesn't exist. """
+    update_data = {"language": "python"}
+    response = endpoint.put(f"{API}/question_dne/solutions/s1", json=update_data)
+    assert response.status_code == 404
+
+@pytest.mark.asyncio
+async def test_update_solution_question_dne(endpoint):
+    """ Test updating a solution but the solution id doesn't exist. """
+    update_data = {"language": "python"}
+    response = endpoint.put(f"{API}/modify/solutions/solution_dne", json=update_data)
+    assert response.status_code == 404
 
 
 # # Delete questions

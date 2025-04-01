@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from typing import Annotated
+from pydantic import ValidationError
 from ..config import get_solution_service
 from ..exceptions.entity_not_found import EntityNotFoundError
 from ..managers.solution_manager import SolutionManager
@@ -53,6 +54,11 @@ async def update_solution(
         return await solution_service.update_solution(question_id, solution_id, data)
     except EntityNotFoundError as e:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
+    except ValidationError:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Unprocessable entity. Check if field exists or its value is accepted by the backend."
+        )
 
 @router.delete("/{solution_id}")
 async def delete_solution(
