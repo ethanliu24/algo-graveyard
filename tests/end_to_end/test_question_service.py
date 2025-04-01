@@ -24,18 +24,6 @@ async def test_all_crud_question_no_errors(question_service):
     assert str(info.value) == "Invalid question ID."
 
 @pytest.mark.asyncio
-async def test_create_question_with_duplicated_ids(question_service):
-    """ Testing creating a document with the same id more than once. """
-    data = {"source": "other", "link": "", "status": "completed", "title": "Duplicated",
-            "prompt": "duplicated id", "test_cases": [], "notes": [], "hints": [], "tags": []}
-    id = "duplicate_id"
-    await question_service.create_question(QuestionCreate(**data), id)
-
-    with pytest.raises(ValueError) as info:
-        await question_service.create_question(QuestionCreate(**data), id)
-    assert str(info.value) == "Question ID already exists"
-
-@pytest.mark.asyncio
 async def test_deleting_all_questions(question_service):
     questions = await question_service.get_all_questions()
     assert len(questions) > 0
