@@ -181,23 +181,35 @@ async def test_update_solution_question_dne(endpoint):
     assert response.status_code == 404
 
 @pytest.mark.asyncio
-async def test_update_solution_question_dne(endpoint):
+async def test_update_solution_solution_dne(endpoint):
     """ Test updating a solution but the solution id doesn't exist. """
     update_data = {"language": "python"}
     response = endpoint.put(f"{API}/modify/solutions/solution_dne", json=update_data)
     assert response.status_code == 404
 
+@pytest.mark.asyncio
+async def test_update_solution_both_id_dne(endpoint):
+    """ Test updating a solution but both ids doesn't exist. """
+    update_data = {"language": "python"}
+    response = endpoint.put(f"{API}/question_dne/solutions/solution_dne", json=update_data)
+    assert response.status_code == 404
 
-# # Delete questions
-# @pytest.mark.asyncio
-# async def test_update_question_exists(endpoint):
-#     """ Test deleting a question that exists in the database. """
-#     response = endpoint.delete(f"{API}/delete_endpoint")
-#     assert response.status_code == 200
 
+# Delete questions
+@pytest.mark.asyncio
+async def test_update_solution_exists(endpoint):
+    """ Test deleting a solution that exists in the database. """
+    response = endpoint.delete(f"{API}/modify/solutions/s2")
+    assert response.status_code == 200
 
-# @pytest.mark.asyncio
-# async def test_update_question_doesnt_exist(endpoint):
-#     """ Test deleting a question that doesn't exist in the database. """
-#     response = endpoint.delete(f"{API}/delete_dne")
-#     assert response.status_code == 200
+@pytest.mark.asyncio
+async def test_update_solution_doesnt_exist(endpoint):
+    """ Test deleting a solution that doesn't exist in the database. """
+    response = endpoint.delete(f"{API}/modify/solutions/solution_dne")
+    assert response.status_code == 404
+
+@pytest.mark.asyncio
+async def test_update_solution_question_doesnt_exist(endpoint):
+    """ Test deleting a solution but the question id doesn't exist in the database. """
+    response = endpoint.delete(f"{API}/question_dne/solutions/solution_dne")
+    assert response.status_code == 404
