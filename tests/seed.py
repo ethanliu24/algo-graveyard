@@ -96,5 +96,20 @@ QUESTIONS = [
         "solutions": [],
         "created_at": datetime(2011, 1, 1, 1, 1, 1, 1, tzinfo=timezone.utc),
         "last_modified": datetime(2011, 1, 1, 1, 1, 1, 1, tzinfo=timezone.utc),
-    }
+    },
+    {
+        "id": "modify",
+        "source": Source.OTHER.value,
+        "link": "",
+        "status": Status.UNOPTIMIZED.value,
+        "title": "Modify",
+        "prompt": "This schema is for modifying",
+        "test_cases": [],
+        "notes": [],
+        "hints": [],
+        "tags": [],
+        "solutions": [],
+        "created_at": datetime(2011, 1, 1, 1, 1, 1, 1, tzinfo=timezone.utc),
+        "last_modified": datetime(2011, 1, 1, 1, 1, 1, 1, tzinfo=timezone.utc),
+    },
 ]
