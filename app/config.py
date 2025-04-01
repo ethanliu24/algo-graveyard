@@ -2,14 +2,19 @@ from __future__ import annotations
 from fastapi import Depends
 from typing import Annotated
 from .daos.question_dao import QuestionDAO
+from .daos.solution_dao import SolutionDAO
 from .env_vars import ENV_VARS
 from .managers.firebase_manager import FirebaseManager
 from .managers.question_manager import QuestionManager
+from .managers.solution_manager import SolutionManager
 
 class Configs:
     instance: Configs = None
     firebase_manager: FirebaseManager = None
+    question_dao: QuestionDAO = None
+    solution_dao: SolutionDAO = None
     question_manager: QuestionManager = None
+    solution_manager: SolutionManager = None
     question_collection: str = ""
     solution_collection: str = ""
 
@@ -33,7 +38,15 @@ class Configs:
                 cls.question_collection,
                 cls.solution_collection
             )
+            cls.solution_dao = SolutionDAO(
+                cls.firebase_manager.get_client(),
+                cls.question_collection,
+                cls.solution_collection
+            )
+
             cls.question_manager = QuestionManager(cls.question_dao)
+            cls.solution_manager = SolutionManager(cls.solution_dao)
+
         return cls.instance
 
 
@@ -43,3 +56,7 @@ def init_config() -> Configs:
 
 def get_question_service(configs: Annotated[Configs, Depends(init_config)]):
     return configs.question_manager
+
+
+def get_solution_service(configs: Annotated[Configs, Depends(init_config)]):
+    return configs.solution_manager

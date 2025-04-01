@@ -9,7 +9,7 @@ from app.schemas.solution import Solution
 from app.schemas.test_case import TestCase
 from .seed import QUESTIONS
 
-def pytest_sessionstart(session):
+def pytest_sessionstart():
     """ Populates the database when a test session starts. """
     configs = Configs()
     client = configs.firebase_manager.get_client()
@@ -32,7 +32,7 @@ def pytest_sessionstart(session):
             seen_sln.add(sln_id)
 
             _ = Solution(**sln_data)
-            _ = [AiAnalysis(**analysis_data) for analysis_data in q_data["ai_analysis"]]
+            _ = AiAnalysis(**sln_data["ai_analysis"])
 
             client.collection(configs.question_collection) \
                 .document(q_id) \
@@ -46,7 +46,7 @@ def pytest_sessionstart(session):
         client.collection(configs.question_collection).document(q_id).set(q_data)
 
 
-def pytest_sessionfinish(session, exitstatus):
+def pytest_sessionfinish():
     """ Clears the database when a test session ends. """
     configs = Configs()
     client = configs.firebase_manager.get_client()
@@ -71,6 +71,11 @@ def pytest_sessionfinish(session, exitstatus):
 @pytest.fixture()
 def setup():
     yield Configs()
+
+
+@pytest.fixture()
+def solution_service(setup):
+    yield setup.solution_manager
 
 
 @pytest.fixture()

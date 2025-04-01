@@ -11,12 +11,12 @@ class QuestionDAO:
         self.question_collection = question_collection
         self.solution_collection = solution_collection
 
-    def get_all_questions(self) -> Question:
+    def get_all_questions(self) -> list[Question]:
         # TODO implement filter, use where() function
         questions = self.db.collection(self.question_collection).stream()
         return [self._format_question(q) for q in questions]
 
-    def get_question(self, id: str):
+    def get_question(self, id: str) -> Question:
         doc = self.db.collection(self.question_collection).document(id).get()
         return None if not doc.exists else self._format_question(doc)
 
@@ -28,10 +28,10 @@ class QuestionDAO:
         doc_ref.set(data)
         return doc_ref.id
 
-    def delete_question(self, id: str):
+    def delete_question(self, id: str) -> None:
         self.db.collection(self.question_collection).document(id).delete()
 
-    def update_question(self, id: str, data: dict):
+    def update_question(self, id: str, data: dict) -> None:
         self.db.collection(self.question_collection).document(id).update(data)
 
     def _format_question(self, doc) -> Question:
