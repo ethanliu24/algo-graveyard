@@ -5,7 +5,7 @@ from app.schemas.solution import Solution
 
 API = "/api/questions"
 
-# Getting Solutions
+# Getting solutions
 @pytest.mark.asyncio
 async def test_get_q_has_one_solution(endpoint):
     """ Get all solutions of a question that has one solution. """
@@ -62,7 +62,7 @@ async def test_get_single_solution_from_q_dne(endpoint):
     assert response.status_code == 404
 
 
-# Creating questions
+# Creating solutions
 @pytest.mark.asyncio
 async def test_create_solution_basic(endpoint):
     """ Test creating a solution with basic inputs. """
@@ -125,7 +125,7 @@ async def test_create_solution_missing_fields(endpoint):
     assert response.status_code == 422
 
 
-# Updating questions
+# Updating solutions
 @pytest.mark.asyncio
 async def test_update_solution(endpoint):
     """ Test updating a solution with different fields being updated. """
@@ -195,7 +195,7 @@ async def test_update_solution_both_id_dne(endpoint):
     assert response.status_code == 404
 
 
-# Delete questions
+# Delete solutions
 @pytest.mark.asyncio
 async def test_update_solution_exists(endpoint):
     """ Test deleting a solution that exists in the database. """
