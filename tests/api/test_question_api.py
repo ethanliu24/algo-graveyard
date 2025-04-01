@@ -54,8 +54,8 @@ async def test_create_question_basic(endpoint):
 
     response = endpoint.post(f"{API}", json=question)
     assert response.status_code == 200
-    assert isinstance(response.text, str)
-
+    q = Question(**response.json())
+    assert q.title == "Create Question Basic"
 
 @pytest.mark.asyncio
 async def test_create_question_invalid_input(endpoint):

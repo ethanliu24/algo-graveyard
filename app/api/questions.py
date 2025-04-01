@@ -31,7 +31,7 @@ async def get_question(
 async def create_question(
     question_data: QuestionCreate,
     question_service: Annotated[QuestionManager, Depends(get_question_service)]
-) -> str:
+) -> Question:
     return await question_service.create_question(data=question_data)
 
 @router.put("/{question_id}")

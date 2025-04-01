@@ -18,10 +18,11 @@ class QuestionManager(object):
             raise EntityNotFoundError("Invalid question ID.")
         return question
 
-    async def create_question(self, data: QuestionCreate, id: str = None) -> str:
+    async def create_question(self, data: QuestionCreate, id: str = None) -> Question:
         question = data.model_dump()
         question["source"] = question["source"].value
         question["status"] = question["status"].value
+        question["solutions"] = []
 
         creation_time = datetime.now()
         question.update({ "created_at": creation_time, "last_modified": creation_time })

@@ -20,13 +20,13 @@ class QuestionDAO:
         doc = self.db.collection(self.question_collection).document(id).get()
         return None if not doc.exists else self._format_question(doc)
 
-    def create_question(self, data: dict, id: str = None) -> str:
+    def create_question(self, data: dict, id: str = None) -> Question:
         collection_ref = self.db.collection(self.question_collection)
         doc_ref = collection_ref.document(id) if id else collection_ref.document()
 
         data.update({ "id": doc_ref.id })
         doc_ref.set(data)
-        return doc_ref.id
+        return Question(**data)
 
     def delete_question(self, id: str) -> None:
         self.db.collection(self.question_collection).document(id).delete()
