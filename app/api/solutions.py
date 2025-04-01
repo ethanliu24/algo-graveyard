@@ -33,7 +33,7 @@ async def create_solution(
     question_id: str,
     solution_data: SolutionCreate,
     solution_service: Annotated[SolutionManager, Depends(get_solution_service)]
-) -> str:
+) -> Solution:
     return await solution_service.create_solution(question_id=question_id, data=solution_data)
 
 @router.put("/{solution_id}")
@@ -58,4 +58,3 @@ async def delete_solution(
         await solution_service.delete_solution(question_id, solution_id)
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
-    

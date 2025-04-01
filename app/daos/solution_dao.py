@@ -29,7 +29,7 @@ class SolutionDAO:
             .get()
         return None if not doc.exists else Solution(**(doc.to_dict()))
 
-    def create_solution(self, question_id: str, data: dict, id: str = None) -> str:
+    def create_solution(self, question_id: str, data: dict, id: str = None) -> Solution:
         collection_ref = self.db \
             .collection(self.question_collection) \
             .document(question_id) \
@@ -38,7 +38,7 @@ class SolutionDAO:
 
         data.update({ "id": doc_ref.id })
         doc_ref.set(data)
-        return doc_ref.id
+        return Solution(**data)
 
     def update_solution(self, question_id: str, solution_id: str, data: dict) -> None:
         self.db \

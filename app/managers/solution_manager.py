@@ -17,7 +17,7 @@ class SolutionManager(object):
             raise ValueError(f"Invalid solution ID for question {question_id}")
         return res
 
-    async def create_solution(self, question_id: str, data: SolutionCreate, id: str = None) -> str:
+    async def create_solution(self, question_id: str, data: SolutionCreate, id: str = None) -> Solution:
         solution = data.model_dump()
 
         solution["language"] = solution["language"].value
