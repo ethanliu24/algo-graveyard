@@ -38,4 +38,5 @@ class QuestionManager(object):
         return self.question_dao.update_question(id, data)
 
     async def delete_question(self, id: str) -> None:
-        return self.question_dao.delete_question(id)
+        if not self.question_dao.delete_question(id):
+            raise EntityNotFoundError("Invalid question ID.")

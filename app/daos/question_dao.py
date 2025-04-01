@@ -28,8 +28,11 @@ class QuestionDAO:
         doc_ref.set(data)
         return Question(**data)
 
-    def delete_question(self, id: str) -> None:
-        self.db.collection(self.question_collection).document(id).delete()
+    def delete_question(self, id: str) -> bool:
+        doc_ref = self.db.collection(self.question_collection).document(id)
+        res = doc_ref.get().exists
+        doc_ref.delete()
+        return res
 
     def update_question(self, id: str, data: dict) -> Question:
         doc_ref = self.db.collection(self.question_collection).document(id)

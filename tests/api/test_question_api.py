@@ -151,4 +151,4 @@ async def test_update_question_exists(endpoint):
 async def test_update_question_doesnt_exist(endpoint):
     """ Test deleting a question that doesn't exist in the database. """
     response = endpoint.delete(f"{API}/delete_dne")
-    assert response.status_code == 200
+    assert response.status_code == 404

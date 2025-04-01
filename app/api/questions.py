@@ -52,4 +52,7 @@ async def delete_quesiton(
     question_id: str,
     question_service: Annotated[QuestionManager, Depends(get_question_service)]
 ) -> None:
-    await question_service.delete_question(question_id)
+    try:
+        await question_service.delete_question(question_id)
+    except EntityNotFoundError as e:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
