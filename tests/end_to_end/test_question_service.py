@@ -9,8 +9,9 @@ async def test_all_crud_question_no_errors(question_service):
 
     data = {"source": "other", "link": "", "status": "completed", "title": "All CRUD end to end",
             "prompt": "no user errors", "test_cases": [], "notes": [], "hints": [], "tags": []}
-    id = await question_service.create_question(QuestionCreate(**data))
-
+    q = await question_service.create_question(QuestionCreate(**data))
+    id = q.id
+    
     q = await question_service.get_question(id)
     assert q.id == id
     assert q.title == "All CRUD end to end"
