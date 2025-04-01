@@ -74,6 +74,11 @@ def setup():
 
 
 @pytest.fixture()
+def solution_service(setup):
+    yield setup.solution_manager
+
+
+@pytest.fixture()
 def question_service(setup):
     yield setup.question_manager
 
