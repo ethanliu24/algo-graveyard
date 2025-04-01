@@ -5,7 +5,7 @@ from app.schemas.solution import Solution
 
 API = "/api/questions"
 
-# Getting Questions
+# Getting Solutions
 @pytest.mark.asyncio
 async def test_get_q_has_one_solution(endpoint):
     """ Get all solutions of a question that has one solution. """
@@ -42,6 +42,23 @@ async def test_get_q_has_no_solutions(endpoint):
 async def test_get_solution_question_doesnt_exist(endpoint):
     """ Get all solutions of a question that doesn't exist. """
     response = endpoint.get(f"{API}/question_dne/solutions")
+    assert response.status_code == 404
+
+@pytest.mark.asyncio
+async def test_get_single_solution_from_q_exists(endpoint):
+    """ Get a specific solution of a question. """
+    response = endpoint.get(f"{API}/q1/solutions/s1")
+    assert response.status_code == 200
+    data = response.json()
+    s = Solution(**data)
+    assert s.id == "s1"
+    assert s.summary == "Test"
+    assert s.explanation == "test"
+
+@pytest.mark.asyncio
+async def test_get_single_solution_from_q_dne(endpoint):
+    """ Get a specific solution of a question. """
+    response = endpoint.get(f"{API}/q1/solutions/solution_dne")
     assert response.status_code == 404
 
 
