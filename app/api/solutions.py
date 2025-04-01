@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from pydantic import ValidationError
 from typing import Annotated
 from ..config import get_solution_service
+from ..exceptions.entity_not_found import EntityNotFoundError
 from ..managers.solution_manager import SolutionManager
 from ..schemas.solution import Solution, SolutionCreate
 
@@ -15,7 +15,10 @@ async def get_all_solutions(
     question_id: str,
     solution_service: Annotated[SolutionManager, Depends(get_solution_service)]
 ) -> list[Solution]:
-    return await solution_service.get_all_solutions(question_id)
+    try:
+        return await solution_service.get_all_solutions(question_id)
+    except EntityNotFoundError as e:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
 
 @router.get("/{solution_id}", status_code=status.HTTP_200_OK)
 async def get_solution(
@@ -25,7 +28,7 @@ async def get_solution(
 ) -> Solution:
     try:
         return await solution_service.get_solution(question_id, solution_id)
-    except ValueError as e:
+    except EntityNotFoundError as e:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
 
 @router.post("")
@@ -34,7 +37,10 @@ async def create_solution(
     solution_data: SolutionCreate,
     solution_service: Annotated[SolutionManager, Depends(get_solution_service)]
 ) -> Solution:
-    return await solution_service.create_solution(question_id=question_id, data=solution_data)
+    try:
+        return await solution_service.create_solution(question_id=question_id, data=solution_data)
+    except EntityNotFoundError as e:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
 
 @router.put("/{solution_id}")
 async def update_solution(
@@ -45,7 +51,7 @@ async def update_solution(
 ) -> Solution:
     try:
         return await solution_service.update_solution(question_id, solution_id, data)
-    except ValueError as e:
+    except EntityNotFoundError as e:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
 
 @router.delete("/{solution_id}")
@@ -56,5 +62,5 @@ async def delete_solution(
 ) -> None:
     try:
         await solution_service.delete_solution(question_id, solution_id)
-    except ValueError as e:
+    except EntityNotFoundError as e:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
