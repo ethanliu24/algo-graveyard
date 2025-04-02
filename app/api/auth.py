@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends, Request, Response, HTTPException, status
-from pydantic import ValidationError
 from typing import Annotated
 from ..config import get_auth_service
 from ..managers.auth_manager import AuthManager
