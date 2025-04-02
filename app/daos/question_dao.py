@@ -11,13 +11,15 @@ class QuestionDAO:
         self.question_collection = question_collection
         self.solution_collection = solution_collection
 
-    def get_all_questions(self) -> list[Question]:
+    def get_all_questions(self) -> list[QuestionBasicInfo]:
         # TODO implement filter, use where() function
         # TODO implement pagination
         questions = self.db.collection(self.question_collection).get()
         res = []
         for q_data in questions:
-            q = Question(**q_data.to_dict())
+            d = q_data.to_dict()
+            d.update({ "solutions": [] })  # What the solution is doesn't matter
+            q = Question(**d)
             data = {"id": q.id, "source": q.source.value, "status": q.status.value, "title": q.title,
                     "tags": q.tags, "created_at": q.created_at, "last_modified": q.last_modified}
             res.append(QuestionBasicInfo(**data))
