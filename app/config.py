@@ -52,7 +52,9 @@ class Configs:
                 ENV_VARS.get("APP_SECRET"),
                 ENV_VARS.get("JWT_SIGNITURE"),
                 "HS256",
-                24 * 7
+                24 * 7,
+                ENV_VARS.get("JWT_ISS"),
+                ENV_VARS.get("JWT_AUD")
             )
 
         return cls.instance
