@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Request, HTTPException, status
+from fastapi import APIRouter, Depends, Request, Response, HTTPException, status
 from pydantic import ValidationError
 from typing import Annotated
 from ..config import get_auth_service
@@ -12,6 +12,7 @@ router = APIRouter(
 @router.post("", status_code=status.HTTP_200_OK)
 async def authenticate_user(
     request: Request,
+    response: Response,
     auth_service: Annotated[AuthManager, Depends(get_auth_service)]
 ) -> None:
     try:
@@ -24,4 +25,11 @@ async def authenticate_user(
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect app secret.")
 
     token = auth_service.generate_token()
-    # TODO set token in cookie n implement a middleware
+    response.set_cookie(
+        key="jwt_token",
+        value=token,
+        httponly=True,
+        secure=True,
+        samesite="strict",
+        max_age=(auth_service.exp_time * 60 * 60)  # exp_time in hours, max_age takes seconds
+    )

@@ -1,9 +1,8 @@
 import jwt
 import time
 
-# from datetime import datetime, timedelta, timezone
 from jwt import ExpiredSignatureError, InvalidTokenError
-from ..schemas.auth import Token
+from ..schemas.token import Token
 
 class AuthManager:
     # These should never be changed
