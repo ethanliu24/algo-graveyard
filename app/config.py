@@ -50,7 +50,7 @@ class Configs:
             cls.solution_manager = SolutionManager(cls.solution_dao)
             cls.auth_manager = AuthManager(
                 ENV_VARS.get("APP_SECRET"),
-                ENV_VARS.get("JWT_SECRET"),
+                ENV_VARS.get("JWT_SIGNITURE"),
                 "HS256",
                 24 * 7
             )
@@ -68,3 +68,7 @@ def get_question_service(configs: Annotated[Configs, Depends(init_config)]):
 
 def get_solution_service(configs: Annotated[Configs, Depends(init_config)]):
     return configs.solution_manager
+
+
+def get_auth_service(configs: Annotated[Configs, Depends(init_config)]):
+    return configs.auth_manager

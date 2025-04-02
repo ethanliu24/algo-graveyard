@@ -1,8 +1,12 @@
 import jwt
+import time
+
+# from datetime import datetime, timedelta, timezone
 from jwt import ExpiredSignatureError, InvalidTokenError
-from ..schemas.token import Token
+from ..schemas.auth import Token
 
 class AuthManager:
+    # These should never be changed
     app_secret: str
     jwt_secret: str
     hs_alg: str
@@ -16,10 +20,17 @@ class AuthManager:
 
     def verify_secret(self, secret: str) -> bool:
         """ Verifies input with the app secret. Returns whether verification is successful. """
-        pass
+        return secret == self.app_secret
 
     def generate_token(self) -> str:
-        pass
+        payload = {
+            "iss": "algograveyard",
+            "aud": "algograveyard",
+            "exp": time.time() + (self.exp_time * 60)
+        }
+
+        token = jwt.encode(payload, self.jwt_secret, algorithm=self.hs_alg)
+        return token
 
     def verify_token(self, token: str) -> bool:
         # decode & verify claims. assume everything is valid, smth else will handle the errs

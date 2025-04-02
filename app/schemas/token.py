@@ -5,3 +5,7 @@ class Token(BaseModelConfig):
     iss: str
     aud: str
     exp: datetime
+
+
+class AuthenticateReq(BaseModelConfig):
+    secret: str
