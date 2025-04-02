@@ -51,8 +51,8 @@ class Configs:
             cls.auth_manager = AuthManager(
                 ENV_VARS.get("APP_SECRET"),
                 ENV_VARS.get("JWT_SIGNITURE"),
-                "HS256",
-                24 * 7,
+                ENV_VARS.get("JWT_HS_ALG"),
+                int(ENV_VARS.get("JWT_EXP_TIME")),
                 ENV_VARS.get("JWT_ISS"),
                 ENV_VARS.get("JWT_AUD")
             )
