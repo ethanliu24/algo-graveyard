@@ -7,7 +7,7 @@ from .env_vars import ENV_VARS
 from .managers.firebase_manager import FirebaseManager
 from .managers.question_manager import QuestionManager
 from .managers.solution_manager import SolutionManager
-from .managers.auth_manager import AuthManager
+from .managers.auth_manager import AuthManager, JWTBearer
 
 class Configs:
     instance: Configs = None
@@ -74,3 +74,5 @@ def get_solution_service(configs: Annotated[Configs, Depends(init_config)]):
 
 def get_auth_service(configs: Annotated[Configs, Depends(init_config)]):
     return configs.auth_manager
+
+jwt_auth = JWTBearer(Depends(get_auth_service))
