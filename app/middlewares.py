@@ -3,7 +3,9 @@ from starlette.middleware.base import BaseHTTPMiddleware
 
 class JWTCookieToHeaderMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
-        response = await call_next(request)
-        print(request.headers)
-        print(request.cookies.get("jwt_token"))
-        return response
+        jwt_token = request.cookies.get("jwt_token")
+        if jwt_token:
+            auth_header: tuple[bytes, bytes] = b"Authorization", f"Bearer {jwt_token}".encode()
+            request.headers.__dict__["_list"].append(auth_header)
+
+        return await call_next(request)
