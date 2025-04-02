@@ -7,6 +7,7 @@ from .env_vars import ENV_VARS
 from .managers.firebase_manager import FirebaseManager
 from .managers.question_manager import QuestionManager
 from .managers.solution_manager import SolutionManager
+from .managers.auth_manager import AuthManager
 
 class Configs:
     instance: Configs = None
@@ -15,6 +16,7 @@ class Configs:
     solution_dao: SolutionDAO = None
     question_manager: QuestionManager = None
     solution_manager: SolutionManager = None
+    auth_manager: AuthManager = None
     question_collection: str = ""
     solution_collection: str = ""
 
@@ -46,6 +48,12 @@ class Configs:
 
             cls.question_manager = QuestionManager(cls.question_dao)
             cls.solution_manager = SolutionManager(cls.solution_dao)
+            cls.auth_manager = AuthManager(
+                ENV_VARS.get("APP_SECRET"),
+                ENV_VARS.get("JWT_SECRET"),
+                "HS256",
+                24 * 7
+            )
 
         return cls.instance
 
