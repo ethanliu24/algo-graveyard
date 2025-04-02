@@ -1,6 +1,8 @@
 import jwt
 import time
 
+from fastapi import Request, HTTPException, status
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jwt import PyJWTError
 from ..schemas.token import Token
 
@@ -43,3 +45,28 @@ class AuthManager:
         return True
 
 
+class JWTBearer(HTTPBearer):
+    auth_service: AuthManager
+
+    def __init__(self, auth_service: AuthManager, auto_error = True):
+        super().__init__(auto_error=auto_error)
+        self.auth_service = auth_service
+
+    def __call__(self, request: Request):
+        err_msg = ""
+
+        cred: HTTPAuthorizationCredentials = super().__call__(request)
+        if not cred:
+            err_msg = "Invalid authorization code."
+        else:
+            try:
+                if cred.scheme != "Bearer":
+                    err_msg = "Invalid authentication scheme"
+                elif not self.auth_service.verify_token(cred.credentials):
+                    err_msg = "Invalid token."
+                else:
+                    return cred.credentials
+            except PyJWTError as e:
+                err_msg = str(e)
+
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=str(err_msg))
