@@ -8,15 +8,21 @@ from app.schemas.question import Question
 from app.schemas.solution import Solution
 from app.schemas.test_case import TestCase
 from app.schemas.token import Token
-from tests.seed import QUESTIONS
+from tests.seed import QUESTIONS, PAGINATION_Q
 
-def populate_database():
-    """ Populates the database. """
+def seed_database():
+    """ Populates the database with the given seeds. """
+    populate_database(QUESTIONS)
+    populate_database(PAGINATION_Q)
+
+
+def populate_database(q_arr):
+    """ Populates the database with questions from <q_arr>. """
     configs = Configs()
     client = configs.firebase_manager.get_client()
 
     seen_q = set()
-    for q_data in QUESTIONS:
+    for q_data in q_arr:
         # sanity check for duplication
         q_id = q_data["id"]
         if q_id in seen_q:
@@ -94,4 +100,3 @@ def set_jwt_cookie(endpoint, response):
         if res[0] == ENV_VARS.get("JWT_COOKIE"):
             endpoint.cookies.set(ENV_VARS.get("JWT_COOKIE"), res[1])
             break
-        
