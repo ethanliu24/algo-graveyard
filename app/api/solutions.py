@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from typing import Annotated
 from pydantic import ValidationError
-from ..config import get_solution_service
+from ..config import get_solution_service, auth_user_jwt
 from ..exceptions.entity_not_found import EntityNotFoundError
 from ..managers.solution_manager import SolutionManager
 from ..schemas.solution import Solution, SolutionCreate
@@ -32,7 +32,7 @@ async def get_solution(
     except EntityNotFoundError as e:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
 
-@router.post("")
+@router.post("", status_code=status.HTTP_200_OK, dependencies=[Depends(auth_user_jwt)])
 async def create_solution(
     question_id: str,
     solution_data: SolutionCreate,
@@ -43,7 +43,7 @@ async def create_solution(
     except EntityNotFoundError as e:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
 
-@router.put("/{solution_id}")
+@router.put("/{solution_id}", status_code=status.HTTP_200_OK, dependencies=[Depends(auth_user_jwt)])
 async def update_solution(
     question_id: str,
     solution_id: str,
@@ -60,7 +60,7 @@ async def update_solution(
             detail="Unprocessable entity. Check if field exists or its value is accepted by the backend."
         )
 
-@router.delete("/{solution_id}")
+@router.delete("/{solution_id}", status_code=status.HTTP_200_OK, dependencies=[Depends(auth_user_jwt)])
 async def delete_solution(
     question_id: str,
     solution_id: str,
