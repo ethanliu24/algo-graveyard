@@ -11,7 +11,7 @@ async def test_get_all_questions_no_filter(endpoint):
     """ Test the properties of the result of the endpoint to get all questions_no_filter """
     response = endpoint.get(f"{API}?paginate=false")
     assert response.status_code == 200
-    data = response.json()
+    data = response.json()["data"]
     assert len(data) > 0
     assert isinstance(data, list)
     for d in data:

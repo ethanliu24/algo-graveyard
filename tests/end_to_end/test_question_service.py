@@ -28,7 +28,7 @@ async def test_all_crud_question_no_errors(question_service):
 
 @pytest.mark.asyncio
 async def test_deleting_all_questions(question_service):
-    questions = await question_service.get_all_questions(paginate=False)
+    questions = (await question_service.get_all_questions(paginate=False)).data
     assert len(questions) > 0
 
     deleted = []
@@ -36,7 +36,7 @@ async def test_deleting_all_questions(question_service):
         deleted.append(await question_service.get_question(question.id))
         await question_service.delete_question(question.id)
 
-    assert len(await question_service.get_all_questions(paginate=False)) == 0
+    assert len((await question_service.get_all_questions(paginate=False)).data) == 0
 
     # Insert back to database for other tests
     for q in deleted:

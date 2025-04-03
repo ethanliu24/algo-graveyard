@@ -1,7 +1,9 @@
 from datetime import datetime
 from ..daos.question_dao import QuestionDAO
 from ..exceptions.entity_not_found import EntityNotFoundError
-from ..schemas.question import Question, QuestionCreate, QuestionBasicInfo, Source, Difficulty, Status
+from ..schemas.pagination import Pagination
+from ..schemas.question import Question, QuestionCreate, QuestionBasicInfo, QuestionAll, \
+    Source, Difficulty, Status
 
 class QuestionManager(object):
     question_dao: QuestionDAO
@@ -21,7 +23,7 @@ class QuestionManager(object):
         page: int | None = None,
         per_page: int | None = None,
         paginate: bool | None = True
-    ) -> list[QuestionBasicInfo]:
+    ) -> QuestionAll:
         # initialize query params
         tags = tags or []
         search = search or ""
@@ -33,7 +35,7 @@ class QuestionManager(object):
 
         questions = self.question_dao.get_all_questions()
         if paginate == False:
-            return questions
+            return QuestionAll(**{"paginated": False, "data": questions})
 
         # I am broke as fuck. I can't afford firebase queries. Efficiency ain't shit.
         if order not in ["asc", "desc"]:
@@ -75,3 +77,22 @@ class QuestionManager(object):
     async def delete_question(self, id: str) -> None:
         if not self.question_dao.delete_question(id):
             raise EntityNotFoundError("Invalid question ID.")
+
+    def _filter_questions(
+        questions: list[QuestionBasicInfo],
+        source: Source | None,
+        difficulty: Difficulty | None,
+        status: Status | None,
+        tags: list[str] | None,
+        search: str | None
+    ) -> list[QuestionBasicInfo]:
+        pass
+
+    def _paginate_questions(questions: list[QuestionBasicInfo], page: int, per_page: int) -> Pagination:
+        pass
+
+    def _order_questions(questions: list[QuestionBasicInfo], order: str) -> None:
+        pass
+
+    def _sort_questions(questions: list[QuestionBasicInfo], sort_by: str) -> None:
+        pass

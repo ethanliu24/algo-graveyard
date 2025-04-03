@@ -2,6 +2,7 @@ from __future__ import annotations
 from datetime import datetime
 from enum import Enum
 from .base_config import BaseModelConfig
+from .pagination import Pagination
 from .solution import Solution
 from .test_case import TestCase
 
@@ -45,6 +46,10 @@ class QuestionBasicInfo(BaseModelConfig):
     created_at: datetime
     last_modified: datetime
 
+
+class QuestionAll(BaseModelConfig):
+    paginated: bool
+    data: Pagination | list[QuestionBasicInfo]
 
 class Source(Enum):
     LEETCODE = "leetcode"
