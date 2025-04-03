@@ -72,8 +72,8 @@ class Source(Enum):
 
 class Status(Enum):
     COMPLETED = "completed"
-    UNOPTIMIZED = "unoptimized"
     ATTEMPTED = "attempted"
+    UNOPTIMIZED = "unoptimized"
 
 
 class Difficulty(Enum):

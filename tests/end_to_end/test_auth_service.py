@@ -7,7 +7,6 @@ from jwt.exceptions import (
     InvalidAudienceError,
     InvalidIssuerError,
     InvalidSignatureError,
-    InvalidAlgorithmError,
     InvalidTokenError,
     ExpiredSignatureError
     )
