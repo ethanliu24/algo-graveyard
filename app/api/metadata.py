@@ -9,7 +9,7 @@ router = APIRouter(
 )
 
 @router.get("", status_code=status.HTTP_200_OK)
-def get_all_metadata(
+async def get_all_metadata(
     metadata_service: Annotated[MetadataManager, Depends(get_metadata_service)],
     sources: Annotated[bool | None, Query] = None,
     difficulties: Annotated[bool | None, Query] = None,

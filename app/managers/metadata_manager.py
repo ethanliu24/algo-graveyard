@@ -22,7 +22,7 @@ class MetadataManager:
         if difficulties: metadata.update({ "difficulties": self.get_difficulties() })
         if statuses: metadata.update({ "statuses": self.get_statuses() })
         if tags: metadata.update({ "tags": self.get_tags() })
-        if languages: metadata.update({ "languates": self.get_languages() })
+        if languages: metadata.update({ "languages": self.get_languages() })
 
         return metadata
 
