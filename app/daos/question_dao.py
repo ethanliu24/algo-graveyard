@@ -20,8 +20,8 @@ class QuestionDAO:
             d = q_data.to_dict()
             d.update({ "solutions": [] })  # What the solution is doesn't matter
             q = Question(**d)
-            data = {"id": q.id, "source": q.source.value, "status": q.status.value, "title": q.title,
-                    "tags": q.tags, "created_at": q.created_at, "last_modified": q.last_modified}
+            data = {"id": q.id, "source": q.source.value, "difficulty": q.difficulty.value, "status": q.status.value,
+                    "title": q.title, "tags": q.tags, "created_at": q.created_at, "last_modified": q.last_modified}
             res.append(QuestionBasicInfo(**data))
         return res
 

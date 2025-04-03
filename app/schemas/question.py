@@ -38,6 +38,7 @@ class QuestionCreate(BaseModelConfig):
 class QuestionBasicInfo(BaseModelConfig):
     id: str
     source: Source
+    difficulty: Difficulty
     status: Status
     title: str
     tags: list[str]

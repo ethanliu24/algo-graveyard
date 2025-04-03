@@ -4,7 +4,7 @@ from typing import Annotated
 from ..config import get_question_service, auth_user_jwt
 from ..exceptions.entity_not_found import EntityNotFoundError
 from ..managers.question_manager import QuestionManager
-from ..schemas.question import Question, QuestionCreate, QuestionBasicInfo
+from ..schemas.question import Question, QuestionCreate, QuestionBasicInfo, Source, Difficulty, Status
 
 router = APIRouter(
     prefix="/questions",
@@ -13,9 +13,31 @@ router = APIRouter(
 
 @router.get("", status_code=status.HTTP_200_OK)
 async def get_all_questions(
-    question_service: Annotated[QuestionManager, Depends(get_question_service)]
-) -> list[QuestionBasicInfo]:  # TODO add filter
-    return await question_service.get_all_questions()
+    question_service: Annotated[QuestionManager, Depends(get_question_service)],
+    source: Source = None,
+    diffculty: Difficulty = None,
+    status: Status = None,
+    tags: list[str] = [],
+    search: str = "",
+    sort_by: str = "created_at",
+    order: str = "asc",
+    page: int = 1,
+    per_page: int = 20,
+    paginate: bool = True
+) -> list[QuestionBasicInfo]:
+    questions = await question_service.get_all_questions(
+        source,
+        diffculty,
+        status,
+        tags,
+        search,
+        sort_by,
+        order,
+        page,
+        per_page,
+        paginate
+    )
+    return questions
 
 @router.get("/{question_id}", status_code=status.HTTP_200_OK)
 async def get_question(
