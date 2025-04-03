@@ -30,8 +30,8 @@ class QuestionManager(object):
         search = search or ""
         sort_by_provided, sort_by = sort_by is not None, sort_by or "created_at"
         order = order or "asc"
-        page = page if page is not None else 1
-        per_page = per_page if per_page is not None else 20
+        page = min(50, page) if page is not None else 1
+        per_page = max(1, per_page) if per_page is not None else 20
         paginate = paginate if paginate is not None else True
 
         # I am broke as fuck. I can't afford firebase queries. Efficiency ain't shit.
@@ -39,10 +39,6 @@ class QuestionManager(object):
             raise ValueError(f"Invalid order value {order}. Must be 'asc' or 'desc'.")
         if sort_by not in ["created_at", "difficulty", "title"]:
             raise ValueError(f"Invalid order value {order}. Must be 'created_at', 'difficulty' or 'title'.")
-        if per_page == 0:
-            raise ValueError(f"Invalid 'per_page' value. Cannot be 0.")
-        if page == 0:
-            raise ValueError(f"Invalid 'page' value. Cannot be 0.")
 
         questions = self.question_dao.get_all_questions()
         questions = self._filter_questions(questions, source, difficulty, status, tags, search)

@@ -274,6 +274,7 @@ async def test_search_questions(endpoint):
     assert len(pagination["data"]) == 6
     assert pagination["pages"] == 1
 
+
 @pytest.mark.asyncio
 async def test_search_no_questions(endpoint):
     """ Testing if searching questions returns nothing if no questions match. """
@@ -284,6 +285,7 @@ async def test_search_no_questions(endpoint):
     assert len(pagination["data"]) == 0
     assert pagination["pages"] == 1
 
+
 @pytest.mark.asyncio
 async def test_search_case_sensitive(endpoint):
     """ Test if search returns right result when it's not case sensitive. """
@@ -291,6 +293,7 @@ async def test_search_case_sensitive(endpoint):
     assert response.status_code == 200
     pagination = response.json()["data"]
     assert len(pagination["data"]) == 1
+
 
 @pytest.mark.asyncio
 async def test_search_title_with_space(endpoint):
@@ -310,6 +313,7 @@ async def test_filtering_for_source(endpoint):
     pagination = response.json()["data"]
     assert len(pagination["data"]) == 6
 
+
 @pytest.mark.asyncio
 async def test_filtering_for_difficulty(endpoint):
     """ Test filtering for difficulty. """
@@ -317,6 +321,7 @@ async def test_filtering_for_difficulty(endpoint):
     assert response.status_code == 200
     pagination = response.json()["data"]
     assert len(pagination["data"]) == 1
+
 
 @pytest.mark.asyncio
 async def test_filtering_for_status(endpoint):
@@ -326,6 +331,7 @@ async def test_filtering_for_status(endpoint):
     pagination = response.json()["data"]
     assert len(pagination["data"]) == 3
 
+
 @pytest.mark.asyncio
 async def test_filtering_for_tags(endpoint):
     """ Test filtering for status. """
@@ -333,6 +339,7 @@ async def test_filtering_for_tags(endpoint):
     assert response.status_code == 200
     pagination = response.json()["data"]
     assert len(pagination["data"]) == 5
+
 
 @pytest.mark.asyncio
 async def test_filtering_without_search(endpoint):
@@ -343,6 +350,7 @@ async def test_filtering_without_search(endpoint):
     questions = response.json()["data"]
     count = sum(1 for q in questions if q["difficulty"] == "easy")
     assert len(pagination["data"]) == count
+
 
 @pytest.mark.asyncio
 async def test_multiple_filters(endpoint):
@@ -369,6 +377,7 @@ async def test_sorting_by_created_at(endpoint):
     assert response.status_code == 200
     questions = response.json()["data"]["data"]
     assert all([questions[i-1]["created_at"] >= questions[i]["created_at"] for i in range(1, len(questions))])
+
 
 @pytest.mark.asyncio
 async def test_sorting_by_difficulty(endpoint):
