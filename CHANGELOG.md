@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## Version 0.0.1
+- Enhance schemas with validation and make tags enums for single source of truth. (#20)
 - Support querying specific questions on all questions route (#19).
 - Fixed test reporter (#17)
 - Update test case schema to use a dict for inputs rather than parallel arrays (#15)

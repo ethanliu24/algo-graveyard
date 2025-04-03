@@ -6,7 +6,7 @@ from typing import Annotated
 from ..config import get_question_service, auth_user_jwt
 from ..exceptions.entity_not_found import EntityNotFoundError
 from ..managers.question_manager import QuestionManager
-from ..schemas.question import Question, QuestionCreate, QuestionAll, Source, Difficulty, Status
+from ..schemas.question import Question, QuestionCreate, QuestionAll, Source, Difficulty, Status, Tag
 
 router = APIRouter(
     prefix="/questions",
@@ -19,7 +19,7 @@ async def get_all_questions(
     source: Annotated[Source | None, Query()] = None,
     difficulty: Annotated[Difficulty | None, Query()] = None,
     status: Annotated[Status | None, Query()] = None,
-    tags: Annotated[list[str] | None, Query()] = None,
+    tags: Annotated[list[Tag] | None, Query()] = None,
     search: Annotated[str | None, Query()] = None,
     sort_by: Annotated[str | None, Query()] = None,
     order: Annotated[str | None, Query()] = None,

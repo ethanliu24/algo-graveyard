@@ -1,10 +1,10 @@
 from math import ceil
-from datetime import datetime
+from datetime import datetime, timezone
 from ..daos.question_dao import QuestionDAO
 from ..exceptions.entity_not_found import EntityNotFoundError
 from ..schemas.pagination import Pagination
 from ..schemas.question import Question, QuestionCreate, QuestionBasicInfo, QuestionAll, \
-    Source, Difficulty, Status
+    Source, Difficulty, Status, Tag
 
 class QuestionManager(object):
     question_dao: QuestionDAO
@@ -17,7 +17,7 @@ class QuestionManager(object):
         source: Source | None = None,
         difficulty: Difficulty | None = None,
         status: Status | None = None,
-        tags: list[str] | None = None,
+        tags: list[Tag] | None = None,
         search: str | None = None,
         sort_by: str | None = None,
         order: str | None = None,
@@ -30,8 +30,8 @@ class QuestionManager(object):
         search = search or ""
         sort_by_provided, sort_by = sort_by is not None, sort_by or "created_at"
         order = order or "asc"
-        page = page if page is not None else 1
-        per_page = per_page if per_page is not None else 20
+        page = min(50, page) if page is not None else 1
+        per_page = max(1, per_page) if per_page is not None else 20
         paginate = paginate if paginate is not None else True
 
         # I am broke as fuck. I can't afford firebase queries. Efficiency ain't shit.
@@ -39,10 +39,6 @@ class QuestionManager(object):
             raise ValueError(f"Invalid order value {order}. Must be 'asc' or 'desc'.")
         if sort_by not in ["created_at", "difficulty", "title"]:
             raise ValueError(f"Invalid order value {order}. Must be 'created_at', 'difficulty' or 'title'.")
-        if per_page == 0:
-            raise ValueError(f"Invalid 'per_page' value. Cannot be 0.")
-        if page == 0:
-            raise ValueError(f"Invalid 'page' value. Cannot be 0.")
 
         questions = self.question_dao.get_all_questions()
         questions = self._filter_questions(questions, source, difficulty, status, tags, search)
@@ -65,9 +61,10 @@ class QuestionManager(object):
         question["source"] = question["source"].value
         question["difficulty"] = question["difficulty"].value
         question["status"] = question["status"].value
+        question["tags"] = [tag.value for tag in question["tags"]]
         question["solutions"] = []
 
-        creation_time = datetime.now()
+        creation_time = datetime.now(timezone.utc)
         question.update({ "created_at": creation_time, "last_modified": creation_time })
 
         return self.question_dao.create_question(question, id)
@@ -90,7 +87,7 @@ class QuestionManager(object):
         source: Source | None,
         difficulty: Difficulty | None,
         status: Status | None,
-        tags: list[str] | None,
+        tags: list[Tag] | None,
         search: str | None
     ) -> list[QuestionBasicInfo]:
         """

@@ -45,10 +45,16 @@ class QuestionDAO:
         return Question(**data)
 
     def delete_question(self, id: str) -> bool:
-        doc_ref = self.db.collection(self.question_collection).document(id)
-        res = doc_ref.get().exists
-        doc_ref.delete()
-        return res
+        q_ref = self.db.collection(self.question_collection).document(id)
+        if not q_ref.get().exists: return False
+
+        # del solutions
+        sln_collection_ref = q_ref.collection(self.solution_collection)
+        for sln in sln_collection_ref.stream():
+            sln.reference.delete()  # Delete each solution document
+
+        q_ref.delete()
+        return True
 
     def update_question(self, id: str, data: dict) -> Question:
         doc_ref = self.db.collection(self.question_collection).document(id)

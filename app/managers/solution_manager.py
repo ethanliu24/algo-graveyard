@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from ..daos.solution_dao import SolutionDAO
 from ..exceptions.entity_not_found import EntityNotFoundError
 from ..schemas.solution import Solution, SolutionCreate
@@ -33,7 +33,7 @@ class SolutionManager(object):
             "feedback": ""
         }})
 
-        creation_time = datetime.now()
+        creation_time = datetime.now(timezone.utc)
         solution.update({ "created_at": creation_time, "last_modified": creation_time })
 
         res = self.solution_dao.create_solution(question_id, solution, id)
