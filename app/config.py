@@ -4,10 +4,11 @@ from typing import Annotated
 from .daos.question_dao import QuestionDAO
 from .daos.solution_dao import SolutionDAO
 from .env_vars import ENV_VARS
+from .managers.auth_manager import AuthManager, JWTBearer
 from .managers.firebase_manager import FirebaseManager
+from .managers.metadata_manager import MetadataManager
 from .managers.question_manager import QuestionManager
 from .managers.solution_manager import SolutionManager
-from .managers.auth_manager import AuthManager, JWTBearer
 
 class Configs:
     instance: Configs = None
@@ -17,6 +18,7 @@ class Configs:
     question_manager: QuestionManager = None
     solution_manager: SolutionManager = None
     auth_manager: AuthManager = None
+    metadata_manager: MetadataManager = None
     question_collection: str = ""
     solution_collection: str = ""
 
@@ -48,6 +50,7 @@ class Configs:
 
             cls.question_manager = QuestionManager(cls.question_dao)
             cls.solution_manager = SolutionManager(cls.solution_dao)
+            cls.metadata_manager = MetadataManager()
             cls.auth_manager = AuthManager(
                 ENV_VARS.get("APP_SECRET"),
                 ENV_VARS.get("JWT_SIGNITURE"),
@@ -72,7 +75,12 @@ def get_solution_service(configs: Annotated[Configs, Depends(init_config)]):
     return configs.solution_manager
 
 
+def get_metadata_service(configs: Annotated[Configs, Depends(init_config)]):
+    return configs.metadata_manager
+
+
 def get_auth_service(configs: Annotated[Configs, Depends(init_config)]):
     return configs.auth_manager
+
 
 auth_user_jwt = JWTBearer(Configs().auth_manager)
