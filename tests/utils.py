@@ -3,7 +3,6 @@ import time
 
 from app.config import Configs
 from app.env_vars import ENV_VARS
-from app.main import app
 from app.schemas.ai_analysis import AiAnalysis
 from app.schemas.question import Question
 from app.schemas.solution import Solution

@@ -1,6 +1,7 @@
-from fastapi.testclient import TestClient
 import pytest
-import utils
+import tests.utils as utils
+
+from fastapi.testclient import TestClient
 
 from app.config import Configs
 from app.main import app
