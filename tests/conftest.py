@@ -1,12 +1,15 @@
 from fastapi.testclient import TestClient
 import pytest
+import utils
 
 from app.config import Configs
+from app.env_vars import ENV_VARS
 from app.main import app
 from app.schemas.ai_analysis import AiAnalysis
 from app.schemas.question import Question
 from app.schemas.solution import Solution
 from app.schemas.test_case import TestCase
+from app.schemas.token import Token
 from .seed import QUESTIONS
 
 def pytest_sessionstart():
@@ -87,3 +90,8 @@ def question_service(setup):
 def endpoint():
     client = TestClient(app)
     yield client
+
+
+@pytest.fixture()
+def cookie():
+    {"jwt_cookie": utils.create_jwt_token()}
