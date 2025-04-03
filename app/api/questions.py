@@ -16,7 +16,7 @@ async def get_all_questions(
     question_service: Annotated[QuestionManager, Depends(get_question_service)],
     source: Source = None,
     difficulty: Difficulty = None,
-    status: Status = None,
+    q_status: Status = None,
     tags: list[str] = None,
     search: str = None,
     sort_by: str = None,
@@ -25,19 +25,21 @@ async def get_all_questions(
     per_page: int = None,
     paginate: bool = None
 ) -> QuestionAll:
-    questions = await question_service.get_all_questions(
-        source=source,
-        difficulty=difficulty,
-        status=status,
-        tags=tags,
-        search=search,
-        sort_by=sort_by,
-        order=order,
-        page=page,
-        per_page=per_page,
-        paginate=paginate
-    )
-    return questions
+    try:
+        return await question_service.get_all_questions(
+            source=source,
+            difficulty=difficulty,
+            status=q_status,
+            tags=tags,
+            search=search,
+            sort_by=sort_by,
+            order=order,
+            page=page,
+            per_page=per_page,
+            paginate=paginate
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
 
 @router.get("/{question_id}", status_code=status.HTTP_200_OK)
 async def get_question(

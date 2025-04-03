@@ -1,3 +1,4 @@
+from math import ceil
 from datetime import datetime
 from ..daos.question_dao import QuestionDAO
 from ..exceptions.entity_not_found import EntityNotFoundError
@@ -29,8 +30,8 @@ class QuestionManager(object):
         search = search or ""
         sort_by = sort_by or "created_at"
         order = order or "asc"
-        page = page or 1
-        per_page = per_page or 20
+        page = page if page is not None else 1
+        per_page = per_page if per_page is not None else 20
         paginate = paginate if paginate is not None else True
 
         questions = self.question_dao.get_all_questions()
@@ -39,14 +40,18 @@ class QuestionManager(object):
 
         # I am broke as fuck. I can't afford firebase queries. Efficiency ain't shit.
         if order not in ["asc", "desc"]:
-            raise ValueError(f"Invalid order value {order}. Must be asc or desc")
-        if sort_by not in ["created_at", "source", "difficulty", "title"]:
-            raise ValueError(f"Invalid order value {order}. Must be created_at, source, difficulty or title.")
+            raise ValueError(f"Invalid order value {order}. Must be 'asc' or 'desc'.")
+        if sort_by not in ["created_at", "difficulty", "title"]:
+            raise ValueError(f"Invalid order value {order}. Must be 'created_at', 'difficulty' or 'title'.")
+        if per_page == 0:
+            raise ValueError(f"Invalid 'per_page' value. Cannot be 0.")
+        if page == 0:
+            raise ValueError(f"Invalid 'page' value. Cannot be 0.")
 
         questions = self._filter_questions(questions, source, difficulty, status, tags, search)
-        self._sort_quesitons(questions, sort_by)
-        self._order_questions(questions, order)
-        return self._paginate_questions(questions, page, per_page)
+        self._sort_questions(questions, sort_by, order)
+        pagination = self._paginate_questions(questions, page, per_page)
+        return QuestionAll(**{"paginated": False, "data": pagination})
 
     async def get_question(self, id: str) -> Question:
         question = self.question_dao.get_question(id)
@@ -79,6 +84,7 @@ class QuestionManager(object):
             raise EntityNotFoundError("Invalid question ID.")
 
     def _filter_questions(
+        self,
         questions: list[QuestionBasicInfo],
         source: Source | None,
         difficulty: Difficulty | None,
@@ -86,13 +92,58 @@ class QuestionManager(object):
         tags: list[str] | None,
         search: str | None
     ) -> list[QuestionBasicInfo]:
-        pass
+        res = []
+        for question in questions:
+            appended = False
 
-    def _paginate_questions(questions: list[QuestionBasicInfo], page: int, per_page: int) -> Pagination:
-        pass
+            if (source and question.source.value == source.value) or \
+               (difficulty and question.difficulty.value == difficulty.value) or \
+               (status and question.status.value == status.value) or \
+               (search and search in question.title):
+                res.append(question)
+                appended = True
+                continue
 
-    def _order_questions(questions: list[QuestionBasicInfo], order: str) -> None:
-        pass
+            for tag in tags:
+                if tag in question.tags:
+                    res.append(question)
+                    appended = True
+                    break
 
-    def _sort_questions(questions: list[QuestionBasicInfo], sort_by: str) -> None:
-        pass
+            if not appended and not search:
+                res.append(question)
+                appended = True
+
+        return res
+
+    def _sort_questions(self, questions: list[QuestionBasicInfo], sort_by: str, order: bool) -> None:
+        diff_prio = {
+            Difficulty.EASY.value: 0,
+            Difficulty.MEDIUM.value: 1,
+            Difficulty.HARD.value: 2,
+        }
+
+        sorting_key = {
+            "created_at": lambda q: (q.created_at.timestamp(), q.title),
+            "difficulty": lambda q: (diff_prio[q.difficulty.value], -q.created_at.timestamp()),
+            "title": lambda q: (q.title, -q.created_at.timestamp()),
+        }
+
+        questions.sort(
+            key=sorting_key[sort_by],
+            reverse=(False if order == "asc" else True)
+        )
+
+    def _paginate_questions(self, questions: list[QuestionBasicInfo], page: int, per_page: int) -> Pagination:
+        total = len(questions)
+        total_pages = ceil(total / per_page)
+        page = max(1, min(page, total_pages))
+        start = (page - 1) * per_page
+        data = {
+            "data": questions[start:start+per_page],
+            "page": page,
+            "per_page": per_page,
+            "pages": total_pages,
+            "total": total,
+        }
+        return Pagination(**data)
