@@ -8,7 +8,7 @@ from app.main import app
 from app.env_vars import ENV_VARS
 
 def pytest_sessionstart():
-    utils.populate_database()
+    utils.seed_database()
 
 
 def pytest_sessionfinish():

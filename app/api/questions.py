@@ -1,10 +1,12 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+import fastapi
+
+from fastapi import APIRouter, Depends, HTTPException, status, Query
 from pydantic import ValidationError
 from typing import Annotated
 from ..config import get_question_service, auth_user_jwt
 from ..exceptions.entity_not_found import EntityNotFoundError
 from ..managers.question_manager import QuestionManager
-from ..schemas.question import Question, QuestionCreate, QuestionBasicInfo
+from ..schemas.question import Question, QuestionCreate, QuestionAll, Source, Difficulty, Status
 
 router = APIRouter(
     prefix="/questions",
@@ -13,9 +15,33 @@ router = APIRouter(
 
 @router.get("", status_code=status.HTTP_200_OK)
 async def get_all_questions(
-    question_service: Annotated[QuestionManager, Depends(get_question_service)]
-) -> list[QuestionBasicInfo]:  # TODO add filter
-    return await question_service.get_all_questions()
+    question_service: Annotated[QuestionManager, Depends(get_question_service)],
+    source: Annotated[Source | None, Query()] = None,
+    difficulty: Annotated[Difficulty | None, Query()] = None,
+    status: Annotated[Status | None, Query()] = None,
+    tags: Annotated[list[str] | None, Query()] = None,
+    search: Annotated[str | None, Query()] = None,
+    sort_by: Annotated[str | None, Query()] = None,
+    order: Annotated[str | None, Query()] = None,
+    page: Annotated[int | None, Query()] = None,
+    per_page: Annotated[int | None, Query()] = None,
+    paginate: Annotated[bool | None, Query()] = None,
+) -> QuestionAll:
+    try:
+        return await question_service.get_all_questions(
+            source=source,
+            difficulty=difficulty,
+            status=status,  # note: fastapi also has a status. if using that, do fastapi.status
+            tags=tags,
+            search=search,
+            sort_by=sort_by,
+            order=order,
+            page=page,
+            per_page=per_page,
+            paginate=paginate
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=fastapi.status.HTTP_400_BAD_REQUEST, detail=str(e))
 
 @router.get("/{question_id}", status_code=status.HTTP_200_OK)
 async def get_question(

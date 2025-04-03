@@ -2,6 +2,7 @@ from __future__ import annotations
 from datetime import datetime
 from enum import Enum
 from .base_config import BaseModelConfig
+from .pagination import Pagination
 from .solution import Solution
 from .test_case import TestCase
 
@@ -9,6 +10,7 @@ class Question(BaseModelConfig):
     id: str
     source: Source
     link: str
+    difficulty: Difficulty
     status: Status
     title: str
     prompt: str
@@ -24,6 +26,7 @@ class Question(BaseModelConfig):
 class QuestionCreate(BaseModelConfig):
     source: Source
     link: str
+    difficulty: Difficulty
     status: Status
     title: str
     prompt: str
@@ -36,12 +39,17 @@ class QuestionCreate(BaseModelConfig):
 class QuestionBasicInfo(BaseModelConfig):
     id: str
     source: Source
+    difficulty: Difficulty
     status: Status
     title: str
     tags: list[str]
     created_at: datetime
     last_modified: datetime
 
+
+class QuestionAll(BaseModelConfig):
+    paginated: bool
+    data: Pagination | list[QuestionBasicInfo]
 
 class Source(Enum):
     LEETCODE = "leetcode"
@@ -52,3 +60,9 @@ class Status(Enum):
     COMPLETED = "completed"
     UNOPTIMIZED = "unoptimized"
     ATTEMPTED = "attempted"
+
+
+class Difficulty(Enum):
+    EASY = "easy"
+    MEDIUM = "medium"
+    HARD = "hard"

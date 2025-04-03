@@ -8,6 +8,7 @@ JWT_COOKIE = ENV_VARS.get("JWT_COOKIE")
 Q_JSON = {
     "source": "leetcode",
     "link": "",
+    "difficulty": "easy",
     "status": "completed",
     "title": "Test authentication authorization",
     "prompt": "Test authentication authorization",

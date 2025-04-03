@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## Version 0.0.1
+- Support querying specific questions on all questions route (#19).
 - Fixed test reporter (#17)
 - Update test case schema to use a dict for inputs rather than parallel arrays (#15)
 - Add authentication and authorization enpoints and services (#14)

@@ -39,5 +39,5 @@ def test_verify_incorrect_secret(endpoint):
 def test_public_routes(endpoint):
     """ These routes shuold still be accessible even when not authed. """
     endpoint.cookies.clear()
-    response = endpoint.get("api/questions")
+    response = endpoint.get("api/questions?paginate=false")
     assert response.status_code == 200
