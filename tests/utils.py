@@ -8,7 +8,7 @@ from app.schemas.question import Question
 from app.schemas.solution import Solution
 from app.schemas.test_case import TestCase
 from app.schemas.token import Token
-from .seed import QUESTIONS
+from tests.seed import QUESTIONS
 
 def populate_database():
     """ Populates the database. """
@@ -84,3 +84,14 @@ def create_jwt_token(
 
     _ = Token(**payload)
     return jwt.encode(payload, jwt_secret, algorithm=hs_alg)
+
+
+def set_jwt_cookie(endpoint, response):
+    set_cookie_header = response.headers.get("set-cookie")
+    cookie_values = set_cookie_header.split(";")
+    for val in cookie_values:
+        res = val.split("=")
+        if res[0] == ENV_VARS.get("JWT_COOKIE"):
+            endpoint.cookies.set(ENV_VARS.get("JWT_COOKIE"), res[1])
+            break
+        

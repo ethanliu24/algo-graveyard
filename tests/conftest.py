@@ -31,6 +31,11 @@ def question_service(setup):
 
 
 @pytest.fixture()
+def auth_service(setup):
+    yield setup.auth_manager
+
+
+@pytest.fixture()
 def endpoint():
     client = TestClient(app)
     client.cookies.set(ENV_VARS.get("JWT_COOKIE"), utils.create_jwt_token())
