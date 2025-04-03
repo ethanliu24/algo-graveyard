@@ -1,4 +1,4 @@
-from fastapi import Request, Header
+from fastapi import Request
 from starlette.middleware.base import BaseHTTPMiddleware
 from .env_vars import ENV_VARS
 

@@ -1,6 +1,7 @@
 from __future__ import annotations
 from datetime import datetime
 from enum import Enum
+from pydantic import field_validator
 from .base_config import BaseModelConfig
 from .pagination import Pagination
 from .solution import Solution
@@ -34,6 +35,18 @@ class QuestionCreate(BaseModelConfig):
     notes: list[str]
     hints: list[str]
     tags: list[str]
+
+    @field_validator("title")
+    def title_exists_and_is_long_enough(title: str) -> int:
+        if not (0 <= len(title) <= 50):
+            raise ValueError("There must be a title and it should be less or equal than 50 characters.")
+        return title
+
+    @field_validator("prompt")
+    def prompt_exists(prompt: str) -> int:
+        if len(prompt) == 0:
+            raise ValueError("There must be a prompt for a question.")
+        return prompt
 
 
 class QuestionBasicInfo(BaseModelConfig):
