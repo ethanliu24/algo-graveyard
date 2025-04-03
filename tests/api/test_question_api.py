@@ -1,6 +1,6 @@
 import pytest
 
-from app.schemas.question import Question, QuestionBasicInfo
+from app.schemas.question import Question, QuestionBasicInfo, Difficulty
 from tests.seed import QUESTIONS
 
 API = "/api/questions"
@@ -156,7 +156,9 @@ async def test_update_question_doesnt_exist(endpoint):
     assert response.status_code == 404
 
 
-# Filter
+# TODO add a per page pagination queries
+
+# Search
 @pytest.mark.asyncio
 async def test_search_questions(endpoint):
     """ Testing if searching questions works. """
@@ -245,3 +247,79 @@ async def test_multiple_filters(endpoint):
     assert response.status_code == 200
     pagination = response.json()["data"]
     assert len(pagination["data"]) == 1
+
+
+# Sort and order
+@pytest.mark.asyncio
+async def test_sorting_by_created_at(endpoint):
+    """ Test sorting by created at with both orders. """
+    # check asc
+    response = endpoint.get(f"{API}?search=paginate&sort_by=created_at&order=asc")
+    assert response.status_code == 200
+    questions = response.json()["data"]["data"]
+    assert all([questions[i-1]["created_at"] <= questions[i]["created_at"] for i in range(1, len(questions))])
+
+    # check desc
+    response = endpoint.get(f"{API}?sort_by=created_at&order=desc")
+    assert response.status_code == 200
+    questions = response.json()["data"]["data"]
+    assert all([questions[i-1]["created_at"] >= questions[i]["created_at"] for i in range(1, len(questions))])
+
+@pytest.mark.asyncio
+async def test_sorting_by_difficulty(endpoint):
+    """ Test sorting by difficulty at with both orders. """
+    prio = { Difficulty.EASY.value: 0, Difficulty.MEDIUM.value: 1, Difficulty.HARD.value: 2 }
+
+    # check asc
+    response = endpoint.get(f"{API}?sort_by=difficulty&order=asc")
+    assert response.status_code == 200
+    questions = response.json()["data"]["data"]
+    assert all([prio[questions[i-1]["difficulty"]] <= prio[questions[i]["difficulty"]] for i in range(1, len(questions))])
+
+    # check desc
+    response = endpoint.get(f"{API}?search=paginate&sort_by=difficulty&order=desc")
+    assert response.status_code == 200
+    questions = response.json()["data"]["data"]
+    assert all([prio[questions[i-1]["difficulty"]] >= prio[questions[i]["difficulty"]] for i in range(1, len(questions))])
+
+
+@pytest.mark.asyncio
+async def test_sorting_by_title(endpoint):
+    """ Test sorting by title at with both orders. """
+    # check asc
+    response = endpoint.get(f"{API}?search=paginate&sort_by=title&order=asc")
+    assert response.status_code == 200
+    questions = response.json()["data"]["data"]
+    assert all([questions[i-1]["title"] <= questions[i]["title"] for i in range(1, len(questions))])
+
+    # check desc
+    response = endpoint.get(f"{API}?sort_by=title&order=desc")
+    assert response.status_code == 200
+    questions = response.json()["data"]["data"]
+    assert all([questions[i-1]["title"] >= questions[i]["title"] for i in range(1, len(questions))])
+
+
+@pytest.mark.asyncio
+async def test_sorting_invalid_query_param(endpoint):
+    """ Test sorting but query params are invalid. """
+    response = endpoint.get(f"{API}?sort_by=bad")
+    assert response.status_code == 400
+
+    response = endpoint.get(f"{API}?order=bad")
+    assert response.status_code == 400
+
+    response = endpoint.get(f"{API}?sort_by=created_at&order=bad")
+    assert response.status_code == 400
+
+    response = endpoint.get(f"{API}?sort_by=bad&order=asc")
+    assert response.status_code == 400
+
+
+@pytest.mark.asyncio
+async def test_sorting_default(endpoint):
+    """ Test if return values are created date sorted in desc order. """
+    # check asc
+    response = endpoint.get(f"{API}?")
+    assert response.status_code == 200
+    questions = response.json()["data"]["data"]
+    assert all([questions[i-1]["created_at"] >= questions[i]["created_at"] for i in range(1, len(questions))])

@@ -28,7 +28,7 @@ class QuestionManager(object):
         # initialize query params
         tags = tags or []
         search = search or ""
-        sort_by = sort_by or "created_at"
+        sort_by_provided, sort_by = sort_by is not None, sort_by or "created_at"
         order = order or "asc"
         page = page if page is not None else 1
         per_page = per_page if per_page is not None else 20
@@ -46,7 +46,9 @@ class QuestionManager(object):
 
         questions = self.question_dao.get_all_questions()
         questions = self._filter_questions(questions, source, difficulty, status, tags, search)
-        self._sort_questions(questions, sort_by, order)
+        # sorts questions in descending order by created_at sort by isn't provided
+        self._sort_questions(questions, sort_by, "desc" if not sort_by_provided else order)
+
         return QuestionAll(**{
             "paginated": False,
             "data": questions if not paginate else self._paginate_questions(questions, page, per_page)
