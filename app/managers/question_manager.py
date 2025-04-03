@@ -4,7 +4,7 @@ from ..daos.question_dao import QuestionDAO
 from ..exceptions.entity_not_found import EntityNotFoundError
 from ..schemas.pagination import Pagination
 from ..schemas.question import Question, QuestionCreate, QuestionBasicInfo, QuestionAll, \
-    Source, Difficulty, Status
+    Source, Difficulty, Status, Tag
 
 class QuestionManager(object):
     question_dao: QuestionDAO
@@ -17,7 +17,7 @@ class QuestionManager(object):
         source: Source | None = None,
         difficulty: Difficulty | None = None,
         status: Status | None = None,
-        tags: list[str] | None = None,
+        tags: list[Tag] | None = None,
         search: str | None = None,
         sort_by: str | None = None,
         order: str | None = None,
@@ -61,6 +61,7 @@ class QuestionManager(object):
         question["source"] = question["source"].value
         question["difficulty"] = question["difficulty"].value
         question["status"] = question["status"].value
+        question["tags"] = [tag.value for tag in question["tags"]]
         question["solutions"] = []
 
         creation_time = datetime.now(timezone.utc)
@@ -86,7 +87,7 @@ class QuestionManager(object):
         source: Source | None,
         difficulty: Difficulty | None,
         status: Status | None,
-        tags: list[str] | None,
+        tags: list[Tag] | None,
         search: str | None
     ) -> list[QuestionBasicInfo]:
         """

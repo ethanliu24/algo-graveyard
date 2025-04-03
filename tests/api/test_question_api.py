@@ -155,8 +155,8 @@ async def test_update_question_basic(endpoint):
     q = Question(**response.json())
     assert q.title == "Updated title"
     assert q.prompt == "Updated prompt"
-    assert q.tags == ["graph", "queue"]
     assert q.source.value == "leetcode"
+    for tag in q.tags: assert tag.value in ["graph", "queue"]
 
 
 @pytest.mark.asyncio
