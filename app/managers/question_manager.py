@@ -34,10 +34,6 @@ class QuestionManager(object):
         per_page = per_page if per_page is not None else 20
         paginate = paginate if paginate is not None else True
 
-        questions = self.question_dao.get_all_questions()
-        if paginate == False:
-            return QuestionAll(**{"paginated": False, "data": questions})
-
         # I am broke as fuck. I can't afford firebase queries. Efficiency ain't shit.
         if order not in ["asc", "desc"]:
             raise ValueError(f"Invalid order value {order}. Must be 'asc' or 'desc'.")
@@ -48,10 +44,13 @@ class QuestionManager(object):
         if page == 0:
             raise ValueError(f"Invalid 'page' value. Cannot be 0.")
 
+        questions = self.question_dao.get_all_questions()
         questions = self._filter_questions(questions, source, difficulty, status, tags, search)
         self._sort_questions(questions, sort_by, order)
-        pagination = self._paginate_questions(questions, page, per_page)
-        return QuestionAll(**{"paginated": False, "data": pagination})
+        return QuestionAll(**{
+            "paginated": False,
+            "data": questions if not paginate else self._paginate_questions(questions, page, per_page)
+        })
 
     async def get_question(self, id: str) -> Question:
         question = self.question_dao.get_question(id)
@@ -94,25 +93,17 @@ class QuestionManager(object):
     ) -> list[QuestionBasicInfo]:
         res = []
         for question in questions:
-            appended = False
-
             if (source and question.source.value == source.value) or \
                (difficulty and question.difficulty.value == difficulty.value) or \
                (status and question.status.value == status.value) or \
-               (search and search in question.title):
+               (search is None or search.lower() in question.title.lower()):
                 res.append(question)
-                appended = True
                 continue
 
             for tag in tags:
                 if tag in question.tags:
                     res.append(question)
-                    appended = True
                     break
-
-            if not appended and not search:
-                res.append(question)
-                appended = True
 
         return res
 
@@ -136,7 +127,7 @@ class QuestionManager(object):
 
     def _paginate_questions(self, questions: list[QuestionBasicInfo], page: int, per_page: int) -> Pagination:
         total = len(questions)
-        total_pages = ceil(total / per_page)
+        total_pages = max(1, ceil(total / per_page))
         page = max(1, min(page, total_pages))
         start = (page - 1) * per_page
         data = {

@@ -119,7 +119,7 @@ QUESTIONS = [
     },
 ]
 
-PAGINATION_Q = [
+QUERY_Q = [
     {
         "id": "paginate1",
         "source": Source.LEETCODE.value,
@@ -207,6 +207,22 @@ PAGINATION_Q = [
         "difficulty": Difficulty.HARD.value,
         "status": Status.UNOPTIMIZED.value,
         "title": "paginate6",
+        "prompt": "a",
+        "test_cases": [],
+        "notes": [],
+        "hints": [],
+        "tags": [],
+        "solutions": [SOLUTIONS[1]],
+        "created_at": datetime(2006, 1, 1, 1, 1, 1, 1, tzinfo=timezone.utc),
+        "last_modified": datetime(2006, 1, 1, 1, 1, 1, 1, tzinfo=timezone.utc),
+    },
+    {
+        "id": "search_with_space",
+        "source": Source.LEETCODE.value,
+        "link": "",
+        "difficulty": Difficulty.HARD.value,
+        "status": Status.UNOPTIMIZED.value,
+        "title": "Space Here",
         "prompt": "a",
         "test_cases": [],
         "notes": [],

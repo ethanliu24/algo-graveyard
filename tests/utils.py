@@ -8,12 +8,12 @@ from app.schemas.question import Question
 from app.schemas.solution import Solution
 from app.schemas.test_case import TestCase
 from app.schemas.token import Token
-from tests.seed import QUESTIONS, PAGINATION_Q
+from tests.seed import QUESTIONS, QUERY_Q
 
 def seed_database():
     """ Populates the database with the given seeds. """
     populate_database(QUESTIONS)
-    populate_database(PAGINATION_Q)
+    populate_database(QUERY_Q)
 
 
 def populate_database(q_arr):

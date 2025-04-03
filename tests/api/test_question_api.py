@@ -154,3 +154,41 @@ async def test_update_question_doesnt_exist(endpoint):
     """ Test deleting a question that doesn't exist in the database. """
     response = endpoint.delete(f"{API}/delete_dne")
     assert response.status_code == 404
+
+
+# Filter, sort, search and pagination
+@pytest.mark.asyncio
+async def test_search_questions(endpoint):
+    """ Testing if searching questions works. """
+    response = endpoint.get(f"{API}?search=paginate")
+    assert response.status_code == 200
+    pagination = response.json()["data"]
+    assert pagination["total"] == 6
+    assert len(pagination["data"]) == 6
+    assert pagination["pages"] == 1
+
+@pytest.mark.asyncio
+async def test_search_no_questions(endpoint):
+    """ Testing if searching questions returns nothing if no questions match. """
+    response = endpoint.get(f"{API}?search=paginate_no_match")
+    assert response.status_code == 200
+    pagination = response.json()["data"]
+    assert pagination["total"] == 0
+    assert len(pagination["data"]) == 0
+    assert pagination["pages"] == 1
+
+@pytest.mark.asyncio
+async def test_search_case_sensitive(endpoint):
+    """ Test if search returns right result when it's not case sensitive. """
+    response = endpoint.get(f"{API}?search=space")
+    assert response.status_code == 200
+    pagination = response.json()["data"]
+    assert len(pagination["data"]) == 1
+
+@pytest.mark.asyncio
+async def test_search_title_with_space(endpoint):
+    """ Test with a space in the search value """
+    response = endpoint.get(f"{API}?search=Space%20Here")
+    assert response.status_code == 200
+    pagination = response.json()["data"]
+    assert len(pagination["data"]) == 1
