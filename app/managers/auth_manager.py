@@ -1,3 +1,8 @@
+"""
+Services for authentication and authorization. Since we don't have a user base as this app is intended to
+be used for only people with the app secret, the app secret is stored in a enviornment variable.
+"""
+
 import jwt
 import time
 
@@ -7,6 +12,9 @@ from jwt import InvalidTokenError, InvalidIssuerError
 from ..schemas.token import Token
 
 class AuthManager:
+    """
+    Services for authentication with the app using JWT tokens.
+    """
     # These should never be changed
     app_secret: str
     jwt_secret: str
@@ -49,6 +57,9 @@ class AuthManager:
 
 
 class JWTBearer(HTTPBearer):
+    """
+    Verifies token from Authorization header before each protected request.
+    """
     auth_service: AuthManager
 
     def __init__(self, auth_service: AuthManager, auto_error = True):
