@@ -16,19 +16,22 @@ jobs:
     strategy:
       matrix:
         python-version: ["3.13"]
-    env:
-      APP_ENV=test
-      APP_SECRET=secret
-      JWT_SIGNITURE=signiture
-      JWT_HS_ALG=HS256
-      JWT_EXP_TIME=1
-      JWT_ISS=algograveyard
-      JWT_AUD=algograveyard
-      JWT_COOKIE=jwt_token_algograveyard
-      FIRESTORE_EMULATOR_HOST=localhost:8080
 
     steps:
       - uses: actions/checkout@v4
+
+
+    - name: Declare env variables
+      run: |
+        echo "APP_ENV=test" >> $GITHUB_ENV
+        echo "APP_SECRET=secret" >> $GITHUB_ENV
+        echo "JWT_SIGNITURE=signiture" >> $GITHUB_ENV
+        echo "JWT_HS_ALG=HS256" >> $GITHUB_ENV
+        echo "JWT_EXP_TIME=1" >> $GITHUB_ENV
+        echo "JWT_ISS=algograveyard" >> $GITHUB_ENV
+        echo "JWT_AUD=algograveyard" >> $GITHUB_ENV
+        echo "JWT_COOKIE=jwt_token_algograveyard" >> $GITHUB_ENV
+        echo "FIRESTORE_EMULATOR_HOST=localhost:8080" >> $GITHUB_ENV
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
