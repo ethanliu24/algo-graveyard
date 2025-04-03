@@ -4,18 +4,6 @@ from tests.utils import set_jwt_cookie
 API = "api/auth"
 APP_SECRET = ENV_VARS.get("APP_SECRET")
 JWT_COOKIE = ENV_VARS.get("JWT_COOKIE")
-QUESTION_API = "api/questions"
-Q_JSON = {
-    "source": "leetcode",
-    "link": "",
-    "status": "completed",
-    "title": "Test authentication authorization",
-    "prompt": "Test authentication authorization",
-    "test_cases": [],
-    "notes": [],
-    "hints": [],
-    "tags": []
-}
 
 def test_verify_correct_secret(endpoint):
     endpoint.cookies.clear()
@@ -23,12 +11,13 @@ def test_verify_correct_secret(endpoint):
     response = endpoint.post(API, json=payload)
 
     # check cookie and update to header
-    set_jwt_cookie(response)
+    set_jwt_cookie(endpoint, response)
     set_cookie_header = response.headers.get("set-cookie")
     cookie_values = set_cookie_header.split(";")
     assert len(cookie_values) > 0
     assert "HttpOnly" in set_cookie_header
     assert "Secure" in set_cookie_header
+    assert endpoint.cookies.get(JWT_COOKIE)
     for val in cookie_values:
         res = val.split("=")
         if res[0] == " Max-Age": assert res[1] == str(float(ENV_VARS.get("JWT_EXP_TIME")) * 60 * 60)
