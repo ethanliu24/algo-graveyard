@@ -1,8 +1,7 @@
 from fastapi import APIRouter, Depends, Query, status
-from typing import Annotated
+from typing import Annotated, Any
 from ..config import get_metadata_service
 from ..managers.metadata_manager import MetadataManager
-from ..schemas.solution import Language
 
 router = APIRouter(
     prefix="/metadata",
@@ -17,5 +16,5 @@ def get_all_metadata(
     statuses: Annotated[bool | None, Query] = None,
     tags: Annotated[bool | None, Query] = None,
     languages: Annotated[bool | None, Query] = None,
-) -> dict:
+) -> dict[str, list[Any]]:
     return metadata_service.get_metadata(sources, difficulties, statuses, tags, languages)
