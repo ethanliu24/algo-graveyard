@@ -157,6 +157,65 @@ async def test_update_question_doesnt_exist(endpoint):
 
 
 # TODO add a per page pagination queries
+# Paginate
+@pytest.mark.asyncio
+async def test_pagination_query_all_pages(endpoint):
+    """ Test pagination and query all pages. """
+    response = endpoint.get(f"{API}")
+    assert response.status_code == 200
+    pagination = response.json()["data"]
+
+    last_page = 1
+    last_res = pagination["data"]
+    while last_page < pagination["pages"]:
+        response = endpoint.get(f"{API}?page={last_page}")
+        pagination = response.json()["data"]
+        assert last_page == pagination["page"] - 1
+        assert last_res != pagination["data"]
+        last_page += 1
+
+
+@pytest.mark.asyncio
+async def test_pagination_last_page(endpoint):
+    """ Test pagination if requested beyond the total page size. """
+    response = endpoint.get(f"{API}")
+    total_pages = response.json()["data"]["page"]
+    res1 = endpoint.get(f"{API}?page={total_pages}").json()["data"]["data"]
+    res2 = endpoint.get(f"{API}?page={total_pages + 100}").json()["data"]["data"]
+    assert res1 == res2
+
+
+@pytest.mark.asyncio
+async def test_pagination_one_per_page(endpoint):
+    """ Test pagination quering one per page. """
+    response = endpoint.get(f"{API}")
+    assert response.status_code == 200
+    pagination = response.json()["data"]
+
+    total_pages = pagination["pages"]
+    last_page = 1
+    last_res = pagination["data"]
+    while last_page < pagination["pages"]:
+        response = endpoint.get(f"{API}?page={last_page}&per_page=1")
+        pagination = response.json()["data"]
+        assert pagination["per_page"] == 1
+        assert last_page == pagination["page"] - 1
+        assert last_res != pagination["data"]
+        last_page += 1
+    assert last_page == total_pages
+
+
+@pytest.mark.asyncio
+async def test_pagination_no_results(endpoint):
+    """ Test pagination but no results are returned in the query. """
+    response = endpoint.get(f"{API}?search=no_pagination_results")
+    assert response.status_code == 200
+    pagination = response.json()["data"]
+    assert pagination["data"] == []
+    assert pagination["page"] == 1
+    assert pagination["pages"] == 1
+    assert pagination["total"] == 0
+
 
 # Search
 @pytest.mark.asyncio
