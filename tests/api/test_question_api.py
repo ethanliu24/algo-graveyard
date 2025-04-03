@@ -9,7 +9,7 @@ API = "/api/questions"
 @pytest.mark.asyncio
 async def test_get_all_questions_no_filter(endpoint):
     """ Test the properties of the result of the endpoint to get all questions_no_filter """
-    response = endpoint.get(f"{API}")
+    response = endpoint.get(f"{API}?paginate=false")
     assert response.status_code == 200
     data = response.json()
     assert len(data) > 0

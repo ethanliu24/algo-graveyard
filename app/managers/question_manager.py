@@ -11,27 +11,40 @@ class QuestionManager(object):
 
     async def get_all_questions(
         self,
-        source: Source = None,
-        diffculty: Difficulty = None,
-        status: Status = None,
-        tags: list[str] = [],
-        search: str = "",
-        sort_by: str = "created_at",
-        order: str = "asc",
-        page: int = 1,
-        per_page: int = 20,
-        paginate: bool = True
+        source: Source | None = None,
+        difficulty: Difficulty | None = None,
+        status: Status | None = None,
+        tags: list[str] | None = None,
+        search: str | None = None,
+        sort_by: str | None = None,
+        order: str | None = None,
+        page: int | None = None,
+        per_page: int | None = None,
+        paginate: bool | None = True
     ) -> list[QuestionBasicInfo]:
+        # initialize query params
+        tags = tags or []
+        search = search or ""
+        sort_by = sort_by or "created_at"
+        order = order or "asc"
+        page = page or 1
+        per_page = per_page or 20
+        paginate = paginate if paginate is not None else True
+
+        questions = self.question_dao.get_all_questions()
+        if paginate == False:
+            return questions
+
+        # I am broke as fuck. I can't afford firebase queries. Efficiency ain't shit.
         if order not in ["asc", "desc"]:
             raise ValueError(f"Invalid order value {order}. Must be asc or desc")
         if sort_by not in ["created_at", "source", "difficulty", "title"]:
             raise ValueError(f"Invalid order value {order}. Must be created_at, source, difficulty or title.")
 
-        questions = self.question_dao.get_all_questions()
-        questions = self._filter_questions(questions, source, diffculty, status, tags, search)
+        questions = self._filter_questions(questions, source, difficulty, status, tags, search)
         self._sort_quesitons(questions, sort_by)
         self._order_questions(questions, order)
-        return self._paginate_questions(questions, page, per_page) if paginate else questions
+        return self._paginate_questions(questions, page, per_page)
 
     async def get_question(self, id: str) -> Question:
         question = self.question_dao.get_question(id)

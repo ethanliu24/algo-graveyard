@@ -15,27 +15,27 @@ router = APIRouter(
 async def get_all_questions(
     question_service: Annotated[QuestionManager, Depends(get_question_service)],
     source: Source = None,
-    diffculty: Difficulty = None,
+    difficulty: Difficulty = None,
     status: Status = None,
-    tags: list[str] = [],
-    search: str = "",
-    sort_by: str = "created_at",
-    order: str = "asc",
-    page: int = 1,
-    per_page: int = 20,
-    paginate: bool = True
+    tags: list[str] = None,
+    search: str = None,
+    sort_by: str = None,
+    order: str = None,
+    page: int = None,
+    per_page: int = None,
+    paginate: bool = None
 ) -> list[QuestionBasicInfo]:
     questions = await question_service.get_all_questions(
-        source,
-        diffculty,
-        status,
-        tags,
-        search,
-        sort_by,
-        order,
-        page,
-        per_page,
-        paginate
+        source=source,
+        difficulty=difficulty,
+        status=status,
+        tags=tags,
+        search=search,
+        sort_by=sort_by,
+        order=order,
+        page=page,
+        per_page=per_page,
+        paginate=paginate
     )
     return questions
 
