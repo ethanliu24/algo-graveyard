@@ -72,18 +72,15 @@ def clear_database():
 def create_jwt_token(
     iss: str = ENV_VARS.get("JWT_ISS"),
     aud: str = ENV_VARS.get("JWT_AUD"),
-    exp: str = ENV_VARS.get("JWT_EXP_TIME"),
-    enable_exp: bool = False,
+    exp: float = float(ENV_VARS.get("JWT_EXP_TIME")),
     jwt_secret: str = ENV_VARS.get("JWT_SIGNITURE"),
     hs_alg: str = ENV_VARS.get("JWT_HS_ALG")
 ) -> str:
     payload = {
         "iss": iss,
         "aud": aud,
+        "exp": time.time() + (exp * 60)
     }
-
-    if enable_exp:
-        payload.update({"exp": time.time() + (exp * 60)})
 
     _ = Token(**payload)
     return jwt.encode(payload, jwt_secret, algorithm=hs_alg)

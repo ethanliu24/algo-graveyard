@@ -5,6 +5,7 @@ from fastapi.testclient import TestClient
 
 from app.config import Configs
 from app.main import app
+from app.env_vars import ENV_VARS
 
 def pytest_sessionstart():
     utils.populate_database()
@@ -32,9 +33,6 @@ def question_service(setup):
 @pytest.fixture()
 def endpoint():
     client = TestClient(app)
+    client.cookies.set(ENV_VARS.get("JWT_COOKIE"), utils.create_jwt_token())
     yield client
 
-
-@pytest.fixture()
-def cookie():
-    {"jwt_cookie": utils.create_jwt_token()}
