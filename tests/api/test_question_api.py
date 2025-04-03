@@ -156,7 +156,7 @@ async def test_update_question_doesnt_exist(endpoint):
     assert response.status_code == 404
 
 
-# Filter, sort, search and pagination
+# Filter
 @pytest.mark.asyncio
 async def test_search_questions(endpoint):
     """ Testing if searching questions works. """
@@ -187,8 +187,61 @@ async def test_search_case_sensitive(endpoint):
 
 @pytest.mark.asyncio
 async def test_search_title_with_space(endpoint):
-    """ Test with a space in the search value """
+    """ Test with a space in the search value. """
     response = endpoint.get(f"{API}?search=Space%20Here")
+    assert response.status_code == 200
+    pagination = response.json()["data"]
+    assert len(pagination["data"]) == 1
+
+
+# Filter
+@pytest.mark.asyncio
+async def test_filtering_for_source(endpoint):
+    """ Test filtering for source. """
+    response = endpoint.get(f"{API}?search=paginate&source=leetcode")
+    assert response.status_code == 200
+    pagination = response.json()["data"]
+    assert len(pagination["data"]) == 6
+
+@pytest.mark.asyncio
+async def test_filtering_for_difficulty(endpoint):
+    """ Test filtering for difficulty. """
+    response = endpoint.get(f"{API}?search=paginate&difficulty=hard")
+    assert response.status_code == 200
+    pagination = response.json()["data"]
+    assert len(pagination["data"]) == 1
+
+@pytest.mark.asyncio
+async def test_filtering_for_status(endpoint):
+    """ Test filtering for status. """
+    response = endpoint.get(f"{API}?search=paginate&status=unoptimized")
+    assert response.status_code == 200
+    pagination = response.json()["data"]
+    assert len(pagination["data"]) == 3
+
+@pytest.mark.asyncio
+async def test_filtering_for_tags(endpoint):
+    """ Test filtering for status. """
+    response = endpoint.get(f"{API}?search=paginate&tags=graph&tags=dfs")
+    assert response.status_code == 200
+    pagination = response.json()["data"]
+    assert len(pagination["data"]) == 5
+
+@pytest.mark.asyncio
+async def test_filtering_without_search(endpoint):
+    """ Test filtering without a search value. """
+    response = endpoint.get(f"{API}?difficulty=easy")
+    pagination = response.json()["data"]
+    response = endpoint.get(f"{API}?paginate=false")  # get everything as a list
+    questions = response.json()["data"]
+    count = sum(1 for q in questions if q["difficulty"] == "easy")
+    assert len(pagination["data"]) == count
+
+@pytest.mark.asyncio
+async def test_multiple_filters(endpoint):
+    """ Test filtering with a combination of the filters. """
+    response = endpoint.get(f"{API}?search=paginate&source=leetcode&difficulty=easy&status=completed&tags=graph")
+    pagination = response.json()["data"]
     assert response.status_code == 200
     pagination = response.json()["data"]
     assert len(pagination["data"]) == 1

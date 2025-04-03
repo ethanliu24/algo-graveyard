@@ -91,19 +91,27 @@ class QuestionManager(object):
         tags: list[str] | None,
         search: str | None
     ) -> list[QuestionBasicInfo]:
+        """
+        Source, difficulty and status are primary filters. Tags and search are secondary filters.
+        For each filtering, we must check:
+            1. For all filters, if all of them are None, check search and tag.
+            2. If all are not None, everything must match. Then, check search and tag.
+            3. If one of the filters is not None, check these filters, and then check search and tag.
+            4. If search is contained in the title. If search is empty or None, treat it as a match.
+            5. If tag is present in the the question. If tags is empty or None, treat it as a match.
+            6. If the question's tag is empty, treat it as a mismatch unless the tag filter is empty or None.
+        """
         res = []
-        for question in questions:
-            if (source and question.source.value == source.value) or \
-               (difficulty and question.difficulty.value == difficulty.value) or \
-               (status and question.status.value == status.value) or \
-               (search is None or search.lower() in question.title.lower()):
-                res.append(question)
-                continue
 
-            for tag in tags:
-                if tag in question.tags:
-                    res.append(question)
-                    break
+        for question in questions:
+            if all([
+                not source or question.source.value == source.value,
+                not difficulty or question.difficulty.value == difficulty.value,
+                not status or question.status.value == status.value
+            ]) or all(ftr is None for ftr in [source, difficulty, status]):
+                if not search or search.lower() in question.title.lower():
+                    if not tags or any(question.tags and tag in question.tags for tag in tags):
+                        res.append(question)
 
         return res
 
