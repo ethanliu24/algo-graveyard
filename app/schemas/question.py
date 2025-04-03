@@ -9,6 +9,7 @@ class Question(BaseModelConfig):
     id: str
     source: Source
     link: str
+    difficulty: Difficulty
     status: Status
     title: str
     prompt: str
@@ -24,6 +25,7 @@ class Question(BaseModelConfig):
 class QuestionCreate(BaseModelConfig):
     source: Source
     link: str
+    difficulty: Difficulty
     status: Status
     title: str
     prompt: str
@@ -52,3 +54,9 @@ class Status(Enum):
     COMPLETED = "completed"
     UNOPTIMIZED = "unoptimized"
     ATTEMPTED = "attempted"
+
+
+class Difficulty(Enum):
+    EASY = "easy"
+    MEDIUM = "medium"
+    HARD = "hard"
