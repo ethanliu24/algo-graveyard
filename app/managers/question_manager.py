@@ -1,5 +1,5 @@
 from math import ceil
-from datetime import datetime
+from datetime import datetime, timezone
 from ..daos.question_dao import QuestionDAO
 from ..exceptions.entity_not_found import EntityNotFoundError
 from ..schemas.pagination import Pagination
@@ -67,7 +67,7 @@ class QuestionManager(object):
         question["status"] = question["status"].value
         question["solutions"] = []
 
-        creation_time = datetime.now()
+        creation_time = datetime.now(timezone.utc)
         question.update({ "created_at": creation_time, "last_modified": creation_time })
 
         return self.question_dao.create_question(question, id)
