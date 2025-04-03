@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import ValidationError
 from typing import Annotated
-from ..config import get_question_service
+from ..config import get_question_service, auth_user_jwt
 from ..exceptions.entity_not_found import EntityNotFoundError
 from ..managers.question_manager import QuestionManager
 from ..schemas.question import Question, QuestionCreate, QuestionBasicInfo
@@ -27,14 +27,14 @@ async def get_question(
     except EntityNotFoundError as e:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
 
-@router.post("")
+@router.post("", status_code=status.HTTP_200_OK, dependencies=[Depends(auth_user_jwt)])
 async def create_question(
     question_data: QuestionCreate,
     question_service: Annotated[QuestionManager, Depends(get_question_service)]
 ) -> Question:
     return await question_service.create_question(data=question_data)
 
-@router.put("/{question_id}")
+@router.put("/{question_id}", status_code=status.HTTP_200_OK, dependencies=[Depends(auth_user_jwt)])
 async def update_question(
     question_id: str,
     data: dict,
@@ -47,7 +47,7 @@ async def update_question(
     except EntityNotFoundError as e:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
 
-@router.delete("/{question_id}")
+@router.delete("/{question_id}", status_code=status.HTTP_200_OK, dependencies=[Depends(auth_user_jwt)])
 async def delete_quesiton(
     question_id: str,
     question_service: Annotated[QuestionManager, Depends(get_question_service)]

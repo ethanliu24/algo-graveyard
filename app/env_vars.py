@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 import os
 from os.path import join, dirname
 
-environment = os.environ.get("APP_ENV")
+environment = os.environ.get("APP_ENV", "development")
 if environment not in ["production", "development", "test"]:
     raise RuntimeError(f"Invalid app environment {environment} - should be production, development or test.")
 

@@ -1,6 +1,5 @@
 import pytest
 
-from tests.seed import QUESTIONS
 from app.schemas.solution import Solution
 
 API = "/api/questions"
