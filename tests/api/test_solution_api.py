@@ -197,6 +197,7 @@ async def test_update_solution_invalid_data(endpoint):
     response = endpoint.put(f"{API}/modify/solutions/s1", json=update_data)
     assert response.status_code == 422
 
+
 @pytest.mark.asyncio
 async def test_update_solution_invalid_field(endpoint):
     """ Test updating a solution but the field is invalid. """
@@ -206,6 +207,7 @@ async def test_update_solution_invalid_field(endpoint):
     response = endpoint.put(f"{API}/modify/solutions/s1", json=update_data)
     assert response.status_code == 422
 
+
 @pytest.mark.asyncio
 async def test_update_solution_question_dne(endpoint):
     """ Test updating a solution but the question id doesn't exist. """
@@ -213,12 +215,14 @@ async def test_update_solution_question_dne(endpoint):
     response = endpoint.put(f"{API}/question_dne/solutions/s1", json=update_data)
     assert response.status_code == 404
 
+
 @pytest.mark.asyncio
 async def test_update_solution_solution_dne(endpoint):
     """ Test updating a solution but the solution id doesn't exist. """
     update_data = {"language": "python"}
     response = endpoint.put(f"{API}/modify/solutions/solution_dne", json=update_data)
     assert response.status_code == 404
+
 
 @pytest.mark.asyncio
 async def test_update_solution_both_id_dne(endpoint):
@@ -235,11 +239,13 @@ async def test_update_solution_exists(endpoint):
     response = endpoint.delete(f"{API}/modify/solutions/s2")
     assert response.status_code == 200
 
+
 @pytest.mark.asyncio
 async def test_update_solution_doesnt_exist(endpoint):
     """ Test deleting a solution that doesn't exist in the database. """
     response = endpoint.delete(f"{API}/modify/solutions/solution_dne")
     assert response.status_code == 404
+
 
 @pytest.mark.asyncio
 async def test_update_solution_question_doesnt_exist(endpoint):
