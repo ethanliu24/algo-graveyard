@@ -94,6 +94,53 @@ async def test_create_question_missing_fields(endpoint):
     assert response.status_code == 422
 
 
+@pytest.mark.asyncio
+async def test_create_question_validate_title(endpoint):
+    """ Test title validation. """
+    question = {
+        "source": "leetcode",
+        "link": "",
+        "difficulty": "easy",
+        "status": "completed",
+        "title": "Create Question Valid Title",
+        "prompt": "create question valid prompt",
+        "test_cases": [],
+        "notes": [],
+        "hints": [],
+        "tags": []
+    }
+
+    question["title"] = ""
+    response = endpoint.post(f"{API}", json=question)
+    assert response.status_code == 422
+    question["title"] = "a" * 51
+    response = endpoint.post(f"{API}", json=question)
+    assert response.status_code == 422
+    question["title"] = "a" * 50  # upperbound, should pass
+    response = endpoint.post(f"{API}", json=question)
+    assert response.status_code == 200
+
+
+@pytest.mark.asyncio
+async def test_create_question_validate_prompt(endpoint):
+    """ Test prompt validation. """
+    question = {
+        "source": "leetcode",
+        "link": "",
+        "difficulty": "easy",
+        "status": "completed",
+        "title": "Create Question Valid Title",
+        "prompt": "",
+        "test_cases": [],
+        "notes": [],
+        "hints": [],
+        "tags": []
+    }
+
+    response = endpoint.post(f"{API}", json=question)
+    assert response.status_code == 422
+
+
 # Updating questions
 @pytest.mark.asyncio
 async def test_update_question_basic(endpoint):

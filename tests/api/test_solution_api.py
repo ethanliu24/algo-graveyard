@@ -17,6 +17,7 @@ async def test_get_q_has_one_solution(endpoint):
     assert s.summary == "Test"
     assert s.explanation == "test"
 
+
 @pytest.mark.asyncio
 async def test_get_q_has_many_solutions(endpoint):
     """ Get all solutions of a question that has many solutions. """
@@ -29,6 +30,7 @@ async def test_get_q_has_many_solutions(endpoint):
         s = Solution(**d)
         assert s.code == "print(\"hello world\")"
 
+
 @pytest.mark.asyncio
 async def test_get_q_has_no_solutions(endpoint):
     """ Get all solutions of a question that has no solutions. """
@@ -37,11 +39,13 @@ async def test_get_q_has_no_solutions(endpoint):
     data = response.json()
     assert len(data) == 0
 
+
 @pytest.mark.asyncio
 async def test_get_solution_question_doesnt_exist(endpoint):
     """ Get all solutions of a question that doesn't exist. """
     response = endpoint.get(f"{API}/question_dne/solutions")
     assert response.status_code == 404
+
 
 @pytest.mark.asyncio
 async def test_get_single_solution_from_q_exists(endpoint):
@@ -53,6 +57,7 @@ async def test_get_single_solution_from_q_exists(endpoint):
     assert s.id == "s1"
     assert s.summary == "Test"
     assert s.explanation == "test"
+
 
 @pytest.mark.asyncio
 async def test_get_single_solution_from_q_dne(endpoint):
@@ -81,6 +86,7 @@ async def test_create_solution_basic(endpoint):
     assert s.summary == "Created"
     assert s.time_complexity == "n!"
 
+
 @pytest.mark.asyncio
 async def test_create_solution_q_dne(endpoint):
     """ Test creating a solution but the question doesn't exist. """
@@ -95,6 +101,7 @@ async def test_create_solution_q_dne(endpoint):
 
     response = endpoint.post(f"{API}/question_dne/solutions", json=solution)
     assert response.status_code == 404
+
 
 @pytest.mark.asyncio
 async def test_create_solution_invalid_input(endpoint):
@@ -111,6 +118,7 @@ async def test_create_solution_invalid_input(endpoint):
     response = endpoint.post(f"{API}/modify/solutions", json=solution)
     assert response.status_code == 422
 
+
 @pytest.mark.asyncio
 async def test_create_solution_missing_fields(endpoint):
     """ Test creating a question with missing fields. """
@@ -120,8 +128,34 @@ async def test_create_solution_missing_fields(endpoint):
         "code": "",
     }
 
-    response = endpoint.post(f"{API}", json=solution)
+    response = endpoint.post(f"{API}/modify/solutions", json=solution)
     assert response.status_code == 422
+
+
+@pytest.mark.asyncio
+async def test_create_question_validate_summary(endpoint):
+    """ Test prompt validation. """
+    solution = {
+        "summary": "Valid suammary",
+        "explanation": "created in test_create_solution_basic",
+        "language": "python",
+        "time_complexity": "n!",
+        "space_complexity": "n!",
+        "code": "",
+    }
+
+    solution["summary"] = ""
+    response = endpoint.post(f"{API}/modify/solutions", json=solution)
+    assert response.status_code == 422
+
+    solution["summary"] = "a" * 51
+    response = endpoint.post(f"{API}/modify/solutions", json=solution)
+    assert response.status_code == 422
+
+    solution["summary"] = "a" * 50  # upperbound
+    response = endpoint.post(f"{API}/modify/solutions", json=solution)
+    print(response.json())
+    assert response.status_code == 200
 
 
 # Updating solutions
