@@ -3,7 +3,7 @@ import time
 
 from fastapi import Request, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-from jwt import PyJWTError
+from jwt import InvalidTokenError, InvalidIssuerError
 from ..schemas.token import Token
 
 class AuthManager:
@@ -39,8 +39,11 @@ class AuthManager:
         return token
 
     def verify_token(self, token: str) -> bool:
-        # decode will verify all the claims in our token schema since they are must checks
+        # decode checks aud and exp
         payload = jwt.decode(token, self.jwt_secret, algorithms=[self.hs_alg], audience=self.aud)
+        if payload["iss"] != self.iss:
+            raise InvalidIssuerError
+
         _ = Token(**payload)  # sanity check
         return True
 
@@ -66,7 +69,7 @@ class JWTBearer(HTTPBearer):
                     err_msg = "Invalid token."
                 else:
                     return cred.credentials
-            except PyJWTError as e:
+            except InvalidTokenError as e:
                 err_msg = str(e)
 
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=str(err_msg))
