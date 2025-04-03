@@ -34,3 +34,10 @@ def test_verify_incorrect_secret(endpoint):
     assert response.status_code == 401
     assert not endpoint.cookies.get(JWT_COOKIE)
     assert not response.headers.get("set-cookie")
+
+
+def test_public_routes(endpoint):
+    """ These routes shuold still be accessible even when not authed. """
+    endpoint.cookies.clear()
+    response = endpoint.get("api/questions")
+    assert response.status_code == 200
