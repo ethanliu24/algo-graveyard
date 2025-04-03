@@ -21,6 +21,7 @@ class QuestionManager(object):
     async def create_question(self, data: QuestionCreate, id: str = None) -> Question:
         question = data.model_dump()
         question["source"] = question["source"].value
+        question["difficulty"] = question["difficulty"].value
         question["status"] = question["status"].value
         question["solutions"] = []
 

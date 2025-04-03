@@ -43,6 +43,7 @@ async def test_create_question_basic(endpoint):
     question = {
         "source": "leetcode",
         "link": "",
+        "difficulty": "easy",
         "status": "completed",
         "title": "Create Question Basic",
         "prompt": "create a basic question",
@@ -63,6 +64,7 @@ async def test_create_question_invalid_input(endpoint):
     question = {
         "source": "l",
         "link": "",
+        "difficulty": "easy",
         "status": "",
         "title": "Create Question Basic",
         "prompt": "create a basic question",
