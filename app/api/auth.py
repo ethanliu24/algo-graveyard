@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, Request, Response, HTTPException, status
 from typing import Annotated
 from ..config import get_auth_service
+from ..env_vars import ENV_VARS
 from ..managers.auth_manager import AuthManager
 
 router = APIRouter(
@@ -25,7 +26,7 @@ async def authenticate_user(
 
     token = auth_service.generate_token()
     response.set_cookie(
-        key="jwt_token",
+        key=ENV_VARS.get("JWT_COOKIE"),
         value=token,
         httponly=True,
         secure=True,
