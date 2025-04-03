@@ -16,6 +16,16 @@ jobs:
     strategy:
       matrix:
         python-version: ["3.13"]
+    env:
+      APP_ENV="test"
+      APP_SECRET="secret"
+      JWT_SIGNITURE="a"
+      JWT_HS_ALG="HS256"
+      JWT_EXP_TIME="24"
+      JWT_ISS="algograveyard"
+      JWT_AUD="algograveyard"
+      JWT_COOKIE="jwt_token_algograveyard"
+      FIRESTORE_EMULATOR_HOST="localhost:8080"
 
     steps:
       - uses: actions/checkout@v4
@@ -53,9 +63,6 @@ jobs:
 
       - name: Install Firebase CLI
         run: npm install -g firebase-tools
-
-      - name: Set Firebase environment variables
-        run: echo "FIRESTORE_EMULATOR_HOST=localhost:8080" >> $GITHUB_ENV
 
       - name: Start Firebase Emulator
         run: |
