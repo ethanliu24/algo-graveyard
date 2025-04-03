@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## Version 0.0.1
+- Support querying specific questions on all questions route (#19).
 - Update test case schema to use a dict for inputs rather than parallel arrays
 - Add authentication and authorization enpoints and services (#14)
 - Added basic CRUD services and api endpoints for solution services (#10)
