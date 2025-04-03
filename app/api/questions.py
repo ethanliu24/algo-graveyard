@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import ValidationError
 from typing import Annotated
-from ..config import get_question_service
+from ..config import get_question_service, jwt_auth
 from ..exceptions.entity_not_found import EntityNotFoundError
 from ..managers.question_manager import QuestionManager
 from ..schemas.question import Question, QuestionCreate, QuestionBasicInfo

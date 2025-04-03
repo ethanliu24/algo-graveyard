@@ -75,4 +75,4 @@ def get_solution_service(configs: Annotated[Configs, Depends(init_config)]):
 def get_auth_service(configs: Annotated[Configs, Depends(init_config)]):
     return configs.auth_manager
 
-jwt_auth = JWTBearer(Depends(get_auth_service))
+jwt_auth = JWTBearer(Configs().auth_manager)

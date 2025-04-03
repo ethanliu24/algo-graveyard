@@ -52,10 +52,10 @@ class JWTBearer(HTTPBearer):
         super().__init__(auto_error=auto_error)
         self.auth_service = auth_service
 
-    def __call__(self, request: Request):
+    async def __call__(self, request: Request):
         err_msg = ""
+        cred: HTTPAuthorizationCredentials = await super().__call__(request)
 
-        cred: HTTPAuthorizationCredentials = super().__call__(request)
         if not cred:
             err_msg = "Invalid authorization code."
         else:
