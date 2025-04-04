@@ -6,7 +6,6 @@ export default mergeConfig(baseConfig, defineConfig({
   build: {
     sourcemap: true,
     minify: false,
-    ssr: true,
   },
   server: {
     hmr: {
