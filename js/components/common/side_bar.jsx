@@ -6,6 +6,7 @@ export function Sidebar(props) {
   const [isOpen, setIsOpen] = useState(props.open || screen.width >= 768)
 
   useEffect(() => {
+    console.log(isOpen)
     window.addEventListener("resize", () => {
       setIsOpen(window.innerWidth > 768);
     });
@@ -29,8 +30,8 @@ export function Sidebar(props) {
         <div className={`flex flex-col ${isOpen ? "items-end" : "items-center"} w-[100%]`}>
           <div className="flex justify-center items-center rounded-[50%] w-8 h-8
             bg-transparent hover:bg-gray-200 transition-colors cursor-pointer"
-            onClick={() => setIsOpen(!isOpen)}>
-            <FontAwesomeIcon icon={isOpen ? faChevronLeft : faChevronRight} />
+            onClick={() => setIsOpen(!isOpen && window.innerWidth >= 768)} /* Temp solution for mobile */ >
+            <FontAwesomeIcon icon={isOpen ? (window.innerWidth >= 768 ? faChevronLeft : faChevronRight) : ""} />
           </div>
         </div>
       </div>
