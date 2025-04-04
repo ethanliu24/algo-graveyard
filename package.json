@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/ethanliu24/algo-graveyard/issues"
   },
-  "homepage": "https://github.com/ethanliu24/algo-graveyard#readme"
+  "homepage": "https://github.com/ethanliu24/algo-graveyard#readme",
+  "dependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  }
 }
