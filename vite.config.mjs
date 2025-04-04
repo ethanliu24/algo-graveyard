@@ -10,13 +10,13 @@ export default defineConfig({
     emptyOutDir: true,
     rollupOptions: {
       input: {
-        home: resolve(__dirname, 'js/components/home/main.jsx'),
+        home: resolve(__dirname, 'js/components/home/main.js'),
         styles: resolve(__dirname, 'styles/main.css'),
       },
       output: {
-        entryFileNames: '[name]/[name].js',
+        entryFileNames: '[name]/[name].[hash].js',
         chunkFileNames: 'assets/[name].[hash].js',
-        assetFileNames: 'assets/[name].[ext]',
+        assetFileNames: 'assets/[name].[hash].[ext]',
       },
     },
     manifest: true,
