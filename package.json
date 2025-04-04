@@ -4,6 +4,9 @@
   "description": "A full stack application where my inefficient and disappointing algorithms rests.",
   "main": "index.js",
   "scripts": {
+    "dev": "vite build --watch --config vite.dev.config.mjs",
+    "build": "vite build --config vite.prod.config.mjs",
+    "preview": "vite preview",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -15,5 +18,16 @@
   "bugs": {
     "url": "https://github.com/ethanliu24/algo-graveyard/issues"
   },
-  "homepage": "https://github.com/ethanliu24/algo-graveyard#readme"
+  "homepage": "https://github.com/ethanliu24/algo-graveyard#readme",
+  "dependencies": {
+    "@tailwindcss/vite": "^4.1.2",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "tailwindcss": "^4.1.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "terser": "^5.39.0",
+    "vite": "^6.2.5"
+  }
 }

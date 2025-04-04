@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## Version 0.0.1
+- Set up react, vite, tailwind and templates (#22)
 - Add metadata api endpoits and services for client to fetch. (#21)
 - Enhance schemas with validation and make tags enums for single source of truth. (#20)
 - Support querying specific questions on all questions route (#19).
