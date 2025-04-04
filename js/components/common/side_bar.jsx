@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons'
+import { faChevronRight, faChevronLeft, faCross, faHouse } from '@fortawesome/free-solid-svg-icons'
 
 export function Sidebar(props) {
   const [isOpen, setIsOpen] = useState(props.open || screen.width >= 768)
 
   useEffect(() => {
-    console.log(isOpen)
     window.addEventListener("resize", () => {
       setIsOpen(window.innerWidth > 768);
     });
@@ -18,12 +17,13 @@ export function Sidebar(props) {
 
   return (
     <div className={`
-      h-screen p-6 ${isOpen ? "w-50" : "w-12 px-0"}
+      h-screen py-4 ${isOpen ? "w-50 px-3 " : "w-12 px-0"}
       border-r-1 rounded border-r-gray-300
       flex flex-col justify-between items-center
       `}>
       <div className={`w-[100%] flex flex-col ${isOpen ? "items-start" : "items-center"}`}>
-        <div>hi</div>
+        <FontAwesomeIcon icon={faCross} size="2x" className="mb-4" />
+        <SidebarItem title="Home" />
       </div>
 
       <div className={`w-[100%] flex flex-col ${isOpen ? "items-start" : "items-center"}`}>
@@ -36,5 +36,16 @@ export function Sidebar(props) {
         </div>
       </div>
     </div>
-  )
+  );
+}
+
+function SidebarItem(props) {
+  return (
+    <div className="w-[100%] flex justify-start items-center gap-4 cursor-pointer
+      px-3 py-1 rounded-2xl select-none
+      hover:bg-blue-200 hover:ring-2 hover:ring-offset-1 hover:ring-blue-400">
+      <FontAwesomeIcon icon={faHouse} />
+      <div>{props.title}</div>
+    </div>
+  );
 }
