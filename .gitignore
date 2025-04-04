@@ -15,3 +15,6 @@ firestore-debug.log
 junit
 .coverage
 coverage.xml
+
+# Static files
+static/js

@@ -4,6 +4,9 @@
   "description": "A full stack application where my inefficient and disappointing algorithms rests.",
   "main": "index.js",
   "scripts": {
+    "dev": "vite build --watch --config vite.dev.config.mjs",
+    "build": "vite build --config vite.prod.config.mjs",
+    "preview": "vite preview",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,5 +22,10 @@
   "dependencies": {
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "terser": "^5.39.0",
+    "vite": "^6.2.5"
   }
 }
