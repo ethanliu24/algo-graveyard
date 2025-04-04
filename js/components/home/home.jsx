@@ -1,3 +1,10 @@
+import { Sidebar } from "../common/side_bar.jsx";
+
 export function Home() {
-  return <h1 className="text-center text-blue-700">Hello, world</h1>;
+  return (
+    <div className="flex">
+      <Sidebar />
+      <div className="flex-1">yo</div>
+    </div>
+  );
 }
