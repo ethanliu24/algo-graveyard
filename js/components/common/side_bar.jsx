@@ -7,8 +7,7 @@ export function Sidebar(props) {
 
   useEffect(() => {
     window.addEventListener("resize", () => {
-      setIsOpen(window.innerWidth >= 768);
-      console.log(window.innerWidth);
+      setIsOpen(window.innerWidth > 768);
     });
 
     return () => {
@@ -18,7 +17,7 @@ export function Sidebar(props) {
 
   return (
     <div className={`
-      h-screen p-6 ${isOpen ? "w-60" : "w-12 px-0"}
+      h-screen p-6 ${isOpen ? "w-50" : "w-12 px-0"}
       border-r-1 rounded border-r-gray-300
       flex flex-col justify-between items-center
       `}>
