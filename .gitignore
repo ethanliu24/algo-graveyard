@@ -17,4 +17,4 @@ junit
 coverage.xml
 
 # Static files
-static/js
+static/dist

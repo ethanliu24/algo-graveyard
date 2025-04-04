@@ -6,7 +6,7 @@ from fastapi.templating import Jinja2Templates
 router = APIRouter(tags=["page"])
 
 templates = Jinja2Templates(directory="app/templates")
-HOME_SCRIPT = "../static/js/home/home.js"
+HOME_SCRIPT = "../static/dist/home/home.js"
 
 
 @router.get("/", response_class=HTMLResponse)
