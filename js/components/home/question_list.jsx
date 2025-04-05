@@ -31,7 +31,7 @@ export default function QuestionList() {
         {questions.map((q, i) => {
           return (<ListItem key={"q" + i}
             idx={i + 1} title={q.title} status={q.status} source={q.source}
-            difficulty={q.difficulty} createdAt={q.created_at} tags={q.tags}
+            difficulty={q.difficulty} timestamp={q.last_modified} tags={q.tags}
           />)
         })
       }</div>
@@ -51,7 +51,7 @@ function ListItem(props) {
     const tooltipId = `${tooltip}-${idx}`;
 
     return (
-      <div data-tooltip-id={tooltipId} data-tooltip-content={tooltip} data-tooltip-place="left">
+      <div data-tooltip-id={tooltipId} data-tooltip-content={capitalizeFirst(tooltip)} data-tooltip-place="left">
         {statusIcon[status] || <FontAwesomeIcon icon={faMinus} color="#c7c7c7" />}
         <Tooltip id={tooltipId} />
       </div>);
@@ -83,7 +83,7 @@ function ListItem(props) {
       <div className="flex-8 flex flex-col justify-between items-start">
         <div className="text-sm">{capitalizeFirst(props.title)}</div>
         <div className="flex justify-start items-center gap-2 text-[12px] text-gray-500">
-          <div>{formatDate(props.createdAt)}</div>
+          <div>{formatDate(props.timestamp)}</div>
           <div className="-mx-1">·</div>
           <div>{capitalizeFirst(props.source)}</div>
           <div className="-mx-1">·</div>
@@ -100,12 +100,3 @@ function ListItem(props) {
     </div>
   );
 }
-
-// idstring
-// sourceExpand allstring
-// difficultyExpand allstring
-// statusExpand allstring
-// titlestring
-// tagsExpand allarray<string>
-// created_atstringdate-time
-// last_modifiedstringdate-time

@@ -5,6 +5,7 @@ export default function Home() {
   return (
     <div>
       <Header />
+      {/* TODO filter & paginate pages, i.e. p1, 2, 3 */}
       <QuestionList />
     </div>
   );
