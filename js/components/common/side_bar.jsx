@@ -25,6 +25,14 @@ export default function Sidebar(props) {
     }
   }, []);
 
+  const handleSidebarExpand = () => {
+    setIsOpen((i) => {
+      const openState = !i && window.innerWidth >= 768;
+      localStorage.setItem("openSidebar", JSON.stringify(openState));
+      return openState;
+    });
+  }
+
   return (
     <div className={`
       h-screen py-4 ${isOpen ? "w-50 px-2.5 " : "w-12 px-0"}
@@ -51,7 +59,7 @@ export default function Sidebar(props) {
         <div className={`flex flex-col ${isOpen ? "items-end" : "items-center"} w-[100%]`}>
           <div className="flex justify-center items-center rounded-[50%] w-8 h-8
             bg-transparent hover:bg-gray-200 transition-colors cursor-pointer"
-            onClick={() => setIsOpen(!isOpen && window.innerWidth >= 768)} /* Temp solution for mobile */ >
+            onClick={handleSidebarExpand} /* Temp solution for mobile */ >
             <FontAwesomeIcon icon={window.innerWidth >= 768 ? (isOpen ? faChevronLeft : faChevronRight) : ""} />
           </div>
         </div>
