@@ -29,24 +29,32 @@ export default function PaginationBoxes(props) {
   }, [props.page, props.totalPages]);
 
   return (
-    <div>
-      <Box page={1} icon={faAnglesLeft} />
-      <Box page={Math.max(props.page - 1, 1)} icon={faAngleLeft} />
+    <div className="flex justify-center items-center gap-3 mt-16 mb-4">
+      <Box page={1} fetchForPage={props.fetchForPage} icon={faAnglesLeft} />
+      <Box page={Math.max(props.page - 1, 1)} fetchForPage={props.fetchForPage} icon={faAngleLeft}
+        className="mr-4" />
       {boxes.map(boxNum => {
-        return <Box page={boxNum} />;
+        return <Box page={boxNum} curPage={props.page} fetchForPage={props.fetchForPage} />;
       })}
-      <Box page={Math.min(props.page + 1, props.totalPages)} icon={faAngleRight} />
-      <Box page={props.totalPages} icon={faAnglesRight} />
+      <Box page={Math.min(props.page + 1, props.totalPages)} fetchForPage={props.fetchForPage} icon={faAngleRight}
+        className="ml-4" />
+      <Box page={props.totalPages} fetchForPage={props.fetchForPage} icon={faAnglesRight} />
     </div>
   );
 }
 
 function Box(props) {
   return (
-    <div>
+    <div className={`flex justify-center items-center
+      cursor-pointer w-4 h-4 rounded-xs text-xs p-2 shadow-[1px_1px_2px_rgba(0,0,0,0.2)] bg-gray-100
+      ${props.curPage && props.curPage == props.page ? "bg-primary" : ""}
+      ${props.className ? props.className : ""}`}
+      onClick={() => props.fetchForPage(props.page)}>
       {props.icon
-        ? <FontAwesomeIcon icon={props.icon} />
+        ? <FontAwesomeIcon icon={props.icon} size="xs" />
         : props.page}
     </div>
   );
 }
+
+// box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;

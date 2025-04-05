@@ -30,11 +30,11 @@ export default function QuestionPanel() {
   };
 
   const fetchForPage = (page) => {
-
+    console.log(page);
   };
 
   return (
-    <div>
+    <div className="mt-4">
       {/* TODO filter & paginate pages, i.e. p1, 2, 3 */}
       <QuestionList questions={questions} />
       <PaginationBoxes page={page} totalPages={totalPages} fetchForPage={fetchForPage} />

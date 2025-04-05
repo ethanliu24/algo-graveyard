@@ -5,7 +5,7 @@ import { capitalizeFirst } from "../../utils/utils.js";
 
 export default function QuestionList(props) {
   return (
-    <div className="mt-4 text-sm w-[100%] flex flex-col justify-start items-center">
+    <div className="text-sm w-[100%] flex flex-col justify-start items-center">
       {props.questions.map((q, i) => {
         return (<ListItem key={"q" + i}
           idx={i + 1} title={q.title} status={q.status} source={q.source}
