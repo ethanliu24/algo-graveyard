@@ -6,35 +6,43 @@ import { getReqHeader, capitalizeFirst } from "../../utils/utils.js";
 
 export default function QuestionList() {
   const [questions, setQuestions] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(async () => {
+    const data = await getQuestions();
+    setQuestions(data.data);
+    setPage(data.page);
+    setTotalPages(data.totalPages);
+  }, []);
+
+  const getQuestions = async (queries) => {
     const req = {
       method: "GET",
       header: getReqHeader(),
     }
 
-    const data = await getQuestions(req);
-    setQuestions(data.data.data);  // lol
-  }, []);
-
-  const getQuestions = async (req, queries) => {
-    return await fetch(`/api/questions?${queries}`, req)
+    return await fetch(`/api/questions?${queries ? queries : ""}`, req)
       .then(res => res.json())
+      .then(json => json.data)
       .catch(err => {
         throw err;
       })
   };
 
+  const fetchForPage = (page) => {
+
+  };
+
   return (
-    <div className="mt-4">
-      <div className="text-sm w-[100%]">
-        {questions.map((q, i) => {
-          return (<ListItem key={"q" + i}
-            idx={i + 1} title={q.title} status={q.status} source={q.source}
-            difficulty={q.difficulty} timestamp={q.last_modified} tags={q.tags}
-          />)
-        })
-      }</div>
+    <div className="mt-4 text-sm w-[100%] flex flex-col justify-start items-center">
+      {questions.map((q, i) => {
+        return (<ListItem key={"q" + i}
+          idx={i + 1} title={q.title} status={q.status} source={q.source}
+          difficulty={q.difficulty} timestamp={q.last_modified} tags={q.tags}
+        />);
+      })}
+      <PaginationBoxes page={page} totalPages={totalPages} fetchForPage={fetchForPage} />
     </div>
   );
 }
@@ -98,5 +106,38 @@ function ListItem(props) {
         })}
       </div>
     </div>
+  );
+}
+
+function PaginationBoxes(props) {
+  const [boxes, setBoxes] = useState([]);
+
+  useEffect(() => {
+    const numBoxes = 9; // Maximum of 9 boxes, should be an odd number for style
+    let front = [];
+    let back = [];
+    let res = [];
+
+    for (let i = 0; i < numBoxes; i++) {
+      console.log(props.page, props.totalPages)
+      if (front.length + back.length + 1 < numBoxes) {
+        if (props.page - i - 1 >= 1) {
+          front.unshift(props.page - i - 1);
+        }
+
+        if (props.page + i + 1 <= props.totalPages) {
+          back.push(props.page + i + 1);
+        }
+      }
+    }
+
+    res.push(...front, props.page, ...back)
+    setBoxes(res);
+  }, [props.page, props.totalPages]);
+
+  return (
+    <div>{boxes.map(boxNum => {
+      return <div>{boxNum}</div>;
+    })}</div>
   );
 }
