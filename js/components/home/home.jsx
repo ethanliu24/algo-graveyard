@@ -4,7 +4,7 @@ export function Home() {
   return (
     <div className="flex">
       <Sidebar />
-      <div className="flex-1">yo</div>
+      <div className="flex-1"></div>
     </div>
   );
 }
