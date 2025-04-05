@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faHourglassEnd, faClock, faMinus } from "@fortawesome/free-solid-svg-icons";
 import { Tooltip } from "react-tooltip";
-import { getReqHeader } from "../../utils/api.js";
+import { getReqHeader, capitalizeFirst } from "../../utils/utils.js";
 
 export default function QuestionList() {
   const [questions, setQuestions] = useState([]);
@@ -57,17 +57,37 @@ function ListItem(props) {
       </div>);
   };
 
+  const formatDate = (dateStr) => {
+    const options = { month: 'short', day: 'numeric', year: 'numeric' };
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('en-US', options);
+  };
+
+  const getDifficultyStyle = (difficulty) => {
+    const colorMap = {
+      "easy": "#6bd177",
+      "medium": "#f5cd3d",
+      "hard": "#eb4b63"
+    };
+
+    return {
+      color: colorMap[difficulty] || "#c7c7c7"
+    };
+  };
+
   return (
     <div className="flex justify-between items-center gap-4 text-center mt-4
       bg-transparent px-4 py-2 cursor-pointer rounded hover:bg-gray-200">
       <div className="text-[12px] text-gray-500">{props.idx}</div>
       {getStatusIcon(props.status, props.idx)}
       <div className="flex-8 flex flex-col justify-between items-start">
-        <div className="text-sm">{props.title}</div>
+        <div className="text-sm">{capitalizeFirst(props.title)}</div>
         <div className="flex justify-start items-center gap-2 text-[12px] text-gray-500">
-          <div className="">{props.createdAt}</div>
-          <div className="">{props.source}</div>
-          <div className="">{props.difficulty}</div>
+          <div>{formatDate(props.createdAt)}</div>
+          <div className="-mx-1">·</div>
+          <div>{capitalizeFirst(props.source)}</div>
+          <div className="-mx-1">·</div>
+          <div style={getDifficultyStyle(props.difficulty)}>{capitalizeFirst(props.difficulty)}</div>
         </div>
       </div>
       <div className="flex justify-end items-center gap-2 w-48 overflow-x-scroll text-xs max-md:hidden">
