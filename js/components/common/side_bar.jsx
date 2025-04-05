@@ -36,13 +36,13 @@ export function Sidebar(props) {
           <img src={tombstone} alt="rip" className={`${isOpen ? "w-16 h-16" : "w-8 h-8"}`} />
         </div>
         <SidebarItem title="Home" icon={faHouse} link="/"
-          isOpen={isOpen} style={isOpen ? { marginLeft: "-2px" } : {}} />
+          isOpen={isOpen} className={`${isOpen ? "-ml-[2px]" : ""}`} />
         <SidebarItem title="Create" icon={faSquarePlus} link="/create"
           isOpen={isOpen} size="l" />
         <SidebarItem title="Analytics" icon={faChartSimple} link="/analytics"
           isOpen={isOpen} size="l" />
         <SidebarItem title="Source" icon={faCode} link="https://github.com/ethanliu24/algo-graveyard"
-          isOpen={isOpen} size="l" />
+          isOpen={isOpen} className={`${isOpen ? "-ml-[2px]" : ""}`} />
         <SidebarItem title="About" icon={faCircleInfo} link="/about"
           isOpen={isOpen} size="l" />
       </div>
@@ -66,7 +66,8 @@ function SidebarItem(props) {
       className={`w-[100%] flex justify-${props.isOpen ? "start" : "center"} items-center gap-4
         cursor-pointer select-none my-0.5 py-1 ${props.isOpen ? "px-3 rounded-2xl" : "px-0"}
       hover:bg-sky-100 hover:ring-1 hover:ring-sky-200`}>
-      <span data-tooltip-id={props.title} data-tooltip-content={props.title} style={props.style || {}}>
+      <span data-tooltip-id={props.title} data-tooltip-content={props.title}
+        className={`${props.isOpen ? "w-[1.2rem]" : ""} ${props.className}`}>
         <FontAwesomeIcon icon={props.icon} size={props.size || ""} />
       </span>
       <Tooltip id={props.isOpen ? "" : props.title} className="ml-5" />
