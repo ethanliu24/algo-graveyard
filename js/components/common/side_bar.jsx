@@ -6,6 +6,7 @@ import {
   faChevronLeft,
   faHouse,
   faSquarePlus,
+  faLock,
   faChartSimple,
   faCode,
   faCircleInfo
@@ -46,6 +47,8 @@ export default function Sidebar(props) {
         <SidebarItem title="Home" icon={faHouse} link="/"
           isOpen={isOpen} className={`${isOpen ? "-ml-[2px]" : ""}`} />
         <SidebarItem title="Create" icon={faSquarePlus} link="/create"
+          isOpen={isOpen} size="l" />
+        <SidebarItem title="Authenticate" icon={faLock} link="/authenticate"
           isOpen={isOpen} size="l" />
         <SidebarItem title="Analytics" icon={faChartSimple} link="/analytics"
           isOpen={isOpen} size="l" />
