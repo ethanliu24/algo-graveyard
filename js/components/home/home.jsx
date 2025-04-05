@@ -1,5 +1,9 @@
+import Header from "./header.jsx";
+
 export default function Home() {
   return (
-    <div>Hi</div>
+    <div>
+      <Header />
+    </div>
   );
 }
