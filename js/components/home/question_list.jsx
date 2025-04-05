@@ -1,4 +1,22 @@
+import { useEffect } from "react";
+import { getReqBody } from "../../utils/api.js";
+
 export default function QuestionList() {
+  useEffect(() => {
+    const data = getQuestions(getReqBody("GET", {}));
+  }, []);
+
+  const getQuestions = async (reqBody) => {
+    return await fetch("/api/questions", reqBody)
+      .then(res => res.json())
+      .then(json => {
+        console.log(json)
+        return json;  // TODO
+      }).catch(err => {
+        throw err;
+      })
+  };
+
   return (
     <div>
       <div className="text-sm w-[100%]">
