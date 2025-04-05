@@ -70,15 +70,14 @@ export default function Sidebar(props) {
 
 function SidebarItem(props) {
   return (
-    <a href={props.link}
+    <a href={props.link} data-tooltip-id={props.title} data-tooltip-content={props.title}
       className={`w-[100%] flex justify-${props.isOpen ? "start" : "center"} items-center gap-4
         cursor-pointer select-none my-0.5 py-1 ${props.isOpen ? "px-3 rounded-2xl" : "px-0"}
       hover:bg-sky-100 hover:ring-1 hover:ring-sky-200`}>
-      <span data-tooltip-id={props.title} data-tooltip-content={props.title}
-        className={`${props.isOpen ? "w-[1.2rem]" : ""} ${props.className}`}>
+      <span className={`${props.isOpen ? "w-[1.2rem]" : ""} ${props.className}`}>
         <FontAwesomeIcon icon={props.icon} size={props.size || ""} />
       </span>
-      <Tooltip id={props.isOpen ? "" : props.title} className="ml-5" />
+      <Tooltip id={props.isOpen ? "" : props.title} className="ml-1" />
       {props.isOpen ?
         <div>{props.title}</div>
         : null
