@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faHourglassEnd, faClock, faMinus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCheck, faHourglassEnd, faClock, faMinus,
+  faAnglesLeft, faAngleLeft, faAngleRight, faAnglesRight
+} from "@fortawesome/free-solid-svg-icons";
 import { Tooltip } from "react-tooltip";
 import { getReqHeader, capitalizeFirst } from "../../utils/utils.js";
 
@@ -13,7 +16,7 @@ export default function QuestionList() {
     const data = await getQuestions();
     setQuestions(data.data);
     setPage(data.page);
-    setTotalPages(data.totalPages);
+    setTotalPages(data.pages);
   }, []);
 
   const getQuestions = async (queries) => {
@@ -113,13 +116,13 @@ function PaginationBoxes(props) {
   const [boxes, setBoxes] = useState([]);
 
   useEffect(() => {
-    const numBoxes = 9; // Maximum of 9 boxes, should be an odd number for style
+    // Maximum of 9 boxes, should be an odd number for style
+    const numBoxes = Math.min(props.totalPages, 9);
     let front = [];
     let back = [];
     let res = [];
 
     for (let i = 0; i < numBoxes; i++) {
-      console.log(props.page, props.totalPages)
       if (front.length + back.length + 1 < numBoxes) {
         if (props.page - i - 1 >= 1) {
           front.unshift(props.page - i - 1);
@@ -131,13 +134,29 @@ function PaginationBoxes(props) {
       }
     }
 
-    res.push(...front, props.page, ...back)
+    res.push(...front, props.page, ...back);
     setBoxes(res);
   }, [props.page, props.totalPages]);
 
   return (
-    <div>{boxes.map(boxNum => {
-      return <div>{boxNum}</div>;
-    })}</div>
+    <div>
+      <Box page={1} icon={faAnglesLeft} />
+      <Box page={Math.max(props.page - 1, 1)} icon={faAngleLeft} />
+      {boxes.map(boxNum => {
+        return <Box page={boxNum} />;
+      })}
+      <Box page={Math.min(props.page + 1, props.totalPages)} icon={faAngleRight} />
+      <Box page={props.totalPages} icon={faAnglesRight} />
+    </div>
+  );
+}
+
+function Box(props) {
+  return (
+    <div>
+      {props.icon
+        ? <FontAwesomeIcon icon={props.icon} />
+        : props.page}
+    </div>
   );
 }
