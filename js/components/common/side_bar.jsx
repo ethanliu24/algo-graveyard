@@ -32,7 +32,7 @@ export function Sidebar(props) {
       `}>
       <div className={`w-[100%] gap-1 flex flex-col ${isOpen ? "items-start" : "items-center"}`}>
         <div className="flex justify-center items-center w-[100%]">
-          <img src={tombstone} alt="rip" className={`${isOpen ? "w-16 h-16" : "w-6 h-6"}`} />
+          <img src={tombstone} alt="rip" className={`${isOpen ? "w-16 h-16" : "w-8 h-8"}`} />
         </div>
         <SidebarItem title="Home" icon={faHouse} link="/"
           isOpen={isOpen} style={isOpen ? { marginLeft: "-2px" } : {}} />
