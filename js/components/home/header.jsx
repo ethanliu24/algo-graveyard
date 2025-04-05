@@ -9,7 +9,7 @@ export default function Header() {
         The gennie said, "Sure, but only for a moment." <br />
         I said, "Then let that moment live in my smile." <br />
         He said, "Only for a second." <br />
-        I said, "Then let that second be every second I breath." <br />
+        I said, "Then let that second be every second I breathe." <br />
         He said, "Only once". <br />
         I said, "Then let that once, last forever." <br />
         The genie told me to shut the fuck up. <br />
