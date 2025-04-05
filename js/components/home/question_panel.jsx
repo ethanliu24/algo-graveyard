@@ -9,19 +9,25 @@ export default function QuestionPanel() {
   const [totalPages, setTotalPages] = useState(1);
 
   useEffect(async () => {
-    const data = await getQuestions();
+    await fetchForPage(1);
+  }, []);
+
+  const fetchForPage = async (page, pageSize = null) => {
+    let query = { page: page };
+    query = pageSize !== null ? { per_page: pageSize, ...query } : query;
+    const data = await getQuestions(query);
     setQuestions(data.data);
     setPage(data.page);
     setTotalPages(data.pages);
-  }, []);
+  };
 
-  const getQuestions = async (queries) => {
+  const getQuestions = async (queries = {}) => {
     const req = {
       method: "GET",
       header: getReqHeader(),
     }
 
-    return await fetch(`/api/questions?${queries ? queries : ""}`, req)
+    return await fetch(`/api/questions?${formatQueries(queries)}`, req)
       .then(res => res.json())
       .then(json => json.data)
       .catch(err => {
@@ -29,8 +35,9 @@ export default function QuestionPanel() {
       })
   };
 
-  const fetchForPage = (page) => {
-    console.log(page);
+  const formatQueries = (queries) => {
+    let queryStr = new URLSearchParams(queries).toString();
+    return queryStr;
   };
 
   return (
