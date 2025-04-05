@@ -1,18 +1,23 @@
-import { useEffect } from "react";
-import { getReqBody } from "../../utils/api.js";
+import { useEffect, useState } from "react";
+import { getReqHeader } from "../../utils/api.js";
 
 export default function QuestionList() {
-  useEffect(() => {
-    const data = getQuestions(getReqBody("GET", {}));
+  const [questions, setQuestions] = useState([]);
+
+  useEffect(async () => {
+    const req = {
+      method: "GET",
+      header: getReqHeader(),
+    }
+
+    const data = await getQuestions(req);
+    setQuestions(data.data.data);  // lol
   }, []);
 
-  const getQuestions = async (reqBody) => {
-    return await fetch("/api/questions", reqBody)
+  const getQuestions = async (req, queries) => {
+    return await fetch(`/api/questions?${queries}`, req)
       .then(res => res.json())
-      .then(json => {
-        console.log(json)
-        return json;  // TODO
-      }).catch(err => {
+      .catch(err => {
         throw err;
       })
   };
@@ -20,11 +25,13 @@ export default function QuestionList() {
   return (
     <div>
       <div className="text-sm w-[100%]">
-        <ListItem idx={1} title="Title" status="status" source="source" difficulty="diff" createdAt="Mar 21, 2020" tags={["graph", "bfs", "ass", "aaa"]} />
-        <ListItem idx={1} title="Title" status="status" source="source" difficulty="diff" createdAt="Mar 21, 2020" tags={["graph", "bfs", "ass", "aaa"]} />
-        <ListItem idx={1} title="Title" status="status" source="source" difficulty="diff" createdAt="Mar 21, 2020" tags={["graph", "bfs", "ass", "aaa"]} />
-        <ListItem idx={1} title="Title" status="status" source="source" difficulty="diff" createdAt="Mar 21, 2020" tags={["graph", "bfs", "ass", "aaa"]} />
-      </div>
+        {questions.map((q, i) => {
+          return (<ListItem key={"q" + i}
+            idx={i + 1} title={q.title} status={q.status} source={q.source}
+            difficulty={q.difficulty} createdAt={q.createdAt} tags={q.tags}
+          />)
+        })
+      }</div>
     </div>
   );
 }

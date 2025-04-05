@@ -1,9 +1,7 @@
-export function getReqBody(method, payload) {
+export function getReqHeader() {
   return {
-    method: method.toUpperCase(),
-    headers: {
+    header: {
       "Content-Type": "application/json",
     },
-    body: payload,
   }
 }
