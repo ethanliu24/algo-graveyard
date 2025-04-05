@@ -1,10 +1,5 @@
-import { Sidebar } from "../common/side_bar.jsx";
-
-export function Home() {
+export default function Home() {
   return (
-    <div className="flex">
-      <Sidebar />
-      <div className="flex-1"></div>
-    </div>
+    <div>Hi</div>
   );
 }

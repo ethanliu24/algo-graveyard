@@ -12,8 +12,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import tombstone from "../../../static/res/tombstone.svg";
 
-export function Sidebar(props) {
-  const [isOpen, setIsOpen] = useState(props.open || window.innerWidth >= 768)
+export default function Sidebar(props) {
+  const [isOpen, setIsOpen] = useState(props.open)
 
   useEffect(() => {
     window.addEventListener("resize", () => {
@@ -27,7 +27,7 @@ export function Sidebar(props) {
 
   return (
     <div className={`
-      h-screen py-4 ${isOpen ? "w-47 px-2.5 " : "w-12 px-0"}
+      h-screen py-4 ${isOpen ? "w-50 px-2.5 " : "w-12 px-0"}
       border-r-1 rounded border-r-gray-300
       flex flex-col justify-between items-center
       `}>
