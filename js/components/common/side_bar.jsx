@@ -12,7 +12,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 export function Sidebar(props) {
-  const [isOpen, setIsOpen] = useState(props.open || screen.width >= 768)
+  const [isOpen, setIsOpen] = useState(props.open || window.innerWidth >= 768)
 
   useEffect(() => {
     window.addEventListener("resize", () => {
@@ -32,11 +32,16 @@ export function Sidebar(props) {
       `}>
       <div className={`w-[100%] gap-1 flex flex-col ${isOpen ? "items-start" : "items-center"}`}>
         <FontAwesomeIcon icon={faCross} size="2x" className="mb-2" />
-        <SidebarItem title="Home" icon={faHouse} isOpen={isOpen} style={isOpen ? { marginLeft: "-2px" } : {}} />
-        <SidebarItem title="Create" icon={faSquarePlus} isOpen={isOpen} size="l" />
-        <SidebarItem title="Analytics" icon={faChartSimple} isOpen={isOpen} size="l" />
-        <SidebarItem title="Source" icon={faCode} isOpen={isOpen} size="l" />
-        <SidebarItem title="About" icon={faCircleInfo} isOpen={isOpen} size="l" />
+        <SidebarItem title="Home" icon={faHouse} link="/"
+          isOpen={isOpen} style={isOpen ? { marginLeft: "-2px" } : {}} />
+        <SidebarItem title="Create" icon={faSquarePlus} link="/create"
+          isOpen={isOpen} size="l" />
+        <SidebarItem title="Analytics" icon={faChartSimple} link="/analytics"
+          isOpen={isOpen} size="l" />
+        <SidebarItem title="Source" icon={faCode} link="https://github.com/ethanliu24/algo-graveyard"
+          isOpen={isOpen} size="l" />
+        <SidebarItem title="About" icon={faCircleInfo} link="/about"
+          isOpen={isOpen} size="l" />
       </div>
 
       <div className={`w-[100%] flex flex-col ${isOpen ? "items-start" : "items-center"}`}>
@@ -54,13 +59,14 @@ export function Sidebar(props) {
 
 function SidebarItem(props) {
   return (
-    <div className={`w-[100%] flex justify-${props.isOpen ? "start" : "center"} items-center gap-4
-      cursor-pointer select-none my-0.5 rounded-2xl py-1 ${props.isOpen ? "px-3" : "px-0"}
+    <a href={props.link}
+      className={`w-[100%] flex justify-${props.isOpen ? "start" : "center"} items-center gap-4
+        cursor-pointer select-none my-0.5 py-1 ${props.isOpen ? "px-3 rounded-2xl" : "px-0"}
       hover:bg-sky-100 hover:ring-1 hover:ring-sky-200`}>
       <span style={props.style || {}}>
         <FontAwesomeIcon icon={props.icon} size={props.size || ""} />
       </span>
       {props.isOpen ? <div>{props.title}</div> : null}
-    </div>
+    </a>
   );
 }
