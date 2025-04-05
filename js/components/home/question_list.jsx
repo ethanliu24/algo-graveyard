@@ -26,7 +26,7 @@ export default function QuestionList() {
   };
 
   return (
-    <div>
+    <div className="mt-4">
       <div className="text-sm w-[100%]">
         {questions.map((q, i) => {
           return (<ListItem key={"q" + i}
@@ -76,8 +76,8 @@ function ListItem(props) {
   };
 
   return (
-    <div className="flex justify-between items-center gap-4 text-center mt-4
-      bg-transparent px-4 py-2 cursor-pointer rounded hover:bg-gray-200">
+    <div className="flex justify-between items-center gap-4 text-center w-[100%]
+      bg-transparent px-4 py-3 cursor-pointer rounded hover:bg-gray-200">
       <div className="text-[12px] text-gray-500">{props.idx}</div>
       {getStatusIcon(props.status, props.idx)}
       <div className="flex-8 flex flex-col justify-between items-start">

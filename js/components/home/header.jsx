@@ -15,7 +15,7 @@ export default function Header() {
         The genie told me to shut the fuck up. <br />
         <br />
         {/* This has nothing to do with the project. I put this here for decoration. */}
-        神说，诸水之间要有空气。多放大悲咒，积阳德。每日播放大悲咒，积积阳阳德。
+        神说，诸水之间要有空气。多放大悲咒，积阳德。每天放大悲咒，积积阳阳德。
         May my disappointingly inefficent algorithms rest in peace.
       </p>
       <img src="./static/res/ghost.png" alt="crazy gpt generated ghost"
