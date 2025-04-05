@@ -1,7 +1,5 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faHourglassEnd, faClock, faMinus } from "@fortawesome/free-solid-svg-icons";
-import { Tooltip } from "react-tooltip";
-import { capitalizeFirst } from "../../utils/utils.js";
+import { getStatusIcon, getDifficultyStyle } from "../../utils/assets.jsx";
+import { capitalizeFirst, formatDate } from "../../utils/utils.js";
 
 export default function QuestionList(props) {
   return (
@@ -17,41 +15,6 @@ export default function QuestionList(props) {
 }
 
 function ListItem(props) {
-  const getStatusIcon = (status, idx) => {
-    const statusIcon = {
-      "completed": <FontAwesomeIcon icon={faCheck} color="#6bd177" />,
-      "unoptimized": <FontAwesomeIcon icon={faClock} color="#3b82f7" />,
-      "attempted": <FontAwesomeIcon icon={faHourglassEnd} color="#f5cd3d" />
-    };
-
-    const tooltip = statusIcon[status] ? status : "unknown";
-    const tooltipId = `${tooltip}-${idx}`;
-
-    return (
-      <div data-tooltip-id={tooltipId} data-tooltip-content={capitalizeFirst(tooltip)} data-tooltip-place="left">
-        {statusIcon[status] || <FontAwesomeIcon icon={faMinus} color="#c7c7c7" />}
-        <Tooltip id={tooltipId} />
-      </div>);
-  };
-
-  const formatDate = (dateStr) => {
-    const options = { month: 'short', day: 'numeric', year: 'numeric' };
-    const date = new Date(dateStr);
-    return date.toLocaleDateString('en-US', options);
-  };
-
-  const getDifficultyStyle = (difficulty) => {
-    const colorMap = {
-      "easy": "#6bd177",
-      "medium": "#f5cd3d",
-      "hard": "#eb4b63"
-    };
-
-    return {
-      color: colorMap[difficulty] || "#c7c7c7"
-    };
-  };
-
   return (
     <div className="flex justify-between items-center gap-4 text-center w-[100%]
       bg-transparent px-4 py-3 cursor-pointer rounded hover:bg-gray-200">
