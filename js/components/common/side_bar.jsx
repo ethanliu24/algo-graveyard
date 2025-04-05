@@ -43,7 +43,7 @@ function SidebarItem(props) {
   return (
     <div className="w-[100%] flex justify-start items-center gap-4 cursor-pointer
       px-3 py-1 rounded-2xl select-none
-      hover:bg-blue-200 hover:ring-2 hover:ring-offset-1 hover:ring-blue-400">
+      hover:bg-sky-100 hover:ring-1 hover:ring-cyan-100">
       <FontAwesomeIcon icon={faHouse} />
       <div>{props.title}</div>
     </div>
