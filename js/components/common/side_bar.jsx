@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react"
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
   faChevronRight,
   faChevronLeft,
-  faCross,
   faHouse,
   faSquarePlus,
   faChartSimple,
   faCode,
   faCircleInfo
-} from '@fortawesome/free-solid-svg-icons'
+} from "@fortawesome/free-solid-svg-icons"
+import tombstone from "../../../static/res/tombstone.svg"
 
 export function Sidebar(props) {
   const [isOpen, setIsOpen] = useState(props.open || window.innerWidth >= 768)
@@ -23,7 +23,7 @@ export function Sidebar(props) {
       window.removeEventListener("resize", () => {});
     }
   }, []);
-
+  console.log(tombstone)
   return (
     <div className={`
       h-screen py-4 ${isOpen ? "w-47 px-2.5 " : "w-12 px-0"}
@@ -31,7 +31,9 @@ export function Sidebar(props) {
       flex flex-col justify-between items-center
       `}>
       <div className={`w-[100%] gap-1 flex flex-col ${isOpen ? "items-start" : "items-center"}`}>
-        <FontAwesomeIcon icon={faCross} size="2x" className="mb-2" />
+        <div className="flex justify-center items-center w-[100%]">
+          <img src={tombstone} alt="rip" className={`${isOpen ? "w-16 h-16" : "w-6 h-6"}`} />
+        </div>
         <SidebarItem title="Home" icon={faHouse} link="/"
           isOpen={isOpen} style={isOpen ? { marginLeft: "-2px" } : {}} />
         <SidebarItem title="Create" icon={faSquarePlus} link="/create"
