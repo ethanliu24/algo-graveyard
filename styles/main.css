@@ -8,6 +8,9 @@
 }
 
 @layer components {
+  input {
+    @apply border border-gray-300 bg-white rounded focus:outline-primary/70;
+  }
   /* React Prime components */
   .drop-down {
     @apply border-1 border-gray-300 py-1 px-4 rounded;
@@ -48,7 +51,7 @@
     @apply h-full flex justify-center items-center
   }
   .p-multiselect-filter-container input {
-    @apply w-full border border-gray-300 bg-white rounded px-2 py-1 text-[12px] h-full focus:outline-primary/70;
+    @apply w-full h-full px-2 py-1 text-[12px];
   }
 
   .p-multiselect-filter-icon {

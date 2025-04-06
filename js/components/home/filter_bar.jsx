@@ -1,6 +1,9 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { Dropdown } from "primereact/dropdown";
 import { MultiSelect } from 'primereact/multiselect';
+import { InputText } from 'primereact/inputtext';
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { capitalizeFirst } from "../../utils/utils";
 import { getDifficultyStyle, getStatusIcon } from "../../utils/assets";
 
@@ -10,6 +13,7 @@ export default function FilterBar(props) {
   const [status, setStatus] = useState("");
   const [tags, setTags] = useState([]);
   const [tagOpts, setTagOpts] = useState([]);  // formatted for Multiselect
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     const formattedTags = props.tags.map((tag) => ({
@@ -85,6 +89,11 @@ export default function FilterBar(props) {
         onChange={(e) => setTags(e.value)} filter
         itemTemplate={tagsTemplate} panelFooterTemplate={tagsFooterTemplate}
         className="drop-down" panelClassName="drop-down-panel" />
+      <div className="relative flex-1">
+        <InputText value={search} onChange={(e) => setSearch(e.target.value)}
+          className="drop-down pl-8 w-full"/>
+        <FontAwesomeIcon icon={faMagnifyingGlass} className="absolute top-1/2 left-0 -translate-y-1/2 ml-2" />
+      </div>
     </div>
   );
 }
