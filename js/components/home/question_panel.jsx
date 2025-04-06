@@ -68,7 +68,7 @@ export default function QuestionPanel() {
   };
 
   return (
-    <div className="mt-4">
+    <div>
       <FilterBar sources={sources} difficulties={difficulties} statuses={statuses} tags={tags} />
       <QuestionList questions={questions} />
       <PaginationBoxes page={page} totalPages={totalPages} fetchForPage={fetchForPage} />

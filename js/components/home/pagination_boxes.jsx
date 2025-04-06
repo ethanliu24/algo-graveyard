@@ -29,7 +29,7 @@ export default function PaginationBoxes(props) {
   }, [props.page, props.totalPages]);
 
   return (
-    <div className="flex justify-center items-center gap-3 mt-16 mb-4">
+    <div className="flex justify-center items-center gap-3 mb-4">
       <Box page={1} fetchForPage={props.fetchForPage} icon={faAnglesLeft} />
       <Box page={Math.max(props.page - 1, 1)} fetchForPage={props.fetchForPage} icon={faAngleLeft}
         className="mr-4" />

@@ -1,6 +1,6 @@
 export default function Header() {
   return (
-    <div className="rounded-3xl border-1 border-gray-100 p-8 bg-gray-50 shadow-sm max-lg:p-4
+    <div className="rounded-3xl mb-10 border-1 border-gray-100 p-8 bg-gray-50 shadow-sm max-lg:p-4
       grid grid-cols-[4fr_5fr] grid-rows-[1fr_5fr] gap-x-8 grid-flow-col
       max-lg:grid-cols-1 max-lg:grid-rows-[fit-content(10px)_fit-content(10px)_fit-content(10px)] max-lg:gap-y-1">
       <h2 className="text-2xl max-lg:text-center max-lg:text-base">Algo Graveyard</h2>

@@ -26,7 +26,7 @@ export default function FilterBar(props) {
   const CLEAR = "clear"
 
   const valueTemplate = (option, props) => {
-    return (<div className="">{
+    return (<div className="mr-1">{
         capitalizeFirst(!option || option === CLEAR ? props.placeholder : option)
       }</div>
     );
@@ -72,7 +72,7 @@ export default function FilterBar(props) {
   };
 
   return (
-    <div className="flex flex-row justify-center items-center gap-4 flex-wrap gap-y-2 w-[100%] text-md">
+    <div className="flex flex-row justify-center items-center gap-4 flex-wrap gap-y-2 w-[100%] text-md mb-4">
       <Dropdown placeholder="Source" options={props.sources.concat(CLEAR)} value={source} optionLabel="source"
         valueTemplate={valueTemplate} itemTemplate={sourceTemplate}
         className="drop-down" panelClassName="drop-down-panel"
@@ -88,7 +88,7 @@ export default function FilterBar(props) {
       <MultiSelect placeholder="Tags" options={tagOpts} value={tags} optionLabel="label" display="chip"
         onChange={(e) => setTags(e.value)} filter
         itemTemplate={tagsTemplate} panelFooterTemplate={tagsFooterTemplate}
-        className="drop-down" panelClassName="drop-down-panel" />
+        className="drop-down max-w-[12rem]" panelClassName="drop-down-panel" />
       <span className="relative flex-1">
         <InputText value={search} onChange={(e) => setSearch(e.target.value)}
           className="drop-down pl-8 w-full"/>
