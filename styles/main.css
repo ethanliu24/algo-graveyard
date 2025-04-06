@@ -1,1 +1,69 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+@theme {
+  --font-sans: 'Roboto', sans-serif;
+
+  --color-primary: #4f94ff;
+}
+
+@layer components {
+  input {
+    @apply border border-gray-300 bg-white rounded focus:outline-primary/70;
+  }
+
+  /* React Prime components */
+  .drop-down {
+    @apply border-1 border-gray-300 py-1 px-2 rounded max-lg:grow basis-1;
+  }
+
+  .drop-down-panel {
+    @apply rounded shadow-md border bg-white border-gray-200 w-fit;
+  }
+
+  .drop-down-item {
+    @apply bg-white py-2 text-[14px] w-full hover:bg-gray-200;
+  }
+
+  /* Multiselect */
+
+  .p-multiselect-item {
+    @apply px-2 py-1 hover:bg-gray-100 cursor-pointer text-[14px];
+  }
+
+  .p-multiselect-header {
+    @apply px-2 py-1 bg-gray-100 h-[2rem] flex justify-between items-center gap-3;
+  }
+
+  .p-multiselect-select-all-label,
+  .p-checkbox-box {
+    @apply hidden;
+  }
+
+  .p-checkbox-input {
+    @apply cursor-pointer accent-[#5c90ff];
+  }
+
+  .p-multiselect-token {
+    @apply bg-blue-100 text-primary px-2 rounded-full text-sm mr-0.5 flex justify-center items-center gap-1;
+  }
+
+  .p-multiselect-label.p-placeholder {
+    @apply mr-0.5;
+  }
+
+  .p-multiselect-filter-container {
+    @apply h-full flex justify-center items-center
+  }
+  .p-multiselect-filter-container input {
+    @apply w-full h-full px-2 py-1 text-[12px];
+  }
+
+  .p-multiselect-filter-icon {
+    @apply absolute right-0 mr-2 translate-y-[3px];
+  }
+
+  .p-multiselect-empty-message {
+    @apply text-[12px] p-2;
+  }
+}
