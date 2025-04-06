@@ -41,6 +41,21 @@
     --toast-acc: var(--color-primary);
   }
 
+  .p-toast-message.success {
+    --toast-bg: #b2f3b980;
+    --toast-acc: #61d66e;
+  }
+
+  .p-toast-message.warning {
+    --toast-bg: #f3e5b380;
+    --toast-acc: #f1c218;
+  }
+
+  .p-toast-message.error {
+    --toast-bg: #ec9ca880;
+    --toast-acc: #f13b3b;
+  }
+
   .p-toast > div {
     @apply fixed right-0 bottom-0 m-6 text-sm w-60;
   }

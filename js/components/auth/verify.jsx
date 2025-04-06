@@ -1,13 +1,44 @@
-import { useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Password } from 'primereact/password';
 import { Toast } from 'primereact/toast';
+import { getReqHeader } from '../../utils/utils';
 
 export default function Verify(props) {
   const [secret, setSecret] = useState("");
   const verificationRes = useRef(null);
 
-  const handleVerification = () => {
-    let result = { severity: "info", summary: "Info", detail: "Content", sticky: true, className: "info" };
+  useEffect(() => {
+    const toast = { severity: "info", life: 5000, className: "info",
+      summary: "Info", detail: "Enter the app secret to manage questions." }
+    verificationRes.current.show(toast);
+  }, []);
+
+  const handleVerification = async () => {
+    let result = { severity: "danger", summary: "Error", detail: "Something went wrong.", className: "error" };
+
+    if (secret === "") {
+      result = { severity: "warning", summary: "Warning", detail: "Please enter app secret.", className: "warning" };
+    } else {
+      const req = {
+        method: "POST",
+        header: getReqHeader(),
+        body: JSON.stringify({ secret: secret })
+      }
+
+      await fetch("api/auth", req)
+        .then(response => {
+          console.log(response)
+          if (response.ok) {
+            result = { severity: "success", summary: "Success", detail: "You are authenticated!", className: "success" };
+          } else {
+            result = { severity: "danger", summary: "Error", detail: "Authentication Failed.", className: "error" };
+          }
+        })
+        .catch(err => {
+          throw err;
+        });
+    }
+
     verificationRes.current.show(result);
   };
 
