@@ -72,7 +72,7 @@ export default function FilterBar(props) {
   };
 
   return (
-    <div className="flex flex-row justify-center items-center gap-4 flex-wrap gap-y-2 w-[100%] text-md mb-4">
+    <div className="flex flex-row justify-center items-center gap-4 flex-wrap gap-y-3 w-fit text-md mb-4">
       <Dropdown placeholder="Source" options={props.sources.concat(CLEAR)} value={source} optionLabel="source"
         valueTemplate={valueTemplate} itemTemplate={sourceTemplate}
         className="drop-down" panelClassName="drop-down-panel"
@@ -91,7 +91,7 @@ export default function FilterBar(props) {
         className="drop-down max-w-[12rem]" panelClassName="drop-down-panel" />
       <span className="relative flex-1">
         <InputText value={search} onChange={(e) => setSearch(e.target.value)}
-          className="drop-down pl-8 w-full"/>
+          className="drop-down min-w-32 pl-8 w-full cursor-pointer"/>
         <FontAwesomeIcon icon={faMagnifyingGlass} className="absolute top-1/2 left-0 -translate-y-1/2 ml-2" />
       </span>
       <button label="Search" className="drop-down border-0 bg-primary text-white hover:bg-primary/90">

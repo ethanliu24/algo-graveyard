@@ -11,9 +11,10 @@
   input {
     @apply border border-gray-300 bg-white rounded focus:outline-primary/70;
   }
+
   /* React Prime components */
   .drop-down {
-    @apply border-1 border-gray-300 py-1 px-4 rounded;
+    @apply border-1 border-gray-300 py-1 px-4 rounded grow basis-0;
   }
 
   .drop-down-panel {
@@ -60,5 +61,9 @@
 
   .p-multiselect-empty-message {
     @apply text-[12px] p-2;
+  }
+
+  .p-multiselect-label.p-placeholder {
+    @apply mr-2;
   }
 }

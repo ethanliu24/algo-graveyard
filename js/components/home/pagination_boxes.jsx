@@ -47,7 +47,7 @@ function Box(props) {
   return (
     <div className={`flex justify-center items-center
       cursor-pointer w-4 h-4 rounded-xs text-xs p-2 shadow-[1px_1px_2px_rgba(0,0,0,0.2)] bg-gray-100
-      ${props.curPage && props.curPage == props.page ? "bg-primary" : ""}
+      ${props.curPage && props.curPage == props.page ? "bg-primary text-white" : ""}
       ${props.className ? props.className : ""}`}
       onClick={() => props.fetchForPage(props.page)}>
       {props.icon
