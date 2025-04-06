@@ -14,7 +14,7 @@
 
   /* React Prime components */
   .drop-down {
-    @apply border-1 border-gray-300 py-1 px-4 rounded grow basis-0;
+    @apply border-1 border-gray-300 py-1 px-2 rounded max-lg:grow basis-1;
   }
 
   .drop-down-panel {
@@ -45,7 +45,11 @@
   }
 
   .p-multiselect-token {
-    @apply bg-blue-100 text-primary px-2 rounded-full text-sm mr-1 flex justify-center items-center gap-1;
+    @apply bg-blue-100 text-primary px-2 rounded-full text-sm mr-0.5 flex justify-center items-center gap-1;
+  }
+
+  .p-multiselect-label.p-placeholder {
+    @apply mr-0.5;
   }
 
   .p-multiselect-filter-container {
@@ -61,9 +65,5 @@
 
   .p-multiselect-empty-message {
     @apply text-[12px] p-2;
-  }
-
-  .p-multiselect-label.p-placeholder {
-    @apply mr-2;
   }
 }
