@@ -46,7 +46,11 @@ export default function QuestionPanel() {
 
   const fetchForPage = async (page, pageSize = null) => {
     let query = { page: page };
-    query = pageSize !== null ? { per_page: pageSize, ...query } : query;
+    if (pageSize) query = { ...query, per_page: pageSize }
+    await searchQuestions(query);
+  };
+
+  const searchQuestions = async (query) => {
     const data = await getQuestions(query);
     setQuestions(data.data);
     setPage(data.page);
@@ -69,7 +73,7 @@ export default function QuestionPanel() {
 
   return (
     <div>
-      <FilterBar sources={sources} difficulties={difficulties} statuses={statuses} tags={tags} />
+      <FilterBar sources={sources} difficulties={difficulties} statuses={statuses} tags={tags} searchQuestions={searchQuestions} />
       <QuestionList questions={questions} />
       <PaginationBoxes page={page} totalPages={totalPages} fetchForPage={fetchForPage} />
     </div>

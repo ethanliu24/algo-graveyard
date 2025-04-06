@@ -25,6 +25,21 @@ export default function FilterBar(props) {
 
   const CLEAR = "clear"
 
+  const handleSearch = () => {
+    // Since react deals with states asynchronously, there may be delays in when the states are updated,
+    // which causes outdated information to fetch. Shouldn't be much of an issue in this case,
+    // but smth to keep in mind.
+    let query = {};
+    if (source) query = { ...query, source: source };
+    if (difficulty) query = { ...query, difficulty: difficulty };
+    if (status) query = { ...query, status: status };
+    if (tags.length !== 0) query = { ...query, tags: tags };
+    if (search) query = { ...query, search: search };
+
+    console.log(query)
+    props.searchQuestions(query);
+  };
+
   const valueTemplate = (option, props) => {
     return (<div className="mr-1">{
         capitalizeFirst(!option || option === CLEAR ? props.placeholder : option)
@@ -73,6 +88,7 @@ export default function FilterBar(props) {
 
   return (
     <div className="flex flex-row justify-center items-center gap-4 flex-wrap gap-y-3 w-fit text-md mb-4">
+      {/* TODO add sort by, use nested select */}
       <Dropdown placeholder="Source" options={props.sources.concat(CLEAR)} value={source} optionLabel="source"
         valueTemplate={valueTemplate} itemTemplate={sourceTemplate}
         className="drop-down" panelClassName="drop-down-panel"
@@ -94,7 +110,8 @@ export default function FilterBar(props) {
           className="drop-down min-w-32 pl-8 w-full cursor-pointer"/>
         <FontAwesomeIcon icon={faMagnifyingGlass} className="absolute top-1/2 left-0 -translate-y-1/2 ml-2" />
       </span>
-      <button label="Search" className="drop-down border-0 bg-primary text-white hover:bg-primary/90">
+      <button label="Search" className="drop-down border-0 bg-primary text-white hover:bg-primary/90"
+        onClick={handleSearch}>
         Search
       </button>
     </div>
