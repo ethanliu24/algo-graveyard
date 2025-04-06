@@ -1,10 +1,11 @@
 # CHANGELOG
 
 ## Version 0.0.1
+- Add home page and side bar (#25)
 - Set up react, vite, tailwind and templates (#22)
-- Add metadata api endpoits and services for client to fetch. (#21)
-- Enhance schemas with validation and make tags enums for single source of truth. (#20)
-- Support querying specific questions on all questions route (#19).
+- Add metadata api endpoits and services for client to fetch (#21)
+- Enhance schemas with validation and make tags enums for single source of truth (#20)
+- Support querying specific questions on all questions route (#19)
 - Fixed test reporter (#17)
 - Update test case schema to use a dict for inputs rather than parallel arrays (#15)
 - Add authentication and authorization enpoints and services (#14)
