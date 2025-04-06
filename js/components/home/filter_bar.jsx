@@ -89,11 +89,14 @@ export default function FilterBar(props) {
         onChange={(e) => setTags(e.value)} filter
         itemTemplate={tagsTemplate} panelFooterTemplate={tagsFooterTemplate}
         className="drop-down" panelClassName="drop-down-panel" />
-      <div className="relative flex-1">
+      <span className="relative flex-1">
         <InputText value={search} onChange={(e) => setSearch(e.target.value)}
           className="drop-down pl-8 w-full"/>
         <FontAwesomeIcon icon={faMagnifyingGlass} className="absolute top-1/2 left-0 -translate-y-1/2 ml-2" />
-      </div>
+      </span>
+      <button label="Search" className="drop-down border-0 bg-primary text-white hover:bg-primary/90">
+        Search
+      </button>
     </div>
   );
 }
