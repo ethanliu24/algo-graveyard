@@ -15,3 +15,8 @@ export function formatDate(dateStr) {
   const date = new Date(dateStr);
   return date.toLocaleDateString('en-US', options);
 };
+
+export function formatQueries(queries) {
+  let queryStr = new URLSearchParams(queries).toString();
+  return queryStr;
+};

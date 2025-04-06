@@ -3,7 +3,7 @@ import { faCheck, faHourglassEnd, faClock, faMinus } from "@fortawesome/free-sol
 import { Tooltip } from "react-tooltip";
 import { capitalizeFirst } from "./utils";
 
-export function getStatusIcon(status, idx) {
+export function getStatusIcon(status, id, enableTooltip = true) {
   const statusIcon = {
     "completed": <FontAwesomeIcon icon={faCheck} color="#6bd177" />,
     "unoptimized": <FontAwesomeIcon icon={faClock} color="#3b82f7" />,
@@ -11,12 +11,12 @@ export function getStatusIcon(status, idx) {
   };
 
   const tooltip = statusIcon[status] ? status : "unknown";
-  const tooltipId = `${tooltip}-${idx}`;
+  const tooltipId = `${tooltip}-${id}`;
 
   return (
     <div data-tooltip-id={tooltipId} data-tooltip-content={capitalizeFirst(tooltip)} data-tooltip-place="left">
       {statusIcon[status] || <FontAwesomeIcon icon={faMinus} color="#c7c7c7" />}
-      <Tooltip id={tooltipId} />
+      {enableTooltip ? <Tooltip id={tooltipId} /> : null}
     </div>);
 };
 
