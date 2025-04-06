@@ -82,7 +82,7 @@ export default function FilterBar(props) {
         className="drop-down" panelClassName="drop-down-panel"
         onChange={(e) => setStatus(e.value === CLEAR ? "" : e.value)} />
       <MultiSelect placeholder="Tags" options={tagOpts} value={tags} optionLabel="label" display="chip"
-        onChange={(e) => setTags(e.value)}
+        onChange={(e) => setTags(e.value)} filter
         itemTemplate={tagsTemplate} panelFooterTemplate={tagsFooterTemplate}
         className="drop-down" panelClassName="drop-down-panel" />
     </div>
