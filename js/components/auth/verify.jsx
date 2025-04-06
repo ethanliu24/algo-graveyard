@@ -27,7 +27,6 @@ export default function Verify(props) {
 
       await fetch("api/auth", req)
         .then(response => {
-          console.log(response)
           if (response.ok) {
             result = { severity: "success", summary: "Success", detail: "You are authenticated!", className: "success" };
           } else {
