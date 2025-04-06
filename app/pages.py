@@ -14,6 +14,7 @@ def get_static_path(name: str):
 
     key = {
         "home": manifest["components/home/main.js"],
+        "auth": manifest["components/auth/main.js"],
         "styles": manifest["../styles/main.css"],
     }
 
@@ -37,4 +38,11 @@ def create_context(request: Request, title: str, root_id: str, react_script: str
 async def home_page(request: Request):
     return templates.TemplateResponse(
         "base.html", create_context(request, "Home", "homeDiv", get_static_path("home"))
+    )
+
+
+@router.get("/authenticate", response_class=HTMLResponse)
+async def home_page(request: Request):
+    return templates.TemplateResponse(
+        "base.html", create_context(request, "Authenticate", "authDiv", get_static_path("auth"))
     )
