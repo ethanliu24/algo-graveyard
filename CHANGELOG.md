@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## Version 0.0.1
+- Add authentication card and page (#28)
 - Add home page and side bar (#27)
 - Set up react, vite, tailwind and templates (#22)
 - Add metadata api endpoits and services for client to fetch (#21)
