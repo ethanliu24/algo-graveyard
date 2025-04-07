@@ -11,6 +11,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         home: resolve(__dirname, 'js/components/home/main.js'),
+        auth: resolve(__dirname, 'js/components/auth/main.js'),
         styles: resolve(__dirname, 'styles/main.css'),
       },
       output: {

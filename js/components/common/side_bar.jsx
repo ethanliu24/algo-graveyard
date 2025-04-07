@@ -17,6 +17,8 @@ export default function Sidebar(props) {
   const [isOpen, setIsOpen] = useState(props.open)
 
   useEffect(() => {
+    localStorage.setItem("openSidebar", JSON.stringify(props.open));
+
     window.addEventListener("resize", () => {
       setIsOpen(window.innerWidth > 768);
     });

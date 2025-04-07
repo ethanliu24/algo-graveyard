@@ -9,7 +9,11 @@
 
 @layer components {
   input {
-    @apply border border-gray-300 bg-white rounded focus:outline-primary/70;
+    @apply border px-2 border-gray-300 bg-white rounded focus:outline-primary/70;
+  }
+
+  button {
+    @apply border-0 rounded py-1 px-2 bg-primary text-white hover:bg-primary/90;
   }
 
   /* React Prime components */
@@ -23,6 +27,58 @@
 
   .drop-down-item {
     @apply bg-white py-2 text-[14px] w-full hover:bg-gray-200;
+  }
+
+  /* Toast */
+
+  .p-toast-message {
+    --toast-bg: #e7e8eb80;
+    --toast-acc: #000000;
+  }
+
+  .p-toast-message.info {
+    --toast-bg: #c9ddff80;
+    --toast-acc: var(--color-primary);
+  }
+
+  .p-toast-message.success {
+    --toast-bg: #b2f3b980;
+    --toast-acc: #61d66e;
+  }
+
+  .p-toast-message.warning {
+    --toast-bg: #f3e5b380;
+    --toast-acc: #f1c218;
+  }
+
+  .p-toast-message.error {
+    --toast-bg: #ec9ca880;
+    --toast-acc: #f13b3b;
+  }
+
+  .p-toast > div {
+    @apply fixed right-0 bottom-0 m-6 text-sm w-60;
+  }
+
+  .p-toast-message > div {
+    @apply mb-4 bg-[var(--toast-bg)] backdrop-blur-sm rounded p-2 text-[var(--toast-acc)] text-[12px] border-l-6 flex items-center;
+  }
+
+  .p-toast-summary {
+    @apply text-[16px] font-bold
+  }
+
+  .p-toast-message-icon {
+    @apply mr-2 w-4 h-4;
+  }
+
+  .p-toast-icon-close-icon {
+    @apply w-3 h-3;
+  }
+
+  .p-toast-message-icon path,
+  .p-toast-icon-close-icon path {
+    @apply fill-[var(--toast-acc)];
   }
 
   /* Multiselect */

@@ -109,10 +109,7 @@ export default function FilterBar(props) {
           className="drop-down min-w-32 w-full pl-8 cursor-text"/>
         <FontAwesomeIcon icon={faMagnifyingGlass} className="absolute top-1/2 left-0 -translate-y-1/2 ml-2" />
       </span>
-      <button label="Search" className="drop-down border-0 bg-primary text-white hover:bg-primary/90"
-        onClick={handleSearch}>
-        Search
-      </button>
+      <button className="drop-down" onClick={handleSearch}>Search</button>
     </div>
   );
 }

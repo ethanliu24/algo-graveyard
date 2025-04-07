@@ -14,7 +14,7 @@ async def authenticate_user(
     request: Request,
     response: Response,
     auth_service: Annotated[AuthManager, Depends(get_auth_service)]
-) -> None:
+) -> dict:
     try:
         body = await request.json()
         secret = body["secret"]
@@ -33,3 +33,5 @@ async def authenticate_user(
         samesite="strict",
         max_age=(auth_service.exp_time * 60 * 60)  # exp_time in hours, max_age takes seconds
     )
+
+    return { "message": "Authenticated." }
