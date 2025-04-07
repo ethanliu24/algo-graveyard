@@ -17,7 +17,7 @@ export default function Verify(props) {
   useEffect(() => {
     const toast = { severity: "info", life: 5000, className: "info",
       summary: "Info", detail: "Enter the app secret to manage questions." }
-    verificationRes.current.show(toast);
+    setTimeout(() => verificationRes.current.show(toast), 100);
   }, []);
 
   const handleVerification = async () => {
