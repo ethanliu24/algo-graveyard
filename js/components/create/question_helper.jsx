@@ -71,7 +71,7 @@ export function HelperTestCaseTemplate(props) {
       <div className="flex gap-2 items-center w-full">
         <FontAwesomeIcon icon={faX} className="cursor-pointer" style={{ color: "#a0a0a0" }}
           onClick={() => props.updateList(null, props.idx, true)} />
-        <InputTextarea placeholder="" value={props.content.explanation} autoResize
+        <InputTextarea placeholder="Explanation of test case" value={props.content.explanation} autoResize
           onChange={(e) => handleChange(props.content.parameters, e.target.value)}
           className="border-gray-300 w-full flex-1" />
       </div>

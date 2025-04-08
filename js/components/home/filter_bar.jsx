@@ -27,7 +27,7 @@ export default function FilterBar(props) {
   };
 
   return (
-    <div className="flex justify-center items-center gap-2 flex-wrap gap-y-2 text-md mb-4">
+    <div className="flex justify-center items-center gap-2 flex-wrap gap-y-2 text-md mb-4 w-full h-full">
       <SourceDropdown sources={props.sources} updateValue={(s) => setSource(s)} />
       <DifficultyDropdown difficulties={props.difficulties} updateValue={(d) => setDifficulty(d)} />
       <StatusDropdown statuses={props.statuses} updateValue={(s) => setStatus(s)} />

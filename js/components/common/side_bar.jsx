@@ -82,7 +82,7 @@ function SidebarItem(props) {
       <span className={`${props.isOpen ? "w-[1.2rem]" : ""} ${props.className}`}>
         <FontAwesomeIcon icon={props.icon} size={props.size || ""} />
       </span>
-      {props.isOpen ? null : <Tooltip id={props.title} className="ml-1" />}
+      {props.isOpen ? null : <Tooltip id={props.title} className="ml-1 z-50" />}
       {props.isOpen ? <div>{props.title}</div> : null }
     </a>
   );
