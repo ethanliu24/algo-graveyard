@@ -13,7 +13,7 @@
   }
 
   textarea {
-    @apply border border-gray-300 bg-white rounded focus:outline-primary/70 px-2 py-1 min-h-[20rem] text-[14px];
+    @apply border border-gray-300 bg-white rounded focus:outline-primary/70 px-2 py-1 min-h-[20rem];
   }
 
   button {

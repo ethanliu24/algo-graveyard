@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from 'primereact/inputtextarea';
-import { faPlus, faX } from "@fortawesome/free-solid-svg-icons";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getReqHeader, formatQueries } from "../../utils/utils";
 import { StatusDropdown, DifficultyDropdown, SourceDropdown, TagsDropdown } from "../common/drop_down.jsx";
+import QuestionHelper, { HelperStrTemplate } from "./question_helper.jsx";
 
 export default function QuestionForm(props) {
   const [link, setLink] = useState("");
@@ -69,19 +70,19 @@ export default function QuestionForm(props) {
   };
 
   return (
-    <div className="flex flex-col justify-start items-start gap-4 text-[18px]">
+    <div className="flex flex-col justify-start items-start gap-4 text-[14px]">
       <div className="form-section">
         <label className="section-title">Link</label>
         <div className="flex justify-between items-center gap-4 w-full">
           <InputText placeholder="" value={link} onChange={(e) => setLink(e.target.value)}
-            className="flex-1 rounded-xs" />
-          <SourceDropdown sources={metadata.sources || []} updateValue={(s) => setSource(s)} className="py-0 px-3" />
+            className="flex-1 rounded-xs py-1" />
+          <SourceDropdown sources={metadata.sources || []} updateValue={(s) => setSource(s)} className="py-1 px-3" />
         </div>
       </div>
       <div className="form-section">
         <label className="section-title">Title</label>
         <InputText placeholder="" value={title} onChange={(e) => setTitle(e.target.value)}
-          className="w-full rounded-xs" />
+          className="w-full rounded-xs py-1" />
       </div>
       <div className="flex flex-col justify-start items-start">
         <label className="section-title">Category</label>
@@ -96,8 +97,10 @@ export default function QuestionForm(props) {
         <InputTextarea placeholder="" value={prompt} autoResize onChange={(e) => setPrompt(e.target.value)}
           className="border-1 rounded-xs border-gray-300 w-full" />
       </div>
-      <QuestionHelper title="Notes" list={notes} updateList={updateNotes} setList={(l) => setNotes(l)} />
-      <QuestionHelper title="Hints" list={hints} updateList={updateHints} setList={(l) => setHints(l)} />
+      <QuestionHelper title="Notes" helperTemplate={HelperStrTemplate} list={notes}
+        updateList={updateNotes} setList={(l) => setNotes(l)} />
+      <QuestionHelper title="Hints" helperTemplate={HelperStrTemplate} list={hints}
+        updateList={updateHints} setList={(l) => setHints(l)} />
       <button onClick={handleSubmit} className="my-3">
         {props.create
           ? <FontAwesomeIcon icon={faPlus} className="mr-2" />
@@ -106,28 +109,4 @@ export default function QuestionForm(props) {
       </button>
     </div>
   )
-}
-
-function QuestionHelper(props) {
-  return (
-    <div className="form-section">
-      <details className="w-full">
-        <summary className="section-title cursor-pointer">
-          <label className="ml-1">{props.title}</label>
-        </summary>
-        <button onClick={() => props.setList([...props.list, ""])}
-          className="text-[14px] p-0 w-4 h-4 my-2 flex justify-center items-center">+</button>
-        <div className="flex flex-col gap-2">
-          {props.list.map((n, i) => {
-            return (<div className="flex justify-between items-center gap-2">
-                <FontAwesomeIcon icon={faX} size="xs" className="cursor-pointer" style={{ color: "#a0a0a0" }}
-                  onClick={() => props.updateList("", i, true)} />
-                <InputText value={n} onChange={(e) => props.updateList(e.target.value, i, false)}
-                  className="border-0 border-b-1 rounded-[0%] text-[14px] w-full focus:outline-none flex-1 p-1" />
-              </div>);
-          })}
-        </div>
-      </details>
-    </div>
-  );
 }
