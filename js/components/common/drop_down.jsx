@@ -31,7 +31,7 @@ export function SourceDropdown(props) {
   return (
     <Dropdown placeholder="Source" options={props.sources.concat(CLEAR)} value={source} optionLabel="source"
       valueTemplate={valueTemplate} itemTemplate={sourceTemplate}
-      className="drop-down" panelClassName="drop-down-panel"
+      className={`drop-down ${props.className}`} panelClassName="drop-down-panel"
       onChange={handleChange} />
   );
 }
@@ -57,7 +57,7 @@ export function DifficultyDropdown(props) {
   return (
     <Dropdown placeholder="Difficulty" options={props.difficulties.concat(CLEAR)} value={difficulty} optionLabel="difficulty"
       valueTemplate={valueTemplate} itemTemplate={difficultyTemplate}
-      className="drop-down" panelClassName="drop-down-panel"
+      className={`drop-down ${props.className}`} panelClassName="drop-down-panel"
       onChange={handleChange} />
   );
 }
@@ -84,7 +84,7 @@ export function StatusDropdown(props) {
   return (
     <Dropdown placeholder="Status" options={props.statuses.concat(CLEAR)} value={status} optionLabel="status"
       valueTemplate={valueTemplate} itemTemplate={statusTemplate}
-      className="drop-down" panelClassName="drop-down-panel"
+      className={`drop-down ${props.className}`} panelClassName="drop-down-panel"
       onChange={handleChange} />
   );
 }
@@ -130,7 +130,7 @@ export function TagsDropdown(props) {
     <MultiSelect placeholder="Tags" options={tagOpts} value={tags} optionLabel="label" display="chip"
       onChange={handleChange} filter
       itemTemplate={tagsTemplate} panelFooterTemplate={tagsFooterTemplate}
-      className="drop-down max-w-[12rem]" panelClassName="drop-down-panel" />
+      className={`drop-down max-w-[12rem] ${props.className}`} panelClassName="drop-down-panel" />
   );
 }
 

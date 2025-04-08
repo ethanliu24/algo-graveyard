@@ -7,6 +7,7 @@ import { getReqHeader, formatQueries } from "../../utils/utils";
 import { StatusDropdown, DifficultyDropdown, SourceDropdown, TagsDropdown } from "../common/drop_down.jsx";
 
 export default function QuestionForm(props) {
+  const [link, setLink] = useState("");
   const [source, setSource] = useState("");
   const [difficulty, setDifficulty] = useState("");
   const [status, setStatus] = useState("");
@@ -47,16 +48,16 @@ export default function QuestionForm(props) {
   }, []);
 
   const updateNotes = (val, idx, remove) => {
-    const updated = formatHelperList(notes, val, idx, remove);
+    const updated = updateHelper(notes, val, idx, remove);
     setNotes(updated);
   };
 
   const updateHints = (val, idx, remove) => {
-    const updated = formatHelperList(hints, val, idx, remove);
+    const updated = updateHelper(hints, val, idx, remove);
     setHints(updated);
   };
 
-  const formatHelperList = (lst, val, idx, remove) => {
+  const updateHelper = (lst, val, idx, remove) => {
     const updated = lst.slice(0, idx);
     if (!remove) updated.push(val);
     updated.push(...lst.slice(idx + 1));
@@ -70,15 +71,22 @@ export default function QuestionForm(props) {
   return (
     <div className="flex flex-col justify-start items-start gap-4 text-[18px]">
       <div className="form-section">
+        <label className="section-title">Link</label>
+        <div className="flex justify-between items-center gap-4 w-full">
+          <InputText placeholder="" value={link} onChange={(e) => setLink(e.target.value)}
+            className="flex-1 rounded-xs" />
+          <SourceDropdown sources={metadata.sources || []} updateValue={(s) => setSource(s)} className="py-0 px-3" />
+        </div>
+      </div>
+      <div className="form-section">
         <label className="section-title">Title</label>
         <InputText placeholder="" value={title} onChange={(e) => setTitle(e.target.value)}
           className="w-full rounded-xs" />
       </div>
-      <div className="flex flex-col justiify-start items-start">
+      <div className="flex flex-col justify-start items-start">
         <label className="section-title">Category</label>
-        <div className="flex justify-start items-center gap-4 flex-wrap grow w-full">
+        <div className="flex justify-start items-center gap-4 gap-y-1 flex-wrap grow w-full">
           <TagsDropdown tags={metadata.tags || []} updateValue={(t) => setTags(t)} />
-          <SourceDropdown sources={metadata.sources || []} updateValue={(s) => setSource(s)} className="p-0" />
           <DifficultyDropdown difficulties={metadata.difficulties || []} updateValue={(d) => setDifficulty(d)} />
           <StatusDropdown statuses={metadata.statuses || []} updateValue={(s) => setStatus(s)} />
         </div>
