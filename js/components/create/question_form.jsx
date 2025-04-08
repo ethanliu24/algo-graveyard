@@ -90,7 +90,7 @@ export default function QuestionForm(props) {
       </div>
       <QuestionHelper title="Notes" list={notes} updateList={updateNotes} setList={(l) => setNotes(l)} />
       <QuestionHelper title="Hints" list={hints} updateList={updateHints} setList={(l) => setHints(l)} />
-      <button onClick={handleSubmit}>
+      <button onClick={handleSubmit} className="my-3">
         {props.create
           ? <FontAwesomeIcon icon={faPlus} className="mr-2" />
           : <FontAwesomeIcon icon={faPlus} className="mr-2" />}
@@ -115,7 +115,7 @@ function QuestionHelper(props) {
                 <FontAwesomeIcon icon={faX} size="xs" className="cursor-pointer" style={{ color: "#a0a0a0" }}
                   onClick={() => props.updateList("", i, true)} />
                 <InputText value={n} onChange={(e) => props.updateList(e.target.value, i, false)}
-                  className="border-0 border-b-1 rounded-[0%] text-[14px] w-full focus:outline-none flex-1" />
+                  className="border-0 border-b-1 rounded-[0%] text-[14px] w-full focus:outline-none flex-1 p-1" />
               </div>);
           })}
         </div>
