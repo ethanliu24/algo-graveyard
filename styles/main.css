@@ -9,11 +9,11 @@
 
 @layer components {
   input {
-    @apply border px-2 border-gray-300 bg-white rounded focus:outline-primary/70;
+    @apply border px-2 border-gray-300 bg-white rounded-xs focus:outline-primary/70;
   }
 
   textarea {
-    @apply border border-gray-300 bg-white rounded focus:outline-primary/70 px-2 py-1 min-h-[20rem];
+    @apply border-1 rounded-xs border-gray-300 bg-white focus:outline-primary/70 px-2 py-1;
   }
 
   button {
@@ -30,7 +30,7 @@
 
   /* React Prime components */
   .drop-down {
-    @apply border-1 border-gray-300 py-1 px-2 rounded max-lg:grow basis-1;
+    @apply border-1 border-gray-300 py-1 px-2 rounded-xs max-lg:grow basis-1;
   }
 
   .drop-down-panel {

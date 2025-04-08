@@ -5,7 +5,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getReqHeader, formatQueries } from "../../utils/utils";
 import { StatusDropdown, DifficultyDropdown, SourceDropdown, TagsDropdown } from "../common/drop_down.jsx";
-import QuestionHelper, { HelperStrTemplate } from "./question_helper.jsx";
+import QuestionHelper, { HelperStrTemplate, HelperTestCaseTemplate } from "./question_helper.jsx";
 
 export default function QuestionForm(props) {
   const [link, setLink] = useState("");
@@ -17,6 +17,7 @@ export default function QuestionForm(props) {
   const [prompt, setPrompt] = useState("");
   const [notes, setNotes] = useState([]);
   const [hints, setHints] = useState([]);
+  const [testCases, setTestCases] = useState([]);
   const [metadata, setMetadata] = useState({});
 
   useEffect(async () => {
@@ -35,7 +36,6 @@ export default function QuestionForm(props) {
     fetch(`api/metadata?${formatQueries(metadataQuery)}`, req)
       .then(res => res.json())
       .then(data => {
-        console.log("hi")
         setMetadata({
           sources: data.sources,
           difficulties: data.difficulties,
@@ -57,6 +57,11 @@ export default function QuestionForm(props) {
     const updated = updateHelper(hints, val, idx, remove);
     setHints(updated);
   };
+
+  const updateTestCases = (val, idx, remove) => {
+    const updated = updateHelper(testCases, val, idx, remove);
+    setTestCases(updated);
+  }
 
   const updateHelper = (lst, val, idx, remove) => {
     const updated = lst.slice(0, idx);
@@ -95,13 +100,15 @@ export default function QuestionForm(props) {
       <div className="form-section">
         <label className="section-title">Prompt</label>
         <InputTextarea placeholder="" value={prompt} autoResize onChange={(e) => setPrompt(e.target.value)}
-          className="border-1 rounded-xs border-gray-300 w-full" />
+          className="border-1 rounded-xs border-gray-300 w-full min-h-[20rem]" />
       </div>
-      <QuestionHelper title="Notes" helperTemplate={HelperStrTemplate} list={notes}
-        updateList={updateNotes} setList={(l) => setNotes(l)} />
-      <QuestionHelper title="Hints" helperTemplate={HelperStrTemplate} list={hints}
-        updateList={updateHints} setList={(l) => setHints(l)} />
-      <button onClick={handleSubmit} className="my-3">
+      <QuestionHelper title="Notes" helperTemplate={HelperStrTemplate} defaultValue=""
+        list={notes} updateList={updateNotes} setList={(l) => setNotes(l)} />
+      <QuestionHelper title="Hints" helperTemplate={HelperStrTemplate} defaultValue=""
+        list={hints} updateList={updateHints} setList={(l) => setHints(l)} />
+      <QuestionHelper title="Test Cases" helperTemplate={HelperTestCaseTemplate} defaultValue={{ parameters: [], explanation: "" }}
+        list={testCases} updateList={updateTestCases} setList={(l) => setTestCases(l)} />
+      <button onClick={handleSubmit} className="my-3 text-base">
         {props.create
           ? <FontAwesomeIcon icon={faPlus} className="mr-2" />
           : <FontAwesomeIcon icon={faPlus} className="mr-2" />}
