@@ -41,7 +41,7 @@ export default function Verify(props) {
             setSecret("");
             if (props.closable) {
               setShow(false);
-              setTimeout(() => props.closeComponent(), toastLife);
+              setTimeout(() => props.closeComponent(), toastLife + 1000);
             }
           } else {
             result = { severity: "danger", summary: "Error", detail: "Authentication Failed.", life: toastLife, className: "error" };

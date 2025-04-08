@@ -17,7 +17,7 @@
   }
 
   button {
-    @apply border-0 rounded py-1 px-2 bg-primary text-white hover:bg-primary/90 cursor-pointer;
+    @apply border-0 rounded-xs py-1 px-2 bg-primary text-white hover:bg-primary/90 cursor-pointer;
   }
 
   .form-section {
