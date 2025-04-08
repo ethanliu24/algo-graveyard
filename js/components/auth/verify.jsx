@@ -56,7 +56,7 @@ export default function Verify(props) {
 
   return (
     <div className={`flex flex-col justify-center items-center w-fit h-fit rounded-sm
-      bg-gray-50 shadow-sm
+      bg-gray-50 shadow-sm z-100
       ${props.positionStyle ? props.positionStyle : "relative"}
       ${props.className ? props.className : ""}`}>
       <div className={`${show ? "" : "hidden"}`}>

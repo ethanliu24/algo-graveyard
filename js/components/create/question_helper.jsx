@@ -2,7 +2,6 @@ import { InputText } from "primereact/inputtext";
 import { InputTextarea } from 'primereact/inputtextarea';
 import { faX, faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
 
 export default function QuestionHelper(props) {
   const HelperTemplate = props.helperTemplate;

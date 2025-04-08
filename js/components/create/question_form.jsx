@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getReqHeader, formatQueries } from "../../utils/utils";
 import { StatusDropdown, DifficultyDropdown, SourceDropdown, TagsDropdown } from "../common/drop_down.jsx";
 import QuestionHelper, { HelperStrTemplate, HelperTestCaseTemplate } from "./question_helper.jsx";
+import Verify from "../auth/verify.jsx";
 
 export default function QuestionForm(props) {
   const [link, setLink] = useState("");
@@ -19,6 +20,7 @@ export default function QuestionForm(props) {
   const [hints, setHints] = useState([]);
   const [testCases, setTestCases] = useState([]);
   const [metadata, setMetadata] = useState({});
+  const [showVerify, setShowVerify] = useState(false);
 
   useEffect(async () => {
     const req = {
@@ -76,12 +78,16 @@ export default function QuestionForm(props) {
 
   return (
     <div className="flex flex-col justify-start items-start gap-4 text-[14px]">
+      {showVerify
+        ? <Verify closable={true} closeComponent={() => setShowVerify(false)}
+            positionStyle="fixed top-0 right-0 m-8" className="text-base" />
+        : null}
       <div className="form-section">
         <label className="section-title">Link</label>
         <div className="flex justify-between items-center gap-4 w-full">
           <InputText placeholder="" value={link} onChange={(e) => setLink(e.target.value)}
             className="flex-1 rounded-xs py-1" />
-          <SourceDropdown sources={metadata.sources || []} updateValue={(s) => setSource(s)} className="py-1 px-3" />
+          <SourceDropdown sources={metadata.sources || []} updateValue={(s) => setSource(s)} className="py-1" />
         </div>
       </div>
       <div className="form-section">
