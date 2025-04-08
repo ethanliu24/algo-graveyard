@@ -14,6 +14,7 @@ export default function QuestionForm(props) {
   const [title, setTitle] = useState("");
   const [prompt, setPrompt] = useState("");
   const [notes, setNotes] = useState([]);
+  const [hints, setHints] = useState([]);
   const [metadata, setMetadata] = useState({});
 
   useEffect(async () => {
@@ -50,6 +51,11 @@ export default function QuestionForm(props) {
     setNotes(updated);
   };
 
+  const updateHints = (val, idx, remove) => {
+    const updated = formatHelperList(hints, val, idx, remove);
+    setHints(updated);
+  };
+
   const formatHelperList = (lst, val, idx, remove) => {
     const updated = lst.slice(0, idx);
     if (!remove) updated.push(val);
@@ -82,7 +88,8 @@ export default function QuestionForm(props) {
         <InputTextarea placeholder="" value={prompt} autoResize onChange={(e) => setPrompt(e.target.value)}
           className="border-1 rounded-xs border-gray-300 w-full" />
       </div>
-      <QuestionHelper title="Notes" list={notes} updateList={updateNotes} />
+      <QuestionHelper title="Notes" list={notes} updateList={updateNotes} setList={(l) => setNotes(l)} />
+      <QuestionHelper title="Hints" list={hints} updateList={updateHints} setList={(l) => setHints(l)} />
       <button onClick={handleSubmit}>
         {props.create
           ? <FontAwesomeIcon icon={faPlus} className="mr-2" />
@@ -93,22 +100,21 @@ export default function QuestionForm(props) {
   )
 }
 
-
 function QuestionHelper(props) {
   return (
     <div className="form-section">
-      <details open className="w-full">
+      <details className="w-full">
         <summary className="section-title cursor-pointer">
           <label className="ml-1">{props.title}</label>
         </summary>
-        <button onClick={() => props.updateList([...props.list, ""])}
+        <button onClick={() => props.setList([...props.list, ""])}
           className="text-[14px] p-0 w-4 h-4 my-2 flex justify-center items-center">+</button>
         <div className="flex flex-col gap-2">
           {props.list.map((n, i) => {
             return (<div className="flex justify-between items-center gap-2">
                 <FontAwesomeIcon icon={faX} size="xs" className="cursor-pointer" style={{ color: "#a0a0a0" }}
                   onClick={() => props.updateList("", i, true)} />
-                <InputText value={n} onChange={(e) => props.updateList(e.target.value, i)}
+                <InputText value={n} onChange={(e) => props.updateList(e.target.value, i, false)}
                   className="border-0 border-b-1 rounded-[0%] text-[14px] w-full focus:outline-none flex-1" />
               </div>);
           })}
