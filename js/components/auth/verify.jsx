@@ -68,7 +68,7 @@ export default function Verify(props) {
         </h2>
         <div className="flex-1 flex flex-col justify-around items-center gap-4 p-4">
           <Password value={secret} onChange={(e) => setSecret(e.target.value)} feedback={false} tabIndex={1}
-            placeholder="Secret" className="w-full" />
+            placeholder="Super secret secret" className="w-full" />
           <button className="w-full p-0.5 cursor-pointer" onClick={handleVerification}>Verify</button>
         </div>
       </div>
