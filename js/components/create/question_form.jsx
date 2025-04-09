@@ -118,14 +118,23 @@ export default function QuestionForm(props) {
 
     fetch("api/questions", req)
       .then(response => {
-        if (response.ok) {
-          alert("redirect not implemented");
-        } else if (response.status == 401) {
-          alert("Show unauthed Toast");
-          setShowVerify(true);
+        if (!response.ok) {
+          if (response.status == 401) {
+            alert("Show unauthed Toast");
+            setShowVerify(true);
+          } else {
+            alert("Error handling");
+          }
+        }
+
+        return response;
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.id) {  // This means creation was successful
+          window.location.href = `/questions/${data.id}`;
         } else {
-          alert("Error handling");
-          return response;
+          alert("print errors in toast");
         }
       })
       .catch(err => {
