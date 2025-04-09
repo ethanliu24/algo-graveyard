@@ -1,4 +1,4 @@
-import QuestionForm from "./question_form.jsx";
+import QuestionForm from "../question/question_form.jsx"
 
 export default function Create() {
   return (

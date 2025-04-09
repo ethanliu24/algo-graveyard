@@ -5,7 +5,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getReqHeader, formatQueries } from "../../utils/utils";
 import { StatusDropdown, DifficultyDropdown, SourceDropdown, TagsDropdown } from "../common/drop_down.jsx";
-import QuestionHelper, { HelperStrTemplate, HelperTestCaseTemplate } from "./question_helper.jsx";
+import QuestionHelper, { HelperStrTemplate, HelperTestCaseTemplate } from "./question_helpers.jsx";
 import Verify from "../auth/verify.jsx";
 
 export default function QuestionForm(props) {
