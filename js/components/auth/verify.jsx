@@ -30,7 +30,7 @@ export default function Verify(props) {
     } else {
       const req = {
         method: "POST",
-        header: getReqHeader(),
+        headers: getReqHeader(),
         body: JSON.stringify({ secret: secret })
       }
 

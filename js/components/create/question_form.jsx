@@ -25,7 +25,7 @@ export default function QuestionForm(props) {
   useEffect(async () => {
     const req = {
       method: "GET",
-      header: getReqHeader()
+      headers: getReqHeader()
     };
 
     const metadataQuery = {
@@ -73,7 +73,68 @@ export default function QuestionForm(props) {
   }
 
   const handleSubmit = (e) => {
-    e.prevenDefault();
+    e.preventDefault();
+    const data = {
+      source: source,
+      link: link,
+      difficulty: difficulty,
+      status: status,
+      title: title,
+      prompt: prompt,
+      test_cases: testCases,
+      notes: notes,
+      hints: hints,
+      tags: tags
+    };
+
+    if (isFormValid(data)) {
+      props.create ? createQuestion(data) : updateQuestion(data);
+    }
+  };
+
+  const isFormValid = (data) => {
+    // TODO show toast here
+    if (data.link !== "") {
+      alert("handle source is valid");
+      return data.source !== "";
+    }
+
+    if (!data.difficulties|| !data.status || !data.source ||
+        data.title.length === 0 || data.title.length > 50 ||
+        data.prompt.length === 0) {
+      alert("invalid data");
+      return false;
+    }
+
+    return true;
+  };
+
+  const createQuestion = (data) => {
+    const req = {
+      method: "POST",
+      headers: getReqHeader(),
+      body: JSON.stringify(data)
+    };
+
+    fetch("api/questions", req)
+      .then(response => {
+        if (response.ok) {
+          alert("redirect not implemented");
+        } else if (response.status == 401) {
+          alert("Show unauthed Toast");
+          setShowVerify(true);
+        } else {
+          alert("Error handling");
+          return response;
+        }
+      })
+      .catch(err => {
+        throw err;
+      });
+  };
+
+  const updateQuestion = (data) => {
+    alert("Not Implemented yet");
   };
 
   return (
@@ -115,9 +176,7 @@ export default function QuestionForm(props) {
       <QuestionHelper title="Test Cases" helperTemplate={HelperTestCaseTemplate} defaultValue={{ parameters: [], explanation: "" }}
         list={testCases} updateList={updateTestCases} setList={(l) => setTestCases(l)} />
       <button onClick={handleSubmit} className="my-3 text-base">
-        {props.create
-          ? <FontAwesomeIcon icon={faPlus} className="mr-2" />
-          : <FontAwesomeIcon icon={faPlus} className="mr-2" />}
+        <FontAwesomeIcon icon={faPlus} className="mr-2" />
         {props.create ? "Create" : "Update"}
       </button>
     </div>

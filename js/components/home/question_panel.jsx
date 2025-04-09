@@ -21,7 +21,7 @@ export default function QuestionPanel() {
     // Get metadata for filter bar
     const req = {
       method: "GET",
-      header: getReqHeader()
+      headers: getReqHeader()
     };
 
     const metadataQuery = {
@@ -60,7 +60,7 @@ export default function QuestionPanel() {
   const getQuestions = async (queries = {}) => {
     const req = {
       method: "GET",
-      header: getReqHeader(),
+      headers: getReqHeader(),
     }
 
     return await fetch(`/api/questions?${formatQueries(queries)}`, req)
