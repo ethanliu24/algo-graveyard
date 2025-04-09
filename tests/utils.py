@@ -6,7 +6,6 @@ from app.env_vars import ENV_VARS
 from app.schemas.ai_analysis import AiAnalysis
 from app.schemas.question import Question
 from app.schemas.solution import Solution
-from app.schemas.test_case import TestCase
 from app.schemas.token import Token
 from tests.seed import QUESTIONS, QUERY_Q
 
@@ -46,8 +45,6 @@ def populate_database(q_arr):
                 .collection(configs.solution_collection) \
                 .document(sln_id) \
                 .set(sln_data)
-
-        _ = [TestCase(**test_data) for test_data in q_data["test_cases"]] # validate test cases
 
         _ = Question(**q_data)  # validate question
         client.collection(configs.question_collection).document(q_id).set(q_data)

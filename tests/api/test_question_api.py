@@ -48,7 +48,6 @@ async def test_create_question_basic(endpoint):
         "status": "completed",
         "title": "Create Question Basic",
         "prompt": "create a basic question",
-        "test_cases": [],
         "notes": [],
         "hints": [],
         "tags": []
@@ -69,7 +68,6 @@ async def test_create_question_invalid_input(endpoint):
         "status": "",
         "title": "Create Question Basic",
         "prompt": "create a basic question",
-        "test_cases": [],
         "notes": [],
         "hints": [],
         "tags": []
@@ -86,7 +84,6 @@ async def test_create_question_missing_fields(endpoint):
         "link": "",
         "status": "",
         "title": "Create Question Basic",
-        "test_cases": [],
         "hints": [],
         "tags": []
     }
@@ -105,7 +102,6 @@ async def test_create_question_validate_title(endpoint):
         "status": "completed",
         "title": "Create Question Valid Title",
         "prompt": "create question valid prompt",
-        "test_cases": [],
         "notes": [],
         "hints": [],
         "tags": []
@@ -140,7 +136,6 @@ async def test_create_question_validate_prompt(endpoint):
         "status": "completed",
         "title": "Create Question Valid Title",
         "prompt": "",
-        "test_cases": [],
         "notes": [],
         "hints": [],
         "tags": []

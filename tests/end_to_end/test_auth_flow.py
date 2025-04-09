@@ -14,7 +14,6 @@ Q_JSON = {
     "status": "completed",
     "title": "Test authentication authorization",
     "prompt": "Test authentication authorization",
-    "test_cases": [],
     "notes": [],
     "hints": [],
     "tags": []

@@ -5,7 +5,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getReqHeader, formatQueries } from "../../utils/utils";
 import { StatusDropdown, DifficultyDropdown, SourceDropdown, TagsDropdown } from "../common/drop_down.jsx";
-import QuestionHelper, { HelperStrTemplate, HelperTestCaseTemplate } from "./question_helpers.jsx";
+import QuestionHelper, { HelperStrTemplate } from "./question_helpers.jsx";
 import Verify from "../auth/verify.jsx";
 
 export default function QuestionForm(props) {
@@ -18,7 +18,7 @@ export default function QuestionForm(props) {
   const [prompt, setPrompt] = useState("");
   const [notes, setNotes] = useState([]);
   const [hints, setHints] = useState([]);
-  const [testCases, setTestCases] = useState([]);
+  // const [testCases, setTestCases] = useState([]);
   const [metadata, setMetadata] = useState({});
   const [showVerify, setShowVerify] = useState(false);
 
@@ -60,10 +60,10 @@ export default function QuestionForm(props) {
     setHints(updated);
   };
 
-  const updateTestCases = (val, idx, remove) => {
-    const updated = updateHelper(testCases, val, idx, remove);
-    setTestCases(updated);
-  }
+  // const updateTestCases = (val, idx, remove) => {
+  //   const updated = updateHelper(testCases, val, idx, remove);
+  //   setTestCases(updated);
+  // }
 
   const updateHelper = (lst, val, idx, remove) => {
     const updated = lst.slice(0, idx);
@@ -81,7 +81,6 @@ export default function QuestionForm(props) {
       status: status,
       title: title,
       prompt: prompt,
-      test_cases: testCases,
       notes: notes,
       hints: hints,
       tags: tags
@@ -182,8 +181,8 @@ export default function QuestionForm(props) {
         list={notes} updateList={updateNotes} setList={(l) => setNotes(l)} />
       <QuestionHelper title="Hints" helperTemplate={HelperStrTemplate} defaultValue=""
         list={hints} updateList={updateHints} setList={(l) => setHints(l)} />
-      <QuestionHelper title="Test Cases" helperTemplate={HelperTestCaseTemplate} defaultValue={{ parameters: [], explanation: "" }}
-        list={testCases} updateList={updateTestCases} setList={(l) => setTestCases(l)} />
+      {/* <QuestionHelper title="Test Cases" helperTemplate={HelperTestCaseTemplate} defaultValue={{ parameters: [], explanation: "" }}
+        list={testCases} updateList={updateTestCases} setList={(l) => setTestCases(l)} /> */}
       <button onClick={handleSubmit} className="my-3 text-base">
         <FontAwesomeIcon icon={faPlus} className="mr-2" />
         {props.create ? "Create" : "Update"}

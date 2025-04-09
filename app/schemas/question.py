@@ -5,7 +5,6 @@ from pydantic import field_validator, model_validator
 from .base_config import BaseModelConfig
 from .pagination import Pagination
 from .solution import Solution
-from .test_case import TestCase
 
 class Question(BaseModelConfig):
     id: str
@@ -15,7 +14,6 @@ class Question(BaseModelConfig):
     status: Status
     title: str
     prompt: str
-    test_cases: list[TestCase]
     notes: list[str]
     hints: list[str]
     tags: list[Tag]
@@ -31,7 +29,6 @@ class QuestionCreate(BaseModelConfig):
     status: Status
     title: str
     prompt: str
-    test_cases: list[TestCase]
     notes: list[str]
     hints: list[str]
     tags: list[Tag]
