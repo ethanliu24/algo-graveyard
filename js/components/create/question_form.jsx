@@ -99,7 +99,7 @@ export default function QuestionForm(props) {
       return data.source !== "";
     }
 
-    if (!data.difficulties|| !data.status || !data.source ||
+    if (!data.difficulty || !data.status || !data.source ||
         data.title.length === 0 || data.title.length > 50 ||
         data.prompt.length === 0) {
       alert("invalid data");
