@@ -36,14 +36,20 @@ class QuestionCreate(BaseModelConfig):
     hints: list[str]
     tags: list[Tag]
 
-    # @model_validator
-    # def if_link_doesnt_exist() -> str:
-    #     pass
+    # TODO clean up fields (e.g. remove trailing spaces)
+    @model_validator(mode="after")
+    def if_link_doesnt_exist(data: QuestionCreate) -> QuestionCreate:
+        if data.link == "":
+            if len(data.title) == 0:
+                raise ValueError("There must be a title.")
+            if len(data.prompt) == 0:
+                raise ValueError("There must be a prompt.")
+        return data
 
     @field_validator("title")
     def title_exists_and_is_long_enough(title: str) -> int:
         if len(title) > 50:
-            raise ValueError("There must be a title and it should be less or equal than 50 characters.")
+            raise ValueError("The title should be less or equal than 50 characters.")
         return title
 
 

@@ -57,9 +57,12 @@ async def get_question(
 async def create_question(
     request: Request,
     question_service: Annotated[QuestionManager, Depends(get_question_service)]
-) -> Question:
-    question_data = QuestionCreate(**await request.json())
-    return await question_service.create_question(data=question_data)
+) -> None:
+    try:
+        question_data = QuestionCreate(**await request.json())
+        return await question_service.create_question(data=question_data)
+    except ValidationError as e:
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(e))
 
 @router.put("/{question_id}", status_code=status.HTTP_200_OK, dependencies=[Depends(auth_user_jwt)])
 async def update_question(
