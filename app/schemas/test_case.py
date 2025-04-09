@@ -3,5 +3,6 @@ from typing import Any
 from .base_config import BaseModelConfig
 
 class TestCase(BaseModelConfig):
-    parameters: dict[str, Any]
-    explaination: str
+    parameters: list[dict[str, Any]]
+    output: Any
+    explanation: str

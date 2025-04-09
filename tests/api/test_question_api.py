@@ -1,3 +1,4 @@
+import json
 import pytest
 
 from app.schemas.question import Question, QuestionBasicInfo, Difficulty
@@ -47,7 +48,6 @@ async def test_create_question_basic(endpoint):
         "status": "completed",
         "title": "Create Question Basic",
         "prompt": "create a basic question",
-        "test_cases": [],
         "notes": [],
         "hints": [],
         "tags": []
@@ -68,13 +68,12 @@ async def test_create_question_invalid_input(endpoint):
         "status": "",
         "title": "Create Question Basic",
         "prompt": "create a basic question",
-        "test_cases": [],
         "notes": [],
         "hints": [],
         "tags": []
     }
 
-    response = endpoint.post(f"{API}", json=question)
+    response = endpoint.post(f"{API}", content=json.dumps(question))
     assert response.status_code == 422
 
 
@@ -85,12 +84,11 @@ async def test_create_question_missing_fields(endpoint):
         "link": "",
         "status": "",
         "title": "Create Question Basic",
-        "test_cases": [],
         "hints": [],
         "tags": []
     }
 
-    response = endpoint.post(f"{API}", json=question)
+    response = endpoint.post(f"{API}", content=json.dumps(question))
     assert response.status_code == 422
 
 
@@ -104,20 +102,27 @@ async def test_create_question_validate_title(endpoint):
         "status": "completed",
         "title": "Create Question Valid Title",
         "prompt": "create question valid prompt",
-        "test_cases": [],
         "notes": [],
         "hints": [],
         "tags": []
     }
 
     question["title"] = ""
-    response = endpoint.post(f"{API}", json=question)
+    response = endpoint.post(f"{API}", content=json.dumps(question))
     assert response.status_code == 422
+    question["title"] = "a"
+    response = endpoint.post(f"{API}", content=json.dumps(question))
+    assert response.status_code == 200
     question["title"] = "a" * 51
-    response = endpoint.post(f"{API}", json=question)
+    response = endpoint.post(f"{API}", content=json.dumps(question))
     assert response.status_code == 422
     question["title"] = "a" * 50  # upperbound, should pass
-    response = endpoint.post(f"{API}", json=question)
+    response = endpoint.post(f"{API}", content=json.dumps(question))
+    assert response.status_code == 200
+
+    question["link"] = "link" # TODO might fail when web parsing, update real link
+    question["title"] = ""
+    response = endpoint.post(f"{API}", content=json.dumps(question))
     assert response.status_code == 200
 
 
@@ -131,14 +136,21 @@ async def test_create_question_validate_prompt(endpoint):
         "status": "completed",
         "title": "Create Question Valid Title",
         "prompt": "",
-        "test_cases": [],
         "notes": [],
         "hints": [],
         "tags": []
     }
 
-    response = endpoint.post(f"{API}", json=question)
+    response = endpoint.post(f"{API}", content=json.dumps(question))
     assert response.status_code == 422
+    question["prompt"] = "a"
+    response = endpoint.post(f"{API}", content=json.dumps(question))
+    assert response.status_code == 200
+
+    question["link"] = "link" # TODO might fail when web parsing, update real link
+    question["prompt"] = ""
+    response = endpoint.post(f"{API}", content=json.dumps(question))
+    assert response.status_code == 200
 
 
 # Updating questions

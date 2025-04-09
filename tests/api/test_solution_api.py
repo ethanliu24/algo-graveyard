@@ -154,7 +154,6 @@ async def test_create_question_validate_summary(endpoint):
 
     solution["summary"] = "a" * 50  # upperbound
     response = endpoint.post(f"{API}/modify/solutions", json=solution)
-    print(response.json())
     assert response.status_code == 200
 
 

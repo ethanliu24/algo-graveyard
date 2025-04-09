@@ -61,13 +61,13 @@ export default function Sidebar(props) {
       </div>
 
       <div className={`w-[100%] flex flex-col ${isOpen ? "items-start" : "items-center"}`}>
-        <div className={`flex flex-col ${isOpen ? "items-end" : "items-center"} w-[100%]`}>
-          <div className={`flex justify-center items-center rounded-[50%] w-8 h-8
-            bg-transparent transition-colors ${window.innerWidth >= 768 ? "hover:bg-gray-200 cursor-pointer" : ""}`}
-            onClick={handleSidebarExpand} /* Temp solution for mobile */ >
-            <FontAwesomeIcon icon={window.innerWidth >= 768 ? (isOpen ? faChevronLeft : faChevronRight) : ""} />
+        {window.innerWidth >= 768 ? <div className={`flex flex-col ${isOpen ? "items-end" : "items-center"} w-[100%]`}>
+          <div className="flex justify-center items-center rounded-[50%] w-8 h-8
+            bg-transparent transition-colors hover:bg-gray-200 cursor-pointer"
+            onClick={handleSidebarExpand} >
+            <FontAwesomeIcon icon={isOpen ? faChevronLeft : faChevronRight} />
           </div>
-        </div>
+        </div> : null /* Temp solution for mobile */}
       </div>
     </div>
   );
@@ -82,7 +82,7 @@ function SidebarItem(props) {
       <span className={`${props.isOpen ? "w-[1.2rem]" : ""} ${props.className}`}>
         <FontAwesomeIcon icon={props.icon} size={props.size || ""} />
       </span>
-      {props.isOpen ? null : <Tooltip id={props.title} className="ml-1" />}
+      {props.isOpen ? null : <Tooltip id={props.title} className="ml-1 z-50" />}
       {props.isOpen ? <div>{props.title}</div> : null }
     </a>
   );

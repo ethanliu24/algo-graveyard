@@ -1,3 +1,5 @@
+import json
+
 from app.env_vars import ENV_VARS
 from tests.utils import set_jwt_cookie
 
@@ -12,7 +14,6 @@ Q_JSON = {
     "status": "completed",
     "title": "Test authentication authorization",
     "prompt": "Test authentication authorization",
-    "test_cases": [],
     "notes": [],
     "hints": [],
     "tags": []
@@ -34,14 +35,14 @@ def test_authenticated_flow(endpoint):
     response = endpoint.post("/api/auth", json=auth_payload)
     set_jwt_cookie(endpoint, response)
 
-    response = endpoint.post("/api/questions", json=Q_JSON)
+    response = endpoint.post("/api/questions", content=json.dumps(Q_JSON))
     assert response.status_code == 200
     q_id = response.json()["id"]
 
     response = endpoint.post(f"api/questions/{q_id}/solutions", json=S_JSON)
     assert response.status_code == 200
 
-    response = endpoint.post("/api/questions", json={})
+    response = endpoint.post("/api/questions", content=json.dumps({}))
     assert response.status_code == 422
 
     response = endpoint.delete(f"api/questions/{q_id}")

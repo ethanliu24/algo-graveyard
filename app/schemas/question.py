@@ -1,11 +1,10 @@
 from __future__ import annotations
 from datetime import datetime
 from enum import Enum
-from pydantic import field_validator
+from pydantic import field_validator, model_validator
 from .base_config import BaseModelConfig
 from .pagination import Pagination
 from .solution import Solution
-from .test_case import TestCase
 
 class Question(BaseModelConfig):
     id: str
@@ -15,7 +14,6 @@ class Question(BaseModelConfig):
     status: Status
     title: str
     prompt: str
-    test_cases: list[TestCase]
     notes: list[str]
     hints: list[str]
     tags: list[Tag]
@@ -31,22 +29,25 @@ class QuestionCreate(BaseModelConfig):
     status: Status
     title: str
     prompt: str
-    test_cases: list[TestCase]
     notes: list[str]
     hints: list[str]
     tags: list[Tag]
 
+    # TODO clean up fields (e.g. remove trailing spaces)
+    @model_validator(mode="after")
+    def if_link_doesnt_exist(data: QuestionCreate) -> QuestionCreate:
+        if data.link == "":
+            if len(data.title) == 0:
+                raise ValueError("There must be a title.")
+            if len(data.prompt) == 0:
+                raise ValueError("There must be a prompt.")
+        return data
+
     @field_validator("title")
     def title_exists_and_is_long_enough(title: str) -> int:
-        if not (0 < len(title) <= 50):
-            raise ValueError("There must be a title and it should be less or equal than 50 characters.")
+        if len(title) > 50:
+            raise ValueError("The title should be less or equal than 50 characters.")
         return title
-
-    @field_validator("prompt")
-    def prompt_exists(prompt: str) -> int:
-        if len(prompt) == 0:
-            raise ValueError("There must be a prompt for a question.")
-        return prompt
 
 
 class QuestionBasicInfo(BaseModelConfig):
