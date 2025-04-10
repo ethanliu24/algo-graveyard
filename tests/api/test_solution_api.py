@@ -77,6 +77,7 @@ async def test_create_solution_basic(endpoint):
         "time_complexity": "n!",
         "space_complexity": "n!",
         "code": "",
+        "accepted": True
     }
 
     response = endpoint.post(f"{API}/modify/solutions", json=solution)
@@ -97,6 +98,7 @@ async def test_create_solution_q_dne(endpoint):
         "time_complexity": "n!",
         "space_complexity": "n!",
         "code": "",
+        "accepted": False
     }
 
     response = endpoint.post(f"{API}/question_dne/solutions", json=solution)
@@ -142,6 +144,7 @@ async def test_create_question_validate_summary(endpoint):
         "time_complexity": "n!",
         "space_complexity": "n!",
         "code": "",
+        "accepted": True
     }
 
     solution["summary"] = ""
@@ -154,7 +157,6 @@ async def test_create_question_validate_summary(endpoint):
 
     solution["summary"] = "a" * 50  # upperbound
     response = endpoint.post(f"{API}/modify/solutions", json=solution)
-    print(response.json())
     assert response.status_code == 200
 
 

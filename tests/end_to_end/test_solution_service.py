@@ -8,8 +8,8 @@ async def test_all_crud_solution_no_errors(question_service, solution_service):
     """ Test a standard CRUD operation flow with no errors from the user end """
     q_data = {"source": "other", "link": "", "difficulty": "easy", "status": "completed", "title": "All CRUD end to end",
               "prompt": "no user errors", "test_cases": [], "notes": [], "hints": [], "tags": []}
-    s_data = {"summary": "Created", "explanation": "created in test_create_solution_basic",
-              "language": "python", "time_complexity": "n!", "space_complexity": "n!", "code": ""}
+    s_data = {"summary": "Created", "explanation": "created in test_create_solution_basic", "language": "python",
+              "time_complexity": "n!", "space_complexity": "n!", "code": "", "accepted": True}
 
     q = await question_service.create_question(QuestionCreate(**q_data))
     q_id = q.id

@@ -14,6 +14,7 @@ class Solution(BaseModelConfig):
     space_complexity: str
     ai_analysis: AiAnalysis
     code: str
+    accepted: bool
     created_at: datetime
     last_modified: datetime
 
@@ -25,6 +26,7 @@ class SolutionCreate(BaseModelConfig):
     time_complexity: str
     space_complexity: str
     code: str
+    accepted: bool
 
     @field_validator("summary")
     def summary_exists_and_is_long_enough(title: str) -> int:
