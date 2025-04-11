@@ -1,3 +1,4 @@
+import json
 import pytest
 
 from app.schemas.solution import Solution
@@ -80,7 +81,7 @@ async def test_create_solution_basic(endpoint):
         "accepted": True
     }
 
-    response = endpoint.post(f"{API}/modify/solutions", json=solution)
+    response = endpoint.post(f"{API}/modify/solutions", content=json.dumps(solution))
     assert response.status_code == 200
     data = response.json()
     s = Solution(**data)
@@ -101,7 +102,7 @@ async def test_create_solution_q_dne(endpoint):
         "accepted": False
     }
 
-    response = endpoint.post(f"{API}/question_dne/solutions", json=solution)
+    response = endpoint.post(f"{API}/question_dne/solutions", content=json.dumps(solution))
     assert response.status_code == 404
 
 
@@ -115,9 +116,10 @@ async def test_create_solution_invalid_input(endpoint):
         "time_complexity": "n!",
         "space_complexity": "n!",
         "code": "",
+        "accepted": True
     }
 
-    response = endpoint.post(f"{API}/modify/solutions", json=solution)
+    response = endpoint.post(f"{API}/modify/solutions", content=json.dumps(solution))
     assert response.status_code == 422
 
 
@@ -130,7 +132,7 @@ async def test_create_solution_missing_fields(endpoint):
         "code": "",
     }
 
-    response = endpoint.post(f"{API}/modify/solutions", json=solution)
+    response = endpoint.post(f"{API}/modify/solutions", content=json.dumps(solution))
     assert response.status_code == 422
 
 
@@ -148,15 +150,15 @@ async def test_create_question_validate_summary(endpoint):
     }
 
     solution["summary"] = ""
-    response = endpoint.post(f"{API}/modify/solutions", json=solution)
+    response = endpoint.post(f"{API}/modify/solutions", content=json.dumps(solution))
     assert response.status_code == 422
 
     solution["summary"] = "a" * 51
-    response = endpoint.post(f"{API}/modify/solutions", json=solution)
+    response = endpoint.post(f"{API}/modify/solutions", content=json.dumps(solution))
     assert response.status_code == 422
 
     solution["summary"] = "a" * 50  # upperbound
-    response = endpoint.post(f"{API}/modify/solutions", json=solution)
+    response = endpoint.post(f"{API}/modify/solutions", content=json.dumps(solution))
     assert response.status_code == 200
 
 

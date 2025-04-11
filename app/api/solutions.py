@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Request
 from typing import Annotated
 from pydantic import ValidationError
 from ..config import get_solution_service, auth_user_jwt
@@ -34,14 +34,17 @@ async def get_solution(
 
 @router.post("", status_code=status.HTTP_200_OK, dependencies=[Depends(auth_user_jwt)])
 async def create_solution(
+    request: Request,
     question_id: str,
-    solution_data: SolutionCreate,
     solution_service: Annotated[SolutionManager, Depends(get_solution_service)]
 ) -> Solution:
     try:
+        solution_data = SolutionCreate(**await request.json())
         return await solution_service.create_solution(question_id=question_id, data=solution_data)
     except EntityNotFoundError as e:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
+    except ValidationError as e:
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(e))
 
 @router.put("/{solution_id}", status_code=status.HTTP_200_OK, dependencies=[Depends(auth_user_jwt)])
 async def update_solution(
