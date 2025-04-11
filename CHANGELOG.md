@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## Version 0.0.1
+- Added accepted field in solution schema and modified endpoint to take in a Request object (#35)
 - Modified create questions endpoint, added output field, and removed test case from schemas (#34)
 - Add question creation page (#34)
 - Add authentication card and page (#28)
