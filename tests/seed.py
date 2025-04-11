@@ -15,6 +15,7 @@ SOLUTIONS = [
             "feedback": "trash",
         },
         "code": "print(\"hello world\")",
+        "accepted": True,
         "created_at": datetime(2011, 1, 1, 1, 1, 1, 1, tzinfo=timezone.utc),
         "last_modified": datetime(2011, 1, 1, 1, 1, 1, 1, tzinfo=timezone.utc),
     },
@@ -31,6 +32,7 @@ SOLUTIONS = [
             "feedback": "trash",
         },
         "code": "print(\"hello world\")",
+        "accepted": False,
         "created_at": datetime(2011, 1, 1, 1, 1, 1, 1, tzinfo=timezone.utc),
         "last_modified": datetime(2011, 1, 1, 1, 1, 1, 1, tzinfo=timezone.utc),
     }
