@@ -14,36 +14,37 @@ export default function Verify(props) {
   const [show, setShow] = useState(true);
   const verificationRes = useRef(null);
 
+  const toastLife = 3000;
+
   useEffect(() => {
     const toast = { severity: "info", life: 5000, className: "info",
-      summary: "Info", detail: "Enter the app secret to manage questions." }
-    verificationRes.current.show(toast);
+      summary: "Info", detail: "Only admins are allowed to manage questions." }
+    setTimeout(() => verificationRes.current.show(toast), 100);
   }, []);
 
   const handleVerification = async () => {
-    const life = 3000;
-    let result = { severity: "danger", summary: "Error", detail: "Something went wrong.", life: life, className: "error" };
+    let result = { severity: "danger", summary: "Error", detail: "Something went wrong.", life: toastLife, className: "error" };
 
     if (secret === "") {
-      result = { severity: "warning", summary: "Warning", detail: "Please enter app secret.", life: life, className: "warning" };
+      result = { severity: "warning", summary: "Warning", detail: "Please enter app secret.", life: toastLife, className: "warning" };
     } else {
       const req = {
         method: "POST",
-        header: getReqHeader(),
+        headers: getReqHeader(),
         body: JSON.stringify({ secret: secret })
       }
 
       await fetch("api/auth", req)
         .then(response => {
           if (response.ok) {
-            result = { severity: "success", summary: "Success", detail: "You are authenticated!", life: life, className: "success" };
+            result = { severity: "success", summary: "Success", detail: "You are authenticated!", life: toastLife, className: "success" };
             setSecret("");
             if (props.closable) {
               setShow(false);
-              setTimeout(props.closeComponent(), life);
+              setTimeout(() => props.closeComponent(), toastLife + 1000);
             }
           } else {
-            result = { severity: "danger", summary: "Error", detail: "Authentication Failed.", life: life, className: "error" };
+            result = { severity: "danger", summary: "Error", detail: "Authentication Failed.", life: toastLife, className: "error" };
           }
         })
         .catch(err => {
@@ -56,19 +57,19 @@ export default function Verify(props) {
 
   return (
     <div className={`flex flex-col justify-center items-center w-fit h-fit rounded-sm
-      bg-gray-50 shadow-sm
+      bg-gray-50 shadow-sm z-100
       ${props.positionStyle ? props.positionStyle : "relative"}
       ${props.className ? props.className : ""}`}>
       <div className={`${show ? "" : "hidden"}`}>
         <h2 className="w-full rounded-t-sm p-0.5 bg-primary text-white text-center relative">Authenticate
           {props.closable
             ? <FontAwesomeIcon icon={faXmark} size="md" className="absolute top-1/2 right-0 -translate-y-1/2 cursor-pointer mr-2"
-                onClick={props.closeComponent} />
+                onClick={() => setTimeout(props.closeComponent(), toastLife)} />
             : null}
         </h2>
         <div className="flex-1 flex flex-col justify-around items-center gap-4 p-4">
           <Password value={secret} onChange={(e) => setSecret(e.target.value)} feedback={false} tabIndex={1}
-            placeholder="Secret" className="w-full" />
+            placeholder="Super secret secret" className="w-full" />
           <button className="w-full p-0.5 cursor-pointer" onClick={handleVerification}>Verify</button>
         </div>
       </div>

@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## Version 0.0.1
+- Modified create questions endpoint, added output field, and removed test case from schemas (#34)
+- Add question creation page (#34)
 - Add authentication card and page (#28)
 - Add home page and side bar (#27)
 - Set up react, vite, tailwind and templates (#22)

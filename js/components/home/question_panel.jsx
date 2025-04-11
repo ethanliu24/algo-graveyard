@@ -21,7 +21,7 @@ export default function QuestionPanel() {
     // Get metadata for filter bar
     const req = {
       method: "GET",
-      header: getReqHeader()
+      headers: getReqHeader()
     };
 
     const metadataQuery = {
@@ -29,7 +29,7 @@ export default function QuestionPanel() {
       difficulties: true,
       statuses: true,
       tags: true
-    }
+    };
 
     fetch(`api/metadata?${formatQueries(metadataQuery)}`, req)
       .then(res => res.json())
@@ -41,7 +41,7 @@ export default function QuestionPanel() {
       })
       .catch(err => {
         throw err;
-      })
+      });
   }, []);
 
   const fetchForPage = async (page, pageSize = null) => {
@@ -60,7 +60,7 @@ export default function QuestionPanel() {
   const getQuestions = async (queries = {}) => {
     const req = {
       method: "GET",
-      header: getReqHeader(),
+      headers: getReqHeader(),
     }
 
     return await fetch(`/api/questions?${formatQueries(queries)}`, req)
