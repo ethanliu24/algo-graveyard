@@ -51,8 +51,8 @@ export function QuestionTab({ data }) {
 function AccordianItem(props) {
   return (
     <details className="w-full mb-3">
-      <summary className="cursor-pointer w-full mb-0.5 first-letter:text-primary">
-        <label className="ml-1 mr-2">{props.title}</label>
+      <summary className="cursor-pointer w-full mb-1 first-letter:text-primary">
+        <label className="ml-1 mr-2 text-xs">{props.title}</label>
         <FontAwesomeIcon icon={props.icon} size="xs" />
       </summary>
       {props.content}

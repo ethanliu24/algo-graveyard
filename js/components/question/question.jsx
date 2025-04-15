@@ -67,9 +67,9 @@ export default function Question() {
   return (
     <div className="flex justify-center items-center gap-0 w-full h-screen">
       <Sidebar open={false} />
-      <div className="flex-1 w-full h-full text-sm
+      <div className="flex-1 w-full h-full text-sm bg-white
         flex flex-row max-md:flex-col justify-between items-center">
-        <div className="w-1/2 h-full max-md:w-full max-md:h-1/2 p-8 pt-2" ref={questionPanel}>
+        <div className="w-1/2 h-full max-md:w-full max-md:h-1/2 p-8 pt-2 overflow-y-scroll" ref={questionPanel}>
           <div className="flex justify-around items-center mb-4">{
             tabs.map(({ label }, i) => {
               return (
@@ -87,7 +87,7 @@ export default function Question() {
           ref={horDragBar}></div>
         <div className="border-gray-300 hover:border-primary w-full h-0 border-2 cursor-ns-resize md:hidden"
           ref={verDragBar}></div>
-        <div className="flex-1"></div>
+        <div className="flex-1 w-full bg-white"></div>
       </div>
     </div>
   );
