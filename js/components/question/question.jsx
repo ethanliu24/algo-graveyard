@@ -4,14 +4,21 @@ import Sidebar from "../common/side_bar";
 export default function Question() {
   const questionPanel = useRef(null);
   const horDragBar = useRef(null);
+  const verDragBar = useRef(null);
 
   useEffect(() => {
+    // Set up window resizers
     horDragBar.current.addEventListener("mousedown", () => {
       document.addEventListener("mousemove", resizeHor);
     });
 
+    verDragBar.current.addEventListener("mousedown", () => {
+      document.addEventListener("mousemove", resizeVer);
+    });
+
     document.addEventListener("mouseup", () => {
-        document.removeEventListener("mousemove", resizeHor);
+      document.removeEventListener("mousemove", resizeHor);
+      document.removeEventListener("mousemove", resizeVer);
     });
   }, []);
 
@@ -19,9 +26,18 @@ export default function Question() {
     const containerLeft = questionPanel.current.getBoundingClientRect().left;
     const width = Math.max(
       0.2 * window.innerWidth,
-      Math.min(0.7 * window.innerWidth, e.clientX - containerLeft)
+      Math.min(0.8 * window.innerWidth, e.clientX - containerLeft)
     );
     questionPanel.current.style.width = `${width}px`;
+  };
+
+  const resizeVer = (e) => {
+    const containerTop = questionPanel.current.getBoundingClientRect().top;
+    const height = Math.max(
+      0.2 * window.innerHeight,
+      Math.min(0.8 * window.innerHeight, e.clientY + containerTop)
+    );
+    questionPanel.current.style.height = `${height}px`;
   };
 
   return (
@@ -33,7 +49,7 @@ export default function Question() {
         <div className="border-gray-300 hover:border-primary w-0 h-full border-2 cursor-ew-resize max-md:hidden"
           ref={horDragBar}></div>
         <div className="border-gray-300 hover:border-primary w-full h-0 border-2 cursor-ns-resize md:hidden"
-          ></div>
+          ref={verDragBar}></div>
         <div className="flex-1"></div>
       </div>
     </div>
