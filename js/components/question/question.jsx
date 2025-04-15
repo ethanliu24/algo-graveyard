@@ -1,7 +1,11 @@
-import { useEffect, useRef } from "react";
-import Sidebar from "../common/side_bar";
+import { useEffect, useRef, useState } from "react";
+import Sidebar from "../common/side_bar.jsx";
+import { QuestionTab } from "./tabs.jsx";
 
 export default function Question() {
+  const [questionData, setQuestionData] = useState(null);
+  const [activeTab, setActiveTab] = useState(0);
+
   const questionPanel = useRef(null);
   const horDragBar = useRef(null);
   const verDragBar = useRef(null);
@@ -40,12 +44,29 @@ export default function Question() {
     questionPanel.current.style.height = `${height}px`;
   };
 
+  const tabs = [
+    { label: "Question", content: <QuestionTab data={questionData} /> }
+  ];
+
   return (
     <div className="flex justify-center items-center gap-0 w-full h-screen">
       <Sidebar open={false} />
-      <div className="flex-1 w-full h-full
+      <div className="flex-1 w-full h-full text-sm
         flex flex-row max-md:flex-col justify-between items-center">
-        <div className="w-1/2 h-full max-md:w-full max-md:h-1/2" ref={questionPanel}></div>
+        <div className="w-1/2 h-full max-md:w-full max-md:h-1/2 p-4" ref={questionPanel}>
+          <div className="flex justify-around items-center">{
+            tabs.map(({ label }, i) => {
+              return (
+                <button key={`tab-${label}-${i}`}
+                  className={`bg-transparent rounded-none text-black h-full
+                    ${activeTab === i ? "text-primary border-b-2 border-b-primary" : ""}`}
+                    onClick={() => setActiveTab(i)}>
+                    {label}
+                </button>
+              );
+          })}</div>
+          {tabs[activeTab].content}
+        </div>
         <div className="border-gray-300 hover:border-primary w-0 h-full border-2 cursor-ew-resize max-md:hidden"
           ref={horDragBar}></div>
         <div className="border-gray-300 hover:border-primary w-full h-0 border-2 cursor-ns-resize md:hidden"
