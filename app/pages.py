@@ -16,10 +16,11 @@ def get_static_path(name: str):
         "home": manifest["components/home/main.js"],
         "auth": manifest["components/auth/main.js"],
         "create": manifest["components/create/main.js"],
+        "question": manifest["components/question/main.js"],
         "styles": manifest["../styles/main.css"],
     }
 
-    return f"static/dist/{key[name]["file"]}"
+    return f"{key[name]["file"]}"
 
 
 def create_context(request: Request, title: str, root_id: str, react_script: str, extra: dict = {}):
@@ -53,4 +54,11 @@ async def authenticate_page(request: Request):
 async def question_creation_page(request: Request):
     return templates.TemplateResponse(
         "base.html", create_context(request, "Create", "createDiv", get_static_path("create"))
+    )
+
+
+@router.get("/questions/{question_id}", response_class=HTMLResponse)
+async def question_page(request: Request, question_id: str):
+    return templates.TemplateResponse(
+        "base.html", create_context(request, f"{question_id}", "questionDiv", get_static_path("question"))
     )

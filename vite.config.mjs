@@ -13,6 +13,7 @@ export default defineConfig({
         home: resolve(__dirname, 'js/components/home/main.js'),
         auth: resolve(__dirname, 'js/components/auth/main.js'),
         create: resolve(__dirname, 'js/components/create/main.js'),
+        question: resolve(__dirname, 'js/components/question/main.js'),
         styles: resolve(__dirname, 'styles/main.css'),
       },
       output: {
