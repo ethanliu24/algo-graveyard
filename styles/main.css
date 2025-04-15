@@ -28,6 +28,14 @@
     @apply text-[18px] text-gray-800 mb-0.5 first-letter:text-primary first-letter:text-[20px];
   }
 
+  .chip {
+    @apply bg-gray-200 px-2 py-0.5 rounded-full text-[11px] mr-0.5 flex justify-center items-center gap-1;
+  }
+
+  .prompt-container > * {
+    @apply mb-2;
+  }
+
   /* React Prime components */
   .drop-down {
     @apply border-1 border-gray-300 py-1 px-3 rounded-xs max-lg:grow basis-1 bg-white;

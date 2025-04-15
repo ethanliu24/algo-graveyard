@@ -34,7 +34,7 @@ function ListItem(props) {
       <div className="flex justify-end items-center gap-2 w-48 overflow-x-scroll text-xs max-md:hidden">
         {props.tags.map((tag, i) => {
           return (<div key={tag + props.idx + i}
-              className="bg-gray-300 px-1 rounded-3xl">{`#${tag}`}
+              className="chip text-md">{`# ${tag}`}
             </div>);
         })}
       </div>

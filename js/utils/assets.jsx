@@ -20,7 +20,7 @@ export function getStatusIcon(status, id, enableTooltip = true) {
     </div>);
 };
 
-export function getDifficultyStyle (difficulty) {
+export function getDifficultyStyle(difficulty) {
   const colorMap = {
     "easy": "#6bd177",
     "medium": "#f5cd3d",
