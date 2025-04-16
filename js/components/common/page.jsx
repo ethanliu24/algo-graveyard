@@ -9,7 +9,7 @@ export default function Page({ pageTitle, content, openSidebar }) {
       <Sidebar open={typeof openSidebar === "boolean"
         ? openSidebar
         : (typeof presevedSidebarState === "boolean" ? presevedSidebarState : window.innerWidth >= 768)} />
-      <div className="flex-1 flex flex-col h-screen overflow-y-scroll py-4 px-16 max-md:px-4">
+      <div className="flex-1 flex flex-col h-screen overflow-y-auto py-4 px-16 max-md:px-4">
         <h1 className="text-4xl font-bold mb-6 first-letter:text-primary first-letter:text-5xl">{pageTitle}</h1>
         <Content />
       </div>

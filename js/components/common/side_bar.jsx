@@ -38,7 +38,7 @@ export default function Sidebar(props) {
 
   return (
     <div className={`
-      h-screen overflow-y-scroll py-4 ${isOpen ? "w-50 px-2.5 " : "w-12 px-0"}
+      h-screen overflow-y-auto py-4 ${isOpen ? "w-50 px-2.5 " : "w-12 px-0"}
       border-r-1 rounded border-r-gray-300
       flex flex-col justify-between items-center
       `}>

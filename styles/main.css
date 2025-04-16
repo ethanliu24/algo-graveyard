@@ -36,6 +36,15 @@
     @apply mb-2;
   }
 
+  .hide-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  
   /* React Prime components */
   .drop-down {
     @apply border-1 border-gray-300 py-1 px-3 rounded-xs max-lg:grow basis-1 bg-white;
