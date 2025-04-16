@@ -43,7 +43,7 @@ async def home_page(request: Request):
     )
 
 
-@router.get("/authenticate", response_class=HTMLResponse)
+@router.get("/admin", response_class=HTMLResponse)
 async def authenticate_page(request: Request):
     return templates.TemplateResponse(
         "base.html", create_context(request, "Authenticate", "authDiv", get_static_path("auth"))

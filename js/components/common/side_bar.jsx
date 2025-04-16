@@ -50,7 +50,7 @@ export default function Sidebar(props) {
           isOpen={isOpen} className={`${isOpen ? "-ml-[2px]" : ""}`} />
         <SidebarItem title="Create" icon={faSquarePlus} link="/create"
           isOpen={isOpen} size="l" />
-        <SidebarItem title="Authenticate" icon={faLock} link="/authenticate"
+        <SidebarItem title="Admin" icon={faLock} link="/admin"
           isOpen={isOpen} size="l" />
         <SidebarItem title="Analytics" icon={faChartSimple} link="/analytics"
           isOpen={isOpen} size="l" />
