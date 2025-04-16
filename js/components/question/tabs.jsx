@@ -31,15 +31,17 @@ export function QuestionTab({ data }) {
         <ReactMarkdown children={data.prompt} />
       </div>
       <div>
-        <AccordianItem title={"Tags"} icon={faHashtag} content={
-          <div className="flex justify-start items-center gap-1 flex-wrap">
-            {data.tags.map((tag, i) => {
-              return (<div key={tag + i}
-                  className="chip w-fit text-md">{`# ${tag}`}
-                </div>);
-            })}
-          </div>}
-        />
+        {data.tags.length !== 0
+          ? <AccordianItem title={"Tags"} icon={faHashtag} content={
+              <div className="flex justify-start items-center gap-1 flex-wrap">
+                {data.tags.map((tag, i) => {
+                  return (<div key={tag + i}
+                      className="chip w-fit text-md">{`# ${tag}`}
+                    </div>);
+                })}
+              </div>}
+            />
+          : null}
         {data.notes.map((note, i) => {
           return (
             <AccordianItem title={"Note " + (i + 1)} icon={faPen}
