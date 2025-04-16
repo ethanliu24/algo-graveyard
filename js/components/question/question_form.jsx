@@ -35,7 +35,7 @@ export default function QuestionForm(props) {
       tags: true
     };
 
-    fetch(`api/metadata?${formatQueries(metadataQuery)}`, req)
+    fetch(`/api/metadata?${formatQueries(metadataQuery)}`, req)
       .then(res => res.json())
       .then(data => {
         setMetadata({
@@ -115,7 +115,7 @@ export default function QuestionForm(props) {
       body: JSON.stringify(data)
     };
 
-    fetch("api/questions", req)
+    fetch("/api/questions", req)
       .then(response => {
         if (!response.ok) {
           if (response.status == 401) {

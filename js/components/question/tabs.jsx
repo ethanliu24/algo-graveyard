@@ -3,9 +3,35 @@ import { Tooltip } from "react-tooltip";
 import { faRotate, faTrash, faPen, faLightbulb, faHashtag } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getStatusIcon, getDifficultyStyle } from "../../utils/assets";
-import { formatDate, capitalizeFirst } from "../../utils/utils";
+import { formatDate, capitalizeFirst, getReqHeader } from "../../utils/utils";
 
-export function QuestionTab({ data }) {
+export function QuestionTab({ data, setIsAdmin }) {
+  const handleDelete = () => {
+    if (!window.confirm("Are you sure you want to delete the question?")) {
+      return;
+    }
+
+    const req = {
+      method: "DELETE",
+      headers: getReqHeader(),
+    }
+
+    fetch(`/api/questions/${data.id}`, req)
+      .then(response => {
+        if (response.ok) {
+          window.location.href = "/";
+        } else if (response.status == 401 || response.status === 403) {
+          alert("ur not admin lmao");
+          setIsAdmin(false);
+        } else {
+          alert("handle error del q");
+        }
+      })
+      .catch(err => {
+        throw err;
+      });
+  }
+
   return (
     <div className="flex flex-col justify-between items-start w-full overflow-y-auto">
       <div className="flex justify-start items-center gap-4 mb-2">
@@ -22,6 +48,7 @@ export function QuestionTab({ data }) {
           <Tooltip id="edit-question" />
         </button>
         <button className="chip p-1 hover:bg-gray-300 text-black"
+          onClick={handleDelete}
           data-tooltip-id="delete-question" data-tooltip-content="Delete question">
           <FontAwesomeIcon icon={faTrash} />
           <Tooltip id="delete-question" />

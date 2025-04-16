@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import Sidebar from "../common/side_bar.jsx";
+import Verify from "../auth/verify.jsx";
 import { QuestionTab } from "./tabs.jsx";
 import { getReqHeader } from "../../utils/utils.js";
 
@@ -7,6 +8,7 @@ export default function Question() {
   // const [questionData, setQuestionData] = useState(null);
   const [tabs, setTabs] = useState([]);
   const [activeTab, setActiveTab] = useState(0);
+  const [isAdmin, setIsAdmin] = useState(true);
 
   const questionPanel = useRef(null);
   const horDragBar = useRef(null);
@@ -24,7 +26,7 @@ export default function Question() {
         document.title = data.title;
         // setQuestionData(data);
         setTabs([
-          { label: "Question", content: <QuestionTab data={data} /> }
+          { label: "Question", content: <QuestionTab data={data} setIsAdmin={(b) => setIsAdmin(b)} /> }
         ]);
       })
       .catch(err => {
@@ -89,6 +91,11 @@ export default function Question() {
           ref={verDragBar}></div>
         <div className="flex-1 w-full bg-white"></div>
       </div>
+
+      {!isAdmin
+        ? <Verify closable={true} closeComponent={() => setIsAdmin(true)}
+            positionStyle="fixed top-0 right-0 m-8" className="text-base" />
+        : null}
     </div>
   );
 }
