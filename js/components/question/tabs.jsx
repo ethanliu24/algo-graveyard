@@ -2,10 +2,14 @@ import ReactMarkdown from "react-markdown";
 import { Tooltip } from "react-tooltip";
 import { faRotate, faTrash, faPen, faLightbulb, faHashtag } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ModalContainer from "../common/modal";
 import { getStatusIcon, getDifficultyStyle } from "../../utils/assets";
 import { formatDate, capitalizeFirst, getReqHeader } from "../../utils/utils";
+import { useState } from "react";
 
 export function QuestionTab({ data, setIsAdmin }) {
+  const [openModal, setOpenModal] = useState(false);
+
   const handleDelete = () => {
     if (!window.confirm("Are you sure you want to delete the question?")) {
       return;
@@ -30,7 +34,8 @@ export function QuestionTab({ data, setIsAdmin }) {
       .catch(err => {
         throw err;
       });
-  }
+  };
+
 
   return (
     <div className="flex flex-col justify-between items-start w-full h-full overflow-y-auto">
@@ -44,6 +49,7 @@ export function QuestionTab({ data, setIsAdmin }) {
           <div className="chip">{capitalizeFirst(data.source)}</div>
           <div className="chip text-nowrap">{formatDate(data.created_at)}</div>
           <button className="chip p-1 hover:bg-gray-300 text-black"
+            onClick={() => setOpenModal(true)}
             data-tooltip-id="edit-question" data-tooltip-content="Edit question">
             <FontAwesomeIcon icon={faRotate} />
             <Tooltip id="edit-question" />
@@ -84,6 +90,7 @@ export function QuestionTab({ data, setIsAdmin }) {
           );
         })}
       </div>
+      {openModal ? <ModalContainer closeModal={() => setOpenModal(false)} /> : null}
     </div>
   );
 }
