@@ -33,29 +33,31 @@ export function QuestionTab({ data, setIsAdmin }) {
   }
 
   return (
-    <div className="flex flex-col justify-between items-start w-full overflow-y-auto">
-      <div className="flex justify-start items-center gap-4 mb-2">
-        {getStatusIcon(data.status, 0, false)}
-        <h1 className="text-xl text-wrap">{data.title}</h1>
-      </div>
-      <div className="flex justify-start items-center gap-2 text-xs mb-8">
-        <div className="chip" style={getDifficultyStyle(data.difficulty)}>{capitalizeFirst(data.difficulty)}</div>
-        <div className="chip">{capitalizeFirst(data.source)}</div>
-        <div className="chip text-nowrap">{formatDate(data.created_at)}</div>
-        <button className="chip p-1 hover:bg-gray-300 text-black"
-          data-tooltip-id="edit-question" data-tooltip-content="Edit question">
-          <FontAwesomeIcon icon={faRotate} />
-          <Tooltip id="edit-question" />
-        </button>
-        <button className="chip p-1 hover:bg-gray-300 text-black"
-          onClick={handleDelete}
-          data-tooltip-id="delete-question" data-tooltip-content="Delete question">
-          <FontAwesomeIcon icon={faTrash} />
-          <Tooltip id="delete-question" />
-        </button>
-      </div>
-      <div className="prompt-container text-xs mb-32">
-        <ReactMarkdown children={data.prompt} />
+    <div className="flex flex-col justify-between items-start w-full h-full overflow-y-auto">
+      <div>
+        <div className="flex justify-start items-center gap-4 mb-2">
+          {getStatusIcon(data.status, 0, false)}
+          <h1 className="text-xl text-wrap">{data.title}</h1>
+        </div>
+        <div className="flex justify-start items-center gap-2 text-xs mb-8">
+          <div className="chip" style={getDifficultyStyle(data.difficulty)}>{capitalizeFirst(data.difficulty)}</div>
+          <div className="chip">{capitalizeFirst(data.source)}</div>
+          <div className="chip text-nowrap">{formatDate(data.created_at)}</div>
+          <button className="chip p-1 hover:bg-gray-300 text-black"
+            data-tooltip-id="edit-question" data-tooltip-content="Edit question">
+            <FontAwesomeIcon icon={faRotate} />
+            <Tooltip id="edit-question" />
+          </button>
+          <button className="chip p-1 hover:bg-gray-300 text-black"
+            onClick={handleDelete}
+            data-tooltip-id="delete-question" data-tooltip-content="Delete question">
+            <FontAwesomeIcon icon={faTrash} />
+            <Tooltip id="delete-question" />
+          </button>
+        </div>
+        <div className="prompt-container text-xs">
+          <ReactMarkdown children={data.prompt} />
+        </div>
       </div>
       <div>
         {data.tags.length !== 0
