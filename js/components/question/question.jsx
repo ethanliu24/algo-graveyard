@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Sidebar from "../common/side_bar.jsx";
 import Verify from "../auth/verify.jsx";
-import { QuestionTab } from "./tabs.jsx";
+import { QuestionTab } from "./question_tab.jsx";
 import { getReqHeader } from "../../utils/utils.js";
 
 export default function Question() {

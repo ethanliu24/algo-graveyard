@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Tooltip } from "react-tooltip";
 import { faRotate, faTrash, faPen, faLightbulb, faHashtag } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,8 +8,9 @@ import TextDisplay from "../common/text_display.jsx";
 import { getStatusIcon, getDifficultyStyle } from "../../utils/assets.jsx";
 import { formatDate, capitalizeFirst, getReqHeader } from "../../utils/utils.js";
 
-export function QuestionTab({ data, setIsAdmin }) {
+export function QuestionTab(props) {
   const [openModal, setOpenModal] = useState(false);
+  const [data, setData] = useState(props.data);
 
   const handleDelete = () => {
     if (!window.confirm("Are you sure you want to delete the question?")) {
@@ -19,7 +20,7 @@ export function QuestionTab({ data, setIsAdmin }) {
     const req = {
       method: "DELETE",
       headers: getReqHeader(),
-    }
+    };
 
     fetch(`/api/questions/${data.id}`, req)
       .then(response => {
@@ -27,7 +28,7 @@ export function QuestionTab({ data, setIsAdmin }) {
           window.location.href = "/";
         } else if (response.status == 401 || response.status === 403) {
           alert("ur not admin lmao");
-          setIsAdmin(false);
+          props.setIsAdmin(false);
         } else {
           alert("handle error del q");
         }
@@ -37,6 +38,10 @@ export function QuestionTab({ data, setIsAdmin }) {
       });
   };
 
+  const handleUpdate = (newData) => {
+    setOpenModal(false);
+    setData(newData);
+  };
 
   return (
     <div className="flex flex-col justify-between items-start w-full h-full">
@@ -94,7 +99,7 @@ export function QuestionTab({ data, setIsAdmin }) {
             content={
               <QuestionForm create={false} link={data.link} source={data.source} difficulty={data.difficulty}
                 status={data.status} tags={data.tags} title={data.title} prompt={data.prompt} notes={data.notes}
-                hints={data.hints} questionId={data.id} updateSuccessful={() => setOpenModal(false)} />
+                hints={data.hints} questionId={data.id} updateSuccessful={handleUpdate} />
             } />
         : null}
     </div>

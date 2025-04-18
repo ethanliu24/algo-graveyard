@@ -9,6 +9,7 @@ export default function ModalContainer(props) {
     document.body.style.overflow = "hidden";
     dialogRef.current.showModal();
     dialogRef.current.addEventListener("close", closeModal);
+    return () => closeModal();
   }, []);
 
   const closeModal = () => {

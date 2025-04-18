@@ -153,16 +153,24 @@ export default function QuestionForm(props) {
     };
 
     fetch(`/api/questions/${props.questionId}`, req)
-      .then(response => {
+      .then(async response => {
         if (response.ok) {
           alert("show successful toast");
-          props.updateSuccessful();
-        } else if (response.status == 401) {
-          alert("show unauthed toast");
-          setShowVerify(true);
+          return response;
         } else {
-          alert(response.status);
+          if (response.status == 401) {
+            alert("show unauthed toast");
+            setShowVerify(true);
+          } else {
+            alert(response.status);
+          }
+
+          return null
         }
+      })
+      .then(res => res ? res.json() : null)
+      .then(json => {
+        if (json) props.updateSuccessful(json);
       })
       .catch(err => {
         throw err
