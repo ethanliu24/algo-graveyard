@@ -22,7 +22,11 @@ export default function QuestionForm(props) {
   const [metadata, setMetadata] = useState({});
   const [showVerify, setShowVerify] = useState(false);
 
-  useEffect(async () => {
+  useEffect(() => {
+    getMetadata();
+  }, []);
+
+  const getMetadata = () => {
     const req = {
       method: "GET",
       headers: getReqHeader()
@@ -48,7 +52,7 @@ export default function QuestionForm(props) {
       .catch(err => {
         throw err;
       });
-  }, []);
+  }
 
   const updateNotes = (val, idx, remove) => {
     const updated = updateHelper(notes, val, idx, remove);
