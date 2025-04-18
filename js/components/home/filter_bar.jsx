@@ -35,10 +35,10 @@ export default function FilterBar(props) {
       {/* <TagsDropdown tags={props.tags} updateValue={(t) => setTags(t)} /> */}
       <span className="relative flex-1">
         <InputText placeholder="Search" value={search} onChange={(e) => setSearch(e.target.value)}
-          className="drop-down min-w-32 w-full pl-8 cursor-text"/>
-        <FontAwesomeIcon icon={faMagnifyingGlass} className="absolute top-1/2 left-0 -translate-y-1/2 ml-2" />
+          className="drop-down min-w-32 w-full pl-8 cursor-text border-none text-[0.85rem]"/>
+        <FontAwesomeIcon icon={faMagnifyingGlass} size="sm" className="absolute top-1/2 left-0 -translate-y-1/2 ml-2" />
       </span>
-      <button onClick={handleSearch}>Search</button>
+      <button onClick={handleSearch} className="py-[0.4rem]">Search</button>
     </div>
   );
 }
