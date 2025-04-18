@@ -23,6 +23,7 @@ export default function ModalContainer(props) {
   };
 
   return (
+    // https://mui.com/material-ui/react-modal/  Use this instead
     <dialog ref={dialogRef} className="backdrop:bg-black/60">
       <div className="w-[90vw] h-[95vh] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
         overflow-y-auto z-0 flex flex-col justify-start items-start gap-2 rounded p-8 bg-white">
