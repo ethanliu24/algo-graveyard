@@ -34,7 +34,7 @@ export default function Verify(props) {
         body: JSON.stringify({ secret: secret })
       }
 
-      await fetch("api/auth", req)
+      await fetch("/api/auth", req)
         .then(response => {
           if (response.ok) {
             result = { severity: "success", summary: "Success", detail: "You are authenticated!", life: toastLife, className: "success" };

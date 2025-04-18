@@ -22,19 +22,20 @@ function ListItem(props) {
       <div className="text-[12px] text-gray-500">{props.idx}</div>
       {getStatusIcon(props.status, props.idx)}
       <div className="flex-8 flex flex-col justify-between items-start">
-        <div className="text-sm">{capitalizeFirst(props.title)}</div>
+        <div className="text-sm truncate max-w-90 max-lg:max-w-60">{capitalizeFirst(props.title)}</div>
         <div className="flex justify-start items-center gap-2 text-[12px] text-gray-500">
-          <div>{formatDate(props.timestamp)}</div>
+          <div className="text-nowrap">{formatDate(props.timestamp)}</div>
           <div className="-mx-1">·</div>
           <div>{capitalizeFirst(props.source)}</div>
           <div className="-mx-1">·</div>
           <div style={getDifficultyStyle(props.difficulty)}>{capitalizeFirst(props.difficulty)}</div>
         </div>
       </div>
-      <div className="flex justify-end items-center gap-2 w-48 overflow-x-scroll text-xs max-md:hidden">
+      <div className="flex justify-start items-center gap-1 text-xs hide-scrollbar
+        overflow-x-auto whitespace-nowrap max-w-48 max-lg:max-w-16 max-md:hidden">
         {props.tags.map((tag, i) => {
           return (<div key={tag + props.idx + i}
-              className="chip text-md">{`# ${tag}`}
+              className="chip text-md text-nowrap flex-shrink-0">{`# ${tag}`}
             </div>);
         })}
       </div>

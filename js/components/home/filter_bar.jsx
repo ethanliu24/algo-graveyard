@@ -31,7 +31,7 @@ export default function FilterBar(props) {
       <Dropdown title="Source" value={source} options={props.sources} updateValue={(s) => setSource(s)} />
       <Dropdown title="Difficulty" value={difficulty} options={props.difficulties} updateValue={(s) => setDifficulty(s)} />
       <Dropdown title="Status" value={status} options={props.statuses} updateValue={(s) => setStatus(s)} />
-      <MultiSelect title="Tags" options={props.tags} updateValue={(t) => setTags(t)} />
+      <MultiSelect title="Tags" selected={tags} options={props.tags} updateValue={(t) => setTags(t)} />
       <span className="relative flex-1">
         <InputText placeholder="Search" value={search} onChange={(e) => setSearch(e.target.value)}
           className="drop-down min-w-32 w-full pl-8 cursor-text border-none"/>

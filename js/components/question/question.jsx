@@ -1,12 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import Sidebar from "../common/side_bar.jsx";
-import { QuestionTab } from "./tabs.jsx";
+import Verify from "../auth/verify.jsx";
+import { QuestionTab } from "./question_tab.jsx";
 import { getReqHeader } from "../../utils/utils.js";
 
 export default function Question() {
   // const [questionData, setQuestionData] = useState(null);
   const [tabs, setTabs] = useState([]);
   const [activeTab, setActiveTab] = useState(0);
+  const [isAdmin, setIsAdmin] = useState(true);
 
   const questionPanel = useRef(null);
   const horDragBar = useRef(null);
@@ -24,7 +26,7 @@ export default function Question() {
         document.title = data.title;
         // setQuestionData(data);
         setTabs([
-          { label: "Question", content: <QuestionTab data={data} /> }
+          { label: "Question", content: <QuestionTab data={data} setIsAdmin={(b) => setIsAdmin(b)} /> }
         ]);
       })
       .catch(err => {
@@ -69,7 +71,7 @@ export default function Question() {
       <Sidebar open={false} />
       <div className="flex-1 w-full h-full text-sm bg-white
         flex flex-row max-md:flex-col justify-between items-center">
-        <div className="w-1/2 h-full max-md:w-full max-md:h-1/2 p-8 pt-2 overflow-y-scroll" ref={questionPanel}>
+        <div className="w-1/2 h-full max-md:w-full max-md:h-1/2 p-8 pt-2 overflow-y-auto hide-scrollbar" ref={questionPanel}>
           <div className="flex justify-around items-center mb-4">{
             tabs.map(({ label }, i) => {
               return (
@@ -89,6 +91,11 @@ export default function Question() {
           ref={verDragBar}></div>
         <div className="flex-1 w-full bg-white"></div>
       </div>
+
+      {!isAdmin
+        ? <Verify closable={true} closeComponent={() => setIsAdmin(true)}
+            positionStyle="fixed top-0 right-0 m-8" className="text-base" />
+        : null}
     </div>
   );
 }

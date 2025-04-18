@@ -31,7 +31,7 @@ export default function QuestionPanel() {
       tags: true
     };
 
-    fetch(`api/metadata?${formatQueries(metadataQuery)}`, req)
+    fetch(`/api/metadata?${formatQueries(metadataQuery)}`, req)
       .then(res => res.json())
       .then(data => {
         setSources(data.sources);

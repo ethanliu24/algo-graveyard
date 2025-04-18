@@ -9,20 +9,24 @@ import QuestionHelper, { HelperStrTemplate } from "./question_helpers.jsx";
 import Verify from "../auth/verify.jsx";
 
 export default function QuestionForm(props) {
-  const [link, setLink] = useState("");
-  const [source, setSource] = useState("");
-  const [difficulty, setDifficulty] = useState("");
-  const [status, setStatus] = useState("");
-  const [tags, setTags] = useState([]);
-  const [title, setTitle] = useState("");
-  const [prompt, setPrompt] = useState("");
-  const [notes, setNotes] = useState([]);
-  const [hints, setHints] = useState([]);
+  const [link, setLink] = useState(props.link || "");
+  const [source, setSource] = useState(props.source || "");
+  const [difficulty, setDifficulty] = useState(props.difficulty || "");
+  const [status, setStatus] = useState(props.status || "");
+  const [tags, setTags] = useState(props.tags || []);
+  const [title, setTitle] = useState(props.title || "");
+  const [prompt, setPrompt] = useState(props.prompt || "");
+  const [notes, setNotes] = useState(props.notes || []);
+  const [hints, setHints] = useState(props.hints || []);
   // const [testCases, setTestCases] = useState([]);
   const [metadata, setMetadata] = useState({});
   const [showVerify, setShowVerify] = useState(false);
 
-  useEffect(async () => {
+  useEffect(() => {
+    getMetadata();
+  }, []);
+
+  const getMetadata = () => {
     const req = {
       method: "GET",
       headers: getReqHeader()
@@ -35,7 +39,7 @@ export default function QuestionForm(props) {
       tags: true
     };
 
-    fetch(`api/metadata?${formatQueries(metadataQuery)}`, req)
+    fetch(`/api/metadata?${formatQueries(metadataQuery)}`, req)
       .then(res => res.json())
       .then(data => {
         setMetadata({
@@ -48,7 +52,7 @@ export default function QuestionForm(props) {
       .catch(err => {
         throw err;
       });
-  }, []);
+  }
 
   const updateNotes = (val, idx, remove) => {
     const updated = updateHelper(notes, val, idx, remove);
@@ -115,7 +119,7 @@ export default function QuestionForm(props) {
       body: JSON.stringify(data)
     };
 
-    fetch("api/questions", req)
+    fetch("/api/questions", req)
       .then(response => {
         if (!response.ok) {
           if (response.status == 401) {
@@ -142,11 +146,39 @@ export default function QuestionForm(props) {
   };
 
   const updateQuestion = (data) => {
-    alert("Not Implemented yet");
+    const req = {
+      method: "PUT",
+      headers: getReqHeader(),
+      body: JSON.stringify(data)
+    };
+
+    fetch(`/api/questions/${props.questionId}`, req)
+      .then(async response => {
+        if (response.ok) {
+          alert("show successful toast");
+          return response;
+        } else {
+          if (response.status == 401) {
+            alert("show unauthed toast");
+            setShowVerify(true);
+          } else {
+            alert(response.status);
+          }
+
+          return null
+        }
+      })
+      .then(res => res ? res.json() : null)
+      .then(json => {
+        if (json) props.updateSuccessful(json);
+      })
+      .catch(err => {
+        throw err
+      })
   };
 
   return (
-    <div className="flex flex-col justify-start items-start gap-4 text-[14px]">
+    <div className="flex flex-col justify-start items-start gap-4 w-full text-[14px]">
       {showVerify
         ? <Verify closable={true} closeComponent={() => setShowVerify(false)}
             positionStyle="fixed top-0 right-0 m-8" className="text-base" />
@@ -169,7 +201,7 @@ export default function QuestionForm(props) {
         <div className="flex justify-start items-stretch gap-4 gap-y-1 flex-wrap grow w-full">
           <Dropdown title="Difficulty" value={difficulty} options={metadata.difficulties || []} updateValue={(s) => setDifficulty(s)} />
           <Dropdown title="Status" value={status} options={metadata.statuses || []} updateValue={(s) => setStatus(s)} />
-          <MultiSelect title="Tags" options={metadata.tags || []} updateValue={(t) => setTags(t)} />
+          <MultiSelect title="Tags" selected={tags} options={metadata.tags || []} updateValue={(t) => setTags(t)} />
         </div>
       </div>
       <div className="form-section">

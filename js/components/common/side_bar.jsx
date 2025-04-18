@@ -38,7 +38,7 @@ export default function Sidebar(props) {
 
   return (
     <div className={`
-      h-screen overflow-y-scroll py-4 ${isOpen ? "w-50 px-2.5 " : "w-12 px-0"}
+      h-screen overflow-y-auto py-4 ${isOpen ? "w-50 px-2.5 " : "w-12 px-0"}
       border-r-1 rounded border-r-gray-300
       flex flex-col justify-between items-center
       `}>
@@ -50,7 +50,7 @@ export default function Sidebar(props) {
           isOpen={isOpen} className={`${isOpen ? "-ml-[2px]" : ""}`} />
         <SidebarItem title="Create" icon={faSquarePlus} link="/create"
           isOpen={isOpen} size="l" />
-        <SidebarItem title="Authenticate" icon={faLock} link="/authenticate"
+        <SidebarItem title="Admin" icon={faLock} link="/admin"
           isOpen={isOpen} size="l" />
         <SidebarItem title="Analytics" icon={faChartSimple} link="/analytics"
           isOpen={isOpen} size="l" />
