@@ -146,7 +146,7 @@ export default function QuestionForm(props) {
   };
 
   return (
-    <div className="flex flex-col justify-start items-start gap-4 text-[14px]">
+    <div className="flex flex-col justify-start items-start gap-4 w-full text-[14px]">
       {showVerify
         ? <Verify closable={true} closeComponent={() => setShowVerify(false)}
             positionStyle="fixed top-0 right-0 m-8" className="text-base" />

@@ -2,9 +2,10 @@ import ReactMarkdown from "react-markdown";
 import { Tooltip } from "react-tooltip";
 import { faRotate, faTrash, faPen, faLightbulb, faHashtag } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import ModalContainer from "../common/modal";
-import { getStatusIcon, getDifficultyStyle } from "../../utils/assets";
-import { formatDate, capitalizeFirst, getReqHeader } from "../../utils/utils";
+import ModalContainer from "../common/modal.jsx";
+import QuestionForm from "./question_form.jsx";
+import { getStatusIcon, getDifficultyStyle } from "../../utils/assets.jsx";
+import { formatDate, capitalizeFirst, getReqHeader } from "../../utils/utils.js";
 import { useState } from "react";
 
 export function QuestionTab({ data, setIsAdmin }) {
@@ -90,7 +91,10 @@ export function QuestionTab({ data, setIsAdmin }) {
           );
         })}
       </div>
-      {openModal ? <ModalContainer closeModal={() => setOpenModal(false)} /> : null}
+      {openModal
+        ? <ModalContainer closeModal={() => setOpenModal(false)} title="Edit Question"
+            content={<QuestionForm create={false} />} />
+        : null}
     </div>
   );
 }
