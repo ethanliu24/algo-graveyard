@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { faChevronDown, faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { capitalizeFirst } from "../../utils/utils";
@@ -28,9 +28,29 @@ export function MultiSelect(props) {
   const [itemStates, setItemStates] = useState([]);  // 1 means selected, 0 means not
   const [open, setOpen] = useState(false);
 
+  const containerRef = useRef(null);
+
   useEffect(() => {
     setItemStates(Array(props.options.length).fill(0));
   }, [props.options])
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (containerRef.current && !containerRef.current.contains(event.target)) {
+        setOpen(false);
+      }
+    };
+
+    if (open) {
+      document.addEventListener("click", handleClickOutside);
+    } else {
+      document.removeEventListener("click", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [open])
 
   const handleItemClick = (e, value, idx) => {
     e.stopPropagation();
@@ -79,7 +99,7 @@ export function MultiSelect(props) {
 
   return (
     <div className="flex justify-between items-center gap-4 relative drop-down max-w-[12rem] cursor-pointer select-none"
-      onClick={() => setOpen(!open)}>
+      onClick={() => setOpen(!open)} ref={containerRef}>
         <div className="flex justify-start items-center gap-1 overflow-x-auto">
           {selected.length === 0
             ? props.title

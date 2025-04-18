@@ -3,7 +3,7 @@ import { InputText } from "primereact/inputtext";
 import { InputTextarea } from 'primereact/inputtextarea';
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Dropdown } from "../common/drop_down.jsx";
+import { Dropdown, MultiSelect } from "../common/drop_down.jsx";
 import { getReqHeader, formatQueries } from "../../utils/utils";
 import QuestionHelper, { HelperStrTemplate } from "./question_helpers.jsx";
 import Verify from "../auth/verify.jsx";
