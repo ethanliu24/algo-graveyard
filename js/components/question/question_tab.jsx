@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Tooltip } from "react-tooltip";
 import { faRotate, faTrash, faPen, faLightbulb, faHashtag } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,7 +8,7 @@ import TextDisplay from "../common/text_display.jsx";
 import { getStatusIcon, getDifficultyStyle } from "../../utils/assets.jsx";
 import { formatDate, capitalizeFirst, getReqHeader } from "../../utils/utils.js";
 
-export function QuestionTab(props) {
+export default function QuestionTab(props) {
   const [openModal, setOpenModal] = useState(false);
   const [data, setData] = useState(props.data);
 
@@ -44,7 +44,7 @@ export function QuestionTab(props) {
   };
 
   return (
-    <div className="flex flex-col justify-between items-start w-full h-full">
+    <div className="flex flex-col justify-between items-start gap-16 w-full h-full">
       <div className="w-full flex-1">
         <div className="flex justify-start items-center gap-4 mb-2">
           {getStatusIcon(data.status, 0, false)}
@@ -69,7 +69,7 @@ export function QuestionTab(props) {
         </div>
         <TextDisplay content={data.prompt} />
       </div>
-      <div className="mt-16">
+      <div>
         {data.tags.length !== 0
           ? <AccordianItem title={"Tags"} icon={faHashtag} content={
               <div className="flex justify-start items-center gap-1 flex-wrap">
