@@ -2,7 +2,7 @@ import { useState } from "react";
 import { InputText } from 'primereact/inputtext';
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { StatusDropdown, DifficultyDropdown, SourceDropdown, TagsDropdown } from "../common/drop_down.jsx";
+import { Dropdown } from "../common/drop_down.jsx";
 
 export default function FilterBar(props) {
   const [source, setSource] = useState("");
@@ -28,10 +28,11 @@ export default function FilterBar(props) {
 
   return (
     <div className="flex justify-center items-center gap-2 flex-wrap gap-y-2 text-md mb-4 w-full h-full">
-      <SourceDropdown sources={props.sources} updateValue={(s) => setSource(s)} />
-      <DifficultyDropdown difficulties={props.difficulties} updateValue={(d) => setDifficulty(d)} />
-      <StatusDropdown statuses={props.statuses} updateValue={(s) => setStatus(s)} />
-      <TagsDropdown tags={props.tags} updateValue={(t) => setTags(t)} />
+      <Dropdown title="Source" value={source} options={props.sources} updateValue={(s) => setSource(s)} />
+      <Dropdown title="Difficulty" value={difficulty} options={props.difficulties} updateValue={(s) => setDifficulty(s)} />
+      <Dropdown title="Status" value={status} options={props.statuses} updateValue={(s) => setStatus(s)} />
+
+      {/* <TagsDropdown tags={props.tags} updateValue={(t) => setTags(t)} /> */}
       <span className="relative flex-1">
         <InputText placeholder="Search" value={search} onChange={(e) => setSearch(e.target.value)}
           className="drop-down min-w-32 w-full pl-8 cursor-text"/>

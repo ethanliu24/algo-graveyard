@@ -1,91 +1,24 @@
 import { useState, useEffect } from "react";
-import { Dropdown } from "primereact/dropdown";
 import { MultiSelect } from 'primereact/multiselect';
 import { capitalizeFirst } from "../../utils/utils";
-import { getDifficultyStyle, getStatusIcon } from "../../utils/assets";
-
-const CLEAR = "clear";
 
 
-const valueTemplate = (option, props) => {
-  return (<div className="mr-1">
-      {capitalizeFirst(!option || option === CLEAR ? props.placeholder : option)}
-    </div>
-  );
-};
-
-
-export function SourceDropdown(props) {
-  const [source, setSource] = useState("");
-
-  const sourceTemplate = (option) => {
-    return <div className="drop-down-item"><span className="px-2">{capitalizeFirst(option)}</span></div>
-  };
-
+export function Dropdown(props) {
   const handleChange = (e) => {
-    const val = e.value === CLEAR ? "" : e.value;
-    setSource(val);
+    const val = e.target.value === "clear" ? "" : e.target.value;
     props.updateValue(val);
   };
 
   return (
-    <Dropdown placeholder="Source" options={props.sources.concat(CLEAR)} value={source} optionLabel="source"
-      valueTemplate={valueTemplate} itemTemplate={sourceTemplate}
-      className={`drop-down ${props.className}`} panelClassName="drop-down-panel"
-      onChange={handleChange} />
-  );
-}
-
-
-export function DifficultyDropdown(props) {
-  const [difficulty, setDifficulty] = useState("");
-
-  const difficultyTemplate = (option) => {
-    return (
-      <div className="drop-down-item" style={getDifficultyStyle(option)}><span className="px-2">
-        {capitalizeFirst(option)}
-      </span></div>
-    );
-  };
-
-  const handleChange = (e) => {
-    const val = e.value === CLEAR ? "" : e.value;
-    setDifficulty(val);
-    props.updateValue(val);
-  };
-
-  return (
-    <Dropdown placeholder="Difficulty" options={props.difficulties.concat(CLEAR)} value={difficulty} optionLabel="difficulty"
-      valueTemplate={valueTemplate} itemTemplate={difficultyTemplate}
-      className={`drop-down ${props.className}`} panelClassName="drop-down-panel"
-      onChange={handleChange} />
-  );
-}
-
-
-export function StatusDropdown(props) {
-  const [status, setStatus] = useState("");
-
-  const statusTemplate = (option) => {
-    return (
-      <div className="drop-down-item"><span className="px-2 flex justify-start items-center gap-2 text-xs">
-        {getStatusIcon(option, option, false)}
-        {capitalizeFirst(option)}
-      </span></div>
-    );
-  };
-
-  const handleChange = (e) => {
-    const val = e.value === CLEAR ? "" : e.value;
-    setStatus(val);
-    props.updateValue(val);
-  };
-
-  return (
-    <Dropdown placeholder="Status" options={props.statuses.concat(CLEAR)} value={status} optionLabel="status"
-      valueTemplate={valueTemplate} itemTemplate={statusTemplate}
-      className={`drop-down ${props.className}`} panelClassName="drop-down-panel"
-      onChange={handleChange} />
+    <select value={props.value ? props.value : ""} onChange={handleChange}
+      className={`drop-down ${props.className}`}
+    >
+      {!props.value ? <option value="" disabled>{props.title}</option> : null}
+      {props.options.map((option, index) => {
+        return <option key={index} value={option}>{capitalizeFirst(option)}</option>
+      })}
+      <option value="clear">Clear</option>
+    </select>
   );
 }
 
