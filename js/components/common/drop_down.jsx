@@ -67,6 +67,16 @@ export function MultiSelect(props) {
     });
   }
 
+  const selectAll = (e) => {
+    e.stopPropagation();
+    updateSelection(props.options, Array(props.options.length).fill(1));
+  }
+
+  const clear = (e) => {
+    e.stopPropagation();
+    updateSelection([], Array(props.options.length).fill(0));
+  }
+
   return (
     <div className="flex justify-between items-center gap-4 relative drop-down max-w-[12rem] cursor-pointer select-none"
       onClick={() => setOpen(!open)}>
@@ -78,7 +88,7 @@ export function MultiSelect(props) {
                 <div className="chip text-nowrap text-primary bg-primary/20 text-xs">
                   {val}
                   <div className="flex justify-center items-center rounded-full border-1 w-[0.8rem] h-[0.8rem] border-primary"
-                    onClick={() => removeSelected(val)}>
+                    onClick={(e) => {e.stopPropagation(); removeSelected(val)}}>
                     <FontAwesomeIcon icon={faX} size="2xs" className="text-primary"
                        />
                   </div>
@@ -87,17 +97,18 @@ export function MultiSelect(props) {
             })}
         </div>
       <div className={`absolute top-full left-0 flex flex-col justify-start items-stretch z-100
-        bg-white shadow-md rounded text-sm max-h-50 overflow-x-auto ${open ? "" : "hidden"}`}>{
-          props.options.map((val, i) => {
+        bg-white shadow-md rounded text-sm max-h-50 overflow-x-auto ${open ? "" : "hidden"}`}>
+          <div className="multiselect-dropdown" onClick={selectAll}>Select all</div>
+          <div className="multiselect-dropdown" onClick={clear}>Clear</div>
+          {props.options.map((val, i) => {
             return (
-              <div className={`text-nowrap py-2 px-4 hover:bg-gray-200
-                ${itemStates[i] === 1 ? "text-primary" : "" }`}
+              <div className={`multiselect-dropdown ${itemStates[i] === 1 ? "text-primary" : "" }`}
                 onClick={(e) => handleItemClick(e, val, i)}>
                 {val}
               </div>
             );
-          })
-        }</div>
+          })}
+        </div>
       <FontAwesomeIcon icon={faChevronDown} size="2xs" />
     </div>
   );
