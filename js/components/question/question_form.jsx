@@ -156,7 +156,7 @@ export default function QuestionForm(props) {
         <div className="flex justify-between items-center gap-4 w-full">
           <InputText placeholder="" value={link} onChange={(e) => setLink(e.target.value)}
             className="flex-1 rounded-xs py-1" />
-          <Dropdown title="Source" value={source} options={metadata.tags || []} updateValue={(s) => setSource(s)} />
+          <Dropdown title="Source" value={source} options={metadata.sources || []} updateValue={(s) => setSource(s)} />
         </div>
       </div>
       <div className="form-section">
@@ -166,10 +166,10 @@ export default function QuestionForm(props) {
       </div>
       <div className="flex flex-col justify-start items-start">
         <label className="section-title">Category</label>
-        <div className="flex justify-start items-center gap-4 gap-y-1 flex-wrap grow w-full">
+        <div className="flex justify-start items-stretch gap-4 gap-y-1 flex-wrap grow w-full">
           <Dropdown title="Difficulty" value={difficulty} options={metadata.difficulties || []} updateValue={(s) => setDifficulty(s)} />
           <Dropdown title="Status" value={status} options={metadata.statuses || []} updateValue={(s) => setStatus(s)} />
-          {/* <TagsDropdown tags={metadata.tags || []} updateValue={(t) => setTags(t)} /> */}
+          <MultiSelect title="Tags" options={metadata.tags || []} updateValue={(t) => setTags(t)} />
         </div>
       </div>
       <div className="form-section">

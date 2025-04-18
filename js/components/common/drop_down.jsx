@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { MultiSelect } from 'primereact/multiselect';
+import { faChevronDown, faX } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { capitalizeFirst } from "../../utils/utils";
 
 
@@ -11,8 +12,7 @@ export function Dropdown(props) {
 
   return (
     <select value={props.value ? props.value : ""} onChange={handleChange}
-      className={`drop-down ${props.className}`}
-    >
+      className="drop-down cursor-pointer">
       {!props.value ? <option value="" disabled>{props.title}</option> : null}
       {props.options.map((option, index) => {
         return <option key={index} value={option}>{capitalizeFirst(option)}</option>
@@ -23,48 +23,83 @@ export function Dropdown(props) {
 }
 
 
-export function TagsDropdown(props) {
-  const [tags, setTags] = useState([]);
-  const [tagOpts, setTagOpts] = useState([]);  // formatted for Multiselect
+export function MultiSelect(props) {
+  const [selected, setSelected] = useState([]);
+  const [itemStates, setItemStates] = useState([]);  // 1 means selected, 0 means not
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const formattedTags = props.tags.map((tag) => ({
-      label: tag,
-      value: tag
-    }));
-    setTagOpts(formattedTags);
-  }, [props.tags]);
+    setItemStates(Array(props.options.length).fill(0));
+  }, [props.options])
 
-  const tagsTemplate = (option) => {
-    return (
-      <div className="w-full"><span className="ml-2">
-        {capitalizeFirst(option.label)}
-      </span></div>
-    );
-  };
+  const handleItemClick = (e, value, idx) => {
+    e.stopPropagation();
+    let selectStates = [...itemStates];
+    let newSelected = [...selected];
 
-  const tagsFooterTemplate = () => {
-    const length = tags ? tags.length : 0;
+    if (selectStates[idx] === 1) {  // Selcted to not selected
+      const itemIdx = newSelected.indexOf(value);
+      if (itemIdx > -1) newSelected.splice(itemIdx, 1);
+      selectStates[idx] = 0;
+    } else {  // not selected to selected
+      newSelected.push(value)
+      selectStates[idx] = 1;
+    }
 
-    return (
-        <div className="py-2 px-3 text-[10px] bg-gray-100">
-            <b>{length}</b> item{length > 1 ? 's' : ''} selected.
-        </div>
-    );
-  };
+    updateSelection(newSelected, selectStates)
+  }
 
-  const handleChange = (e) => {
-    const val = e.value;
-    setTags(val);
-    props.updateValue(val);
-  };
+  const removeSelected = (val) => {
+    let selectStates = [...itemStates];
+    let newSelected = [...selected];
+    const itemIdx = newSelected.indexOf(val);
+    if (itemIdx > -1) newSelected.splice(itemIdx, 1);
+    selectStates[itemIdx] = 0;
+
+    updateSelection(newSelected, selectStates)
+  }
+
+  const updateSelection = (newSelected, newStates) => {
+    setItemStates(newStates);
+    setSelected(() => {
+      props.updateValue(newSelected);
+      return newSelected;
+    });
+  }
 
   return (
-    <MultiSelect placeholder="Tags" options={tagOpts} value={tags} optionLabel="label" display="chip"
-      onChange={handleChange} filter
-      itemTemplate={tagsTemplate} panelFooterTemplate={tagsFooterTemplate}
-      className={`drop-down max-w-[12rem] ${props.className}`} panelClassName="drop-down-panel" />
+    <div className="flex justify-between items-center gap-4 relative drop-down max-w-[12rem] cursor-pointer select-none"
+      onClick={() => setOpen(!open)}>
+        <div className="flex justify-start items-center gap-1 overflow-x-auto">
+          {selected.length === 0
+            ? props.title
+            : selected.map(val => {
+              return (
+                <div className="chip text-nowrap text-primary bg-primary/20 text-xs">
+                  {val}
+                  <div className="flex justify-center items-center rounded-full border-1 w-[0.8rem] h-[0.8rem] border-primary"
+                    onClick={() => removeSelected(val)}>
+                    <FontAwesomeIcon icon={faX} size="2xs" className="text-primary"
+                       />
+                  </div>
+                </div>
+              );
+            })}
+        </div>
+      <div className={`absolute top-full left-0 flex flex-col justify-start items-stretch z-100
+        bg-white shadow-md rounded text-sm max-h-50 overflow-x-auto ${open ? "" : "hidden"}`}>{
+          props.options.map((val, i) => {
+            return (
+              <div className={`text-nowrap py-2 px-4 hover:bg-gray-200
+                ${itemStates[i] === 1 ? "text-primary" : "" }`}
+                onClick={(e) => handleItemClick(e, val, i)}>
+                {val}
+              </div>
+            );
+          })
+        }</div>
+      <FontAwesomeIcon icon={faChevronDown} size="2xs" />
+    </div>
   );
 }
-
 
