@@ -93,7 +93,11 @@ export function QuestionTab({ data, setIsAdmin }) {
       </div>
       {openModal
         ? <ModalContainer closeModal={() => setOpenModal(false)} title="Edit Question"
-            content={<QuestionForm create={false} />} />
+            content={
+              <QuestionForm create={false} link={data.link} source={data.source} difficulty={data.difficulty}
+                status={data.status} tags={data.tags} title={data.title} prompt={data.prompt} notes={data.notes}
+                hints={data.hints} />
+            } />
         : null}
     </div>
   );

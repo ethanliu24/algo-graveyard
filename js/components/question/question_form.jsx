@@ -9,15 +9,15 @@ import QuestionHelper, { HelperStrTemplate } from "./question_helpers.jsx";
 import Verify from "../auth/verify.jsx";
 
 export default function QuestionForm(props) {
-  const [link, setLink] = useState("");
-  const [source, setSource] = useState("");
-  const [difficulty, setDifficulty] = useState("");
-  const [status, setStatus] = useState("");
-  const [tags, setTags] = useState([]);
-  const [title, setTitle] = useState("");
-  const [prompt, setPrompt] = useState("");
-  const [notes, setNotes] = useState([]);
-  const [hints, setHints] = useState([]);
+  const [link, setLink] = useState(props.link || "");
+  const [source, setSource] = useState(props.source || "");
+  const [difficulty, setDifficulty] = useState(props.difficulty || "");
+  const [status, setStatus] = useState(props.status || "");
+  const [tags, setTags] = useState(props.tags || []);
+  const [title, setTitle] = useState(props.title || "");
+  const [prompt, setPrompt] = useState(props.prompt || "");
+  const [notes, setNotes] = useState(props.notes || []);
+  const [hints, setHints] = useState(props.hints || []);
   // const [testCases, setTestCases] = useState([]);
   const [metadata, setMetadata] = useState({});
   const [showVerify, setShowVerify] = useState(false);

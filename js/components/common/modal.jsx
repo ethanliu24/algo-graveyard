@@ -1,21 +1,19 @@
 import { useEffect, useRef } from "react";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { DifficultyDropdown } from "./drop_down";
 
 export default function ModalContainer(props) {
   const dialogRef = useRef(null);
 
   useEffect(() => {
+    dialogRef.current.addEventListener("close", closeModal);
     dialogRef.current.showModal();
     document.body.style.overflow = "hidden";
-    // dialogRef.current.addEventListener("close", closeModal);
-
-    // return () => {
-    //   dialogRef.current.removeEventListener("close", closeModal);
-    // };
   }, []);
 
   const closeModal = () => {
+    dialogRef.current.removeEventListener("close", closeModal);
     document.body.style.overflow = "";
     dialogRef.current.close();
     props.closeModal();
