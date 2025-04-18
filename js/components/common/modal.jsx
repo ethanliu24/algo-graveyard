@@ -9,24 +9,22 @@ export default function ModalContainer(props) {
     document.body.style.overflow = "hidden";
     dialogRef.current.showModal();
     dialogRef.current.addEventListener("close", closeModal);
-
-    return () => closeModal();
   }, []);
 
   const closeModal = () => {
     document.body.style.overflow = "";
-    props.closeModal();
-    if (dialogRef) {
+    if (dialogRef.current) {
       dialogRef.current.removeEventListener("close", closeModal)
       dialogRef.current.close();
     }
+    props.closeModal();
   };
 
   return (
     // https://mui.com/material-ui/react-modal/  Use this instead
     <dialog ref={dialogRef} className="backdrop:bg-black/60">
-      <div className="w-[90vw] h-[95vh] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
-        overflow-y-auto z-0 flex flex-col justify-start items-start gap-2 rounded p-8 bg-white">
+      <div className="w-[90vw] h-[95vh] fixed inset-0 m-auto z-0
+        overflow-y-auto scrollbar-hide flex flex-col justify-start items-start gap-2 rounded p-8 bg-white">
         <span className="absolute top-0 right-0 cursor-pointer w-6 h-6 p-1 rounded-full m-2
           flex justify-center items-center hover:bg-gray-300"
           onClick={() => closeModal()}>

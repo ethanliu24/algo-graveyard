@@ -167,7 +167,6 @@ export default function QuestionForm(props) {
       .catch(err => {
         throw err
       })
-    alert("Not Implemented yet");
   };
 
   return (

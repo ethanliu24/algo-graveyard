@@ -103,46 +103,4 @@
   .p-toast-icon-close-icon path {
     @apply fill-[var(--toast-acc)];
   }
-
-  /* Multiselect */
-
-  .p-multiselect-item {
-    @apply px-2 py-1 hover:bg-gray-100 cursor-pointer text-[14px];
-  }
-
-  .p-multiselect-header {
-    @apply px-2 py-1 bg-gray-100 h-[2rem] flex justify-between items-center gap-3;
-  }
-
-  .p-multiselect-select-all-label,
-  .p-checkbox-box {
-    @apply hidden;
-  }
-
-  .p-checkbox-input {
-    @apply cursor-pointer accent-[#5c90ff];
-  }
-
-  .p-multiselect-token {
-    @apply bg-blue-100 text-primary px-2 rounded-full text-sm mr-0.5 flex justify-center items-center gap-1;
-  }
-
-  .p-multiselect-label.p-placeholder {
-    @apply mr-0.5;
-  }
-
-  .p-multiselect-filter-container {
-    @apply h-full flex justify-center items-center
-  }
-  .p-multiselect-filter-container input {
-    @apply w-full h-full px-2 py-1 text-[12px];
-  }
-
-  .p-multiselect-filter-icon {
-    @apply absolute right-0 mr-2 translate-y-[3px];
-  }
-
-  .p-multiselect-empty-message {
-    @apply text-[12px] p-2;
-  }
 }
