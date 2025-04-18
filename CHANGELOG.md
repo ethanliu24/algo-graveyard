@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## Version 0.0.1
+- Redesigned dropdown and multiselect components (#37)
 - Added basic display of a single question (#36)
 - Added accepted field in solution schema and modified endpoint to take in a Request object (#35)
 - Modified create questions endpoint, added output field, and removed test case from schemas (#34)

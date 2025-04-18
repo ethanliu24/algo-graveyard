@@ -20,6 +20,22 @@
     @apply border-0 rounded-xs py-1 px-2 bg-primary text-white hover:bg-primary/90 cursor-pointer;
   }
 
+  .drop-down {
+    @apply bg-gray-50 p-2 rounded-xs focus:outline-none shadow-sm;
+  }
+
+  .multiselect-dropdown {
+    @apply text-nowrap py-2 px-4 hover:bg-gray-200;
+  }
+
+  .drop-down {
+    @apply bg-gray-50 p-2 rounded-xs focus:outline-none shadow-sm;
+  }
+
+  .multiselect-dropdown {
+    @apply text-nowrap py-2 px-4 hover:bg-gray-200;
+  }
+
   .form-section {
     @apply flex flex-col justify-start items-start w-full;
   }
@@ -34,28 +50,6 @@
 
   .prompt-container > * {
     @apply mb-2;
-  }
-
-  .hide-scrollbar {
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-
-  .hide-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
-  
-  /* React Prime components */
-  .drop-down {
-    @apply border-1 border-gray-300 py-1 px-3 rounded-xs max-lg:grow basis-1 bg-white;
-  }
-
-  .drop-down-panel {
-    @apply rounded shadow-md border bg-white border-gray-200 w-fit;
-  }
-
-  .drop-down-item {
-    @apply bg-white py-2 text-[14px] w-full hover:bg-gray-200;
   }
 
   /* Toast */
