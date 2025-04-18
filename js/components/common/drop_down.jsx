@@ -24,14 +24,18 @@ export function Dropdown(props) {
 
 
 export function MultiSelect(props) {
-  const [selected, setSelected] = useState([]);
+  const [selected, setSelected] = useState(props.selected || []);
   const [itemStates, setItemStates] = useState([]);  // 1 means selected, 0 means not
   const [open, setOpen] = useState(false);
 
   const containerRef = useRef(null);
 
   useEffect(() => {
-    setItemStates(Array(props.options.length).fill(0));
+    let selections = Array(props.options.length).fill(0);
+    selected.forEach((s) => {
+      selections[props.options.indexOf(s)] = 1;
+    })
+    setItemStates(selections);
   }, [props.options])
 
   useEffect(() => {
@@ -109,8 +113,7 @@ export function MultiSelect(props) {
                   {val}
                   <div className="flex justify-center items-center rounded-full border-1 w-[0.8rem] h-[0.8rem] border-primary"
                     onClick={(e) => {e.stopPropagation(); removeSelected(val)}}>
-                    <FontAwesomeIcon icon={faX} size="2xs" className="text-primary"
-                       />
+                    <FontAwesomeIcon icon={faX} size="2xs" className="text-primary" />
                   </div>
                 </div>
               );

@@ -201,7 +201,7 @@ export default function QuestionForm(props) {
         <div className="flex justify-start items-stretch gap-4 gap-y-1 flex-wrap grow w-full">
           <Dropdown title="Difficulty" value={difficulty} options={metadata.difficulties || []} updateValue={(s) => setDifficulty(s)} />
           <Dropdown title="Status" value={status} options={metadata.statuses || []} updateValue={(s) => setStatus(s)} />
-          <MultiSelect title="Tags" options={metadata.tags || []} updateValue={(t) => setTags(t)} />
+          <MultiSelect title="Tags" selected={tags} options={metadata.tags || []} updateValue={(t) => setTags(t)} />
         </div>
       </div>
       <div className="form-section">
