@@ -146,6 +146,27 @@ export default function QuestionForm(props) {
   };
 
   const updateQuestion = (data) => {
+    const req = {
+      method: "PUT",
+      headers: getReqHeader(),
+      body: JSON.stringify(data)
+    };
+
+    fetch(`/api/questions/${props.questionId}`, req)
+      .then(response => {
+        if (response.ok) {
+          alert("show successful toast");
+          props.updateSuccessful();
+        } else if (response.status == 401) {
+          alert("show unauthed toast");
+          setShowVerify(true);
+        } else {
+          alert(response.status);
+        }
+      })
+      .catch(err => {
+        throw err
+      })
     alert("Not Implemented yet");
   };
 

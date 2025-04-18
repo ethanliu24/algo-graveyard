@@ -96,7 +96,7 @@ export function QuestionTab({ data, setIsAdmin }) {
             content={
               <QuestionForm create={false} link={data.link} source={data.source} difficulty={data.difficulty}
                 status={data.status} tags={data.tags} title={data.title} prompt={data.prompt} notes={data.notes}
-                hints={data.hints} />
+                hints={data.hints} questionId={data.id} updateSuccessful={() => setOpenModal(false)} />
             } />
         : null}
     </div>
