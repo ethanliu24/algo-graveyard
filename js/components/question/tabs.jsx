@@ -1,12 +1,12 @@
-import ReactMarkdown from "react-markdown";
+import { useState } from "react";
 import { Tooltip } from "react-tooltip";
 import { faRotate, faTrash, faPen, faLightbulb, faHashtag } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ModalContainer from "../common/modal.jsx";
 import QuestionForm from "./question_form.jsx";
+import TextDisplay from "../common/text_display.jsx";
 import { getStatusIcon, getDifficultyStyle } from "../../utils/assets.jsx";
 import { formatDate, capitalizeFirst, getReqHeader } from "../../utils/utils.js";
-import { useState } from "react";
 
 export function QuestionTab({ data, setIsAdmin }) {
   const [openModal, setOpenModal] = useState(false);
@@ -39,8 +39,8 @@ export function QuestionTab({ data, setIsAdmin }) {
 
 
   return (
-    <div className="flex flex-col justify-between items-start w-full h-full overflow-y-auto">
-      <div>
+    <div className="flex flex-col justify-between items-start w-full h-full">
+      <div className="w-full flex-1">
         <div className="flex justify-start items-center gap-4 mb-2">
           {getStatusIcon(data.status, 0, false)}
           <h1 className="text-xl text-wrap">{data.title}</h1>
@@ -62,11 +62,9 @@ export function QuestionTab({ data, setIsAdmin }) {
             <Tooltip id="delete-question" />
           </button>
         </div>
-        <div className="prompt-container text-xs">
-          <ReactMarkdown children={data.prompt} />
-        </div>
+        <TextDisplay content={data.prompt} />
       </div>
-      <div>
+      <div className="mt-16">
         {data.tags.length !== 0
           ? <AccordianItem title={"Tags"} icon={faHashtag} content={
               <div className="flex justify-start items-center gap-1 flex-wrap">

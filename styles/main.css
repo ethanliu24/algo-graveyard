@@ -48,10 +48,6 @@
     @apply bg-gray-200 px-2 py-0.5 rounded-full text-[11px] mr-0.5 flex justify-center items-center gap-1;
   }
 
-  .prompt-container > * {
-    @apply mb-2;
-  }
-
   /* Toast */
 
   .p-toast-message {
