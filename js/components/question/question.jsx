@@ -71,6 +71,12 @@ export default function Question() {
     setCurSolution(removed.length !== 0 ? removed[0] : null);
   }
 
+  const updateSolution = (sId, newData) => {
+    const updated = solutions.map(sln => sln.id === sId ? newData : sln);
+    setSolutions(updated);
+    setCurSolution(newData)
+  }
+
   const resizeHor = (e) => {
     const containerLeft = questionPanel.current.getBoundingClientRect().left;
     const width = Math.max(
@@ -118,7 +124,7 @@ export default function Question() {
           ref={verDragBar}></div>
         <div className="flex-1 w-full h-full bg-white p-8 overflow-y-auto">
           <Solution questionId={question.id} data={curSolution} setIsAdmin={(b) => setIsAdmin(b)}
-            removeSolution={removeSolution} />
+            removeSolution={removeSolution} updateSolution={updateSolution} />
         </div>
       </div>
 

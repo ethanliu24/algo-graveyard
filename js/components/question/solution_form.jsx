@@ -9,13 +9,13 @@ import { Dropdown } from "../common/drop_down.jsx";
 import { formatQueries, getReqHeader, getLanguageHighlighter } from "../../utils/utils.js";
 
 export default function SolutionForm(props) {
-  const [summary, setSummary] = useState(props.summary || "");
-  const [explanation, setExplanation] = useState(props.explanation || "");
-  const [language, setLanguage] = useState(props.language || "");
-  const [timeComplexity, setTimeComplexity] = useState(props.timeComplexity || "");
-  const [spaceComplexity, setSpaceComplexity] = useState(props.spaceComplexity || "");
-  const [code, setCode] = useState(props.code || "");
-  const [accepted, setAccepted] = useState(props.accepted || true);
+  const [summary, setSummary] = useState(props.data.summary || "");
+  const [explanation, setExplanation] = useState(props.data.explanation || "");
+  const [language, setLanguage] = useState(props.data.language || "");
+  const [timeComplexity, setTimeComplexity] = useState(props.data.timeComplexity || "");
+  const [spaceComplexity, setSpaceComplexity] = useState(props.data.spaceComplexity || "");
+  const [code, setCode] = useState(props.data.code || "");
+  const [accepted, setAccepted] = useState(props.data.accepted || true);
   const [languages, setLanguages] = useState([]);
   const [showVerify, setShowVerify] = useState(false);
 
@@ -48,7 +48,7 @@ export default function SolutionForm(props) {
     };
 
     if (isFormValid(data)) {
-      props.create ? createSolution(data) : updateQuestion(data);
+      props.create ? createSolution(data) : updateSolution(data);
     }
   };
 
@@ -95,35 +95,35 @@ export default function SolutionForm(props) {
   };
 
   const updateSolution = (data) => {
-    // const req = {
-    //   method: "PUT",
-    //   headers: getReqHeader(),
-    //   body: JSON.stringify(data)
-    // };
+    const req = {
+      method: "PUT",
+      headers: getReqHeader(),
+      body: JSON.stringify(data)
+    };
 
-    // fetch(`/api/questions/${props.questionId}`, req)
-    //   .then(async response => {
-    //     if (response.ok) {
-    //       alert("show successful toast");
-    //       return response;
-    //     } else {
-    //       if (response.status == 401) {
-    //         alert("show unauthed toast");
-    //         setShowVerify(true);
-    //       } else {
-    //         alert(response.status);
-    //       }
+    fetch(`/api/questions/${props.questionId}/solutions/${props.data.id}`, req)
+      .then(response => {
+        if (response.ok) {
+          alert("show successful toast");
+          return response;
+        } else {
+          if (response.status == 401) {
+            alert("show unauthed toast");
+            setShowVerify(true);
+          } else {
+            alert(response.status);
+          }
 
-    //       return null
-    //     }
-    //   })
-    //   .then(res => res ? res.json() : null)
-    //   .then(json => {
-    //     if (json) props.updateSuccessful(json);
-    //   })
-    //   .catch(err => {
-    //     throw err
-    //   })
+          return null;
+        }
+      })
+      .then(res => res ? res.json() : null)
+      .then(json => {
+        if (json) props.methodSuccessful(json);
+      })
+      .catch(err => {
+        throw err;
+      })
   };
 
   return (
