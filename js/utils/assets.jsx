@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faHourglassEnd, faClock, faMinus } from "@fortawesome/free-solid-svg-icons";
 import { Tooltip } from "react-tooltip";
-import { capitalizeFirst } from "./utils";
+import { capitalizeFirst, getLanguageHighlighter } from "./utils";
 
 export function getStatusIcon(status, id, enableTooltip = true) {
   const statusIcon = {
@@ -33,8 +33,8 @@ export function getDifficultyStyle(difficulty) {
 };
 
 export function getLanguageIcon(language) {
-  let filename = language;
+  let filename = getLanguageHighlighter(language);
   filename += ".svg";
   return <img src={`../static/res/languages/${filename}`} alt={language}
-    className="w-4 h-4 brightness-105" />
+    className="w-6 h-6 brightness-105 select-none" />
 }
