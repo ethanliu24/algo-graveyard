@@ -7,18 +7,17 @@ import { formatDate } from "../../utils/utils";
 import { getLanguageIcon } from "../../utils/assets";
 
 export default function SolutionTab(props) {
-  const [solutions, setSolutions] = useState(props.solutions || []);
   const [openForm, setOpenForm] = useState(false);
 
   const creationSucess = (slnData) => {
     setOpenForm(false);
-    setSolutions([...solutions, slnData]);
+    props.addSolution(slnData);
   }
 
   return (
     <div className="flex flex-col justify-start items-start w-full">
       <button className="mb-2" onClick={() => setOpenForm(true)}>Add solution</button>
-      {solutions.map((sln, i) => {
+      {props.solutions.map((sln, i) => {
         return (
           <div className="flex justify-start items-center gap-4 min-w-full w-fit hover:bg-gray-200 cursor-pointer
             px-4 py-2 text-[12px] rounded select-none"

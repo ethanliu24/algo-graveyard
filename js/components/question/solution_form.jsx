@@ -165,7 +165,7 @@ export default function SolutionForm(props) {
       <div className="form-section">
         <label className="section-title">Implementation</label>
         <Editor height="400px" language={getLanguageHighlighter(language) || "plaintext"}
-          onChange={(c) => setCode(c)} defaultValue={code} options={{ wordWrap: "on" }} theme="vs-dark" />
+          onChange={(c) => setCode(c)} value={code} options={{ wordWrap: "on" }} theme="vs-dark" />
       </div>
       <button onClick={handleSubmit} className="my-3 text-base">
         <FontAwesomeIcon icon={props.create ? faPlus : faRotate} className="mr-2" />
