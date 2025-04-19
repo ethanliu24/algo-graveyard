@@ -31,3 +31,10 @@ export function getDifficultyStyle(difficulty) {
     color: colorMap[difficulty] || "#c7c7c7"
   };
 };
+
+export function getLanguageIcon(language) {
+  let filename = language;
+  filename += ".svg";
+  return <img src={`../static/res/languages/${filename}`} alt={language}
+    className="w-4 h-4 brightness-105" />
+}
