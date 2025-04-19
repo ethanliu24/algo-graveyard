@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## Version 0.0.1
+- Display solutions (#39)
 - Add UI for deleting and updating questions (#38)
 - Redesigned dropdown and multiselect components (#37)
 - Added basic display of a single question (#36)

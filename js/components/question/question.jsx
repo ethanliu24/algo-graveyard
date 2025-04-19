@@ -1,12 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import Sidebar from "../common/side_bar.jsx";
 import Verify from "../auth/verify.jsx";
-import { QuestionTab } from "./question_tab.jsx";
+import Solution from "./solution.jsx";
+import DescriptionTab from "./description_tab.jsx";
+import SolutionTab from "./solutions_tab.jsx";
 import { getReqHeader } from "../../utils/utils.js";
 
 export default function Question() {
-  // const [questionData, setQuestionData] = useState(null);
   const [tabs, setTabs] = useState([]);
+  const [solutions, setSolutions] = useState([]);
+  const [curSolution, setCurSolution] = useState(null);
   const [activeTab, setActiveTab] = useState(0);
   const [isAdmin, setIsAdmin] = useState(true);
 
@@ -24,9 +27,18 @@ export default function Question() {
       .then(res => res.json())
       .then(data => {
         document.title = data.title;
-        // setQuestionData(data);
+        setSolutions(data.solutions);
+        if (data.solutions.length !== 0) setCurSolution(data.solutions[0]);
+        console.log(data.solutions)
         setTabs([
-          { label: "Question", content: <QuestionTab data={data} setIsAdmin={(b) => setIsAdmin(b)} /> }
+          {
+            label: "Description",
+            content: <DescriptionTab data={data} setIsAdmin={(b) => setIsAdmin(b)} />
+          },
+          {
+            label: "Solutions",
+            content: <SolutionTab questionId={data.id} solutions={data.solutions} displaySolution={displaySolution} setIsAdmin={(b) => setIsAdmin(b)} />
+          }
         ]);
       })
       .catch(err => {
@@ -34,19 +46,23 @@ export default function Question() {
       });
 
     // Set up window resizers
-    horDragBar.current.addEventListener("mousedown", () => {
-      document.addEventListener("mousemove", resizeHor);
-    });
+    // horDragBar.current.addEventListener("mousedown", () => {
+    //   document.addEventListener("mousemove", resizeHor);
+    // });
 
-    verDragBar.current.addEventListener("mousedown", () => {
-      document.addEventListener("mousemove", resizeVer);
-    });
+    // verDragBar.current.addEventListener("mousedown", () => {
+    //   document.addEventListener("mousemove", resizeVer);
+    // });
 
-    document.addEventListener("mouseup", () => {
-      document.removeEventListener("mousemove", resizeHor);
-      document.removeEventListener("mousemove", resizeVer);
-    });
+    // document.addEventListener("mouseup", () => {
+    //   document.removeEventListener("mousemove", resizeHor);
+    //   document.removeEventListener("mousemove", resizeVer);
+    // });
   }, []);
+
+  const displaySolution = (data) => {
+    setCurSolution(data);
+  }
 
   const resizeHor = (e) => {
     const containerLeft = questionPanel.current.getBoundingClientRect().left;
@@ -71,7 +87,7 @@ export default function Question() {
       <Sidebar open={false} />
       <div className="flex-1 w-full h-full text-sm bg-white
         flex flex-row max-md:flex-col justify-between items-center">
-        <div className="w-1/2 h-full max-md:w-full max-md:h-1/2 p-8 pt-2 overflow-y-auto hide-scrollbar" ref={questionPanel}>
+        <div className="w-3/7 h-full max-md:w-full max-md:h-2/5 p-8 pt-2 overflow-y-auto hide-scrollbar" ref={questionPanel}>
           <div className="flex justify-around items-center mb-4">{
             tabs.map(({ label }, i) => {
               return (
@@ -85,11 +101,13 @@ export default function Question() {
           })}</div>
           {tabs[activeTab]?.content}
         </div>
-        <div className="border-gray-300 hover:border-primary w-0 h-full border-2 cursor-ew-resize max-md:hidden"
+        <div className="border-gray-300 w-0 h-full border-2 max-md:hidden"
           ref={horDragBar}></div>
-        <div className="border-gray-300 hover:border-primary w-full h-0 border-2 cursor-ns-resize md:hidden"
+        <div className="border-gray-300 w-full h-0 border-2 md:hidden"
           ref={verDragBar}></div>
-        <div className="flex-1 w-full bg-white"></div>
+        <div className="flex-1 w-full h-full bg-white p-8 overflow-y-auto">
+          <Solution data={curSolution} />
+        </div>
       </div>
 
       {!isAdmin
