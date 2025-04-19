@@ -7,7 +7,8 @@ export function getReqHeader() {
 }
 
 export function capitalizeFirst(s) {
-  return typeof s !== "string" ? s : s.charAt(0).toUpperCase() + s.slice(1);
+  if (typeof s !== "string") s = String(s);
+  return s.charAt(0).toUpperCase() + s.slice(1);
 };
 
 export function formatDate(dateStr) {
@@ -20,3 +21,14 @@ export function formatQueries(queries) {
   let queryStr = new URLSearchParams(queries).toString();
   return queryStr;
 };
+
+export function getLanguageHighlighter(language) {
+  switch (language) {
+    case "c++":
+      return "cpp"
+    case "c#":
+      return "csharp"
+    default:
+      return language
+  }
+}

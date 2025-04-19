@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
+import Editor from "@monaco-editor/react";
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Dropdown } from "../common/drop_down.jsx";
-import { formatQueries, getReqHeader } from "../../utils/utils.js";
+import { formatQueries, getReqHeader, getLanguageHighlighter } from "../../utils/utils.js";
 
 export default function SolutionForm(props) {
   const [summary, setSummary] = useState(props.summary || "");
@@ -45,7 +46,7 @@ export default function SolutionForm(props) {
       <div className="form-section">
         <label className="section-title">Information</label>
         <div className="space-x-4">
-          <Dropdown title="Language" value={"Accepted"} options={["Accepted", "Denied"]} updateValue={(a) => setAccepted(a === "Y")} />
+          <Dropdown title="Language" value={accepted ? "Accepted" : "Denied"} options={["Accepted", "Denied"]} updateValue={(a) => setAccepted(a === "Accepted")} />
           <Dropdown title="Language" value={language} options={languages} updateValue={(l) => setLanguage(l)} />
         </div>
       </div>
@@ -69,8 +70,8 @@ export default function SolutionForm(props) {
       </div>
       <div className="form-section">
         <label className="section-title">Implementation</label>
-        {/* <InputTextarea placeholder="" value={code} autoResize onChange={(e) => setCode(e.target.value)}
-          className="border-1 rounded-xs border-gray-300 w-full min-h-[20rem]" /> */}
+        <Editor height="400px" language={getLanguageHighlighter(language) || "plaintext"}
+          onChange={(c) => setCode(c)} defaultValue={code} theme="vs-dark" />
       </div>
     </div>
   );
