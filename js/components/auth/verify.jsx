@@ -1,6 +1,6 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { Password } from 'primereact/password';
-import { Toast } from 'primereact/toast';
+import { useToastContext } from '../../contexts/toast_context';
 import { getReqHeader } from '../../utils/utils';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -12,14 +12,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 export default function Verify(props) {
   const [secret, setSecret] = useState("");
   const [show, setShow] = useState(true);
-  const verificationRes = useRef(null);
+  const verificationRes = useToastContext();
 
   const toastLife = 3000;
 
   useEffect(() => {
     const toast = { severity: "info", life: 5000, className: "info",
       summary: "Info", detail: "Only admins are allowed to manage questions." }
-    setTimeout(() => verificationRes.current.show(toast), 100);
+    setTimeout(() => verificationRes.show(toast), 100);
   }, []);
 
   const handleVerification = async () => {
@@ -52,7 +52,7 @@ export default function Verify(props) {
         });
     }
 
-    verificationRes.current.show(result);
+    verificationRes.show(result);
   };
 
   return (
@@ -73,7 +73,6 @@ export default function Verify(props) {
           <button className="w-full p-0.5 cursor-pointer" onClick={handleVerification}>Verify</button>
         </div>
       </div>
-      <Toast ref={verificationRes} position="bottom-right" />
     </div>
   )
 }

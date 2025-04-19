@@ -122,7 +122,7 @@ export default function QuestionForm(props) {
     fetch("/api/questions", req)
       .then(response => {
         if (!response.ok) {
-          if (response.status == 401) {
+          if (response.status == 401 || response.status === 403) {
             alert("Show unauthed Toast");
             setShowVerify(true);
           } else {
