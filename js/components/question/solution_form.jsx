@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react";
 import Editor from "@monaco-editor/react";
+import { faPlus, faRotate } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from 'primereact/inputtextarea';
+import Verify from "../auth/verify.jsx";
 import { Dropdown } from "../common/drop_down.jsx";
 import { formatQueries, getReqHeader, getLanguageHighlighter } from "../../utils/utils.js";
 
@@ -31,6 +34,97 @@ export default function SolutionForm(props) {
         throw err;
       });
   }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const data = {
+      summary: summary,
+      explanation: explanation,
+      language: language,
+      time_complexity: timeComplexity,
+      space_complexity: spaceComplexity,
+      code: code,
+      accepted: accepted
+    };
+
+    if (isFormValid(data)) {
+      props.create ? createSolution(data) : updateQuestion(data);
+    }
+  };
+
+  const isFormValid = (data) => {
+    if (!data.language || !data.summary || data.summary.length >= 50) {
+      alert("invalid data");
+      return false;
+    }
+
+    return true;
+  };
+
+  const createSolution = (data) => {
+    const req = {
+      method: "POST",
+      headers: getReqHeader(),
+      body: JSON.stringify(data)
+    };
+
+    fetch(`/api/questions/${props.questionId}/solutions`, req)
+      .then(response => {
+        if (!response.ok) {
+          if (response.status == 401) {
+            alert("Show unauthed Toast");
+            setShowVerify(true);
+          } else {
+            alert("Error handling");
+          }
+        }
+
+        return response;
+      })
+      .then(res => res.json())
+      .then(json => {
+        if (!json.id) {  // This means creation was successful
+          alert("print errors in toast");
+        } else {
+          props.methodSuccessful(json);
+        }
+      })
+      .catch(err => {
+        throw err;
+      });
+  };
+
+  const updateSolution = (data) => {
+    // const req = {
+    //   method: "PUT",
+    //   headers: getReqHeader(),
+    //   body: JSON.stringify(data)
+    // };
+
+    // fetch(`/api/questions/${props.questionId}`, req)
+    //   .then(async response => {
+    //     if (response.ok) {
+    //       alert("show successful toast");
+    //       return response;
+    //     } else {
+    //       if (response.status == 401) {
+    //         alert("show unauthed toast");
+    //         setShowVerify(true);
+    //       } else {
+    //         alert(response.status);
+    //       }
+
+    //       return null
+    //     }
+    //   })
+    //   .then(res => res ? res.json() : null)
+    //   .then(json => {
+    //     if (json) props.updateSuccessful(json);
+    //   })
+    //   .catch(err => {
+    //     throw err
+    //   })
+  };
 
   return (
     <div className="flex flex-col justify-start items-start gap-4 w-full text-[14px]">
@@ -73,6 +167,10 @@ export default function SolutionForm(props) {
         <Editor height="400px" language={getLanguageHighlighter(language) || "plaintext"}
           onChange={(c) => setCode(c)} defaultValue={code} theme="vs-dark" />
       </div>
+      <button onClick={handleSubmit} className="my-3 text-base">
+        <FontAwesomeIcon icon={props.create ? faPlus : faRotate} className="mr-2" />
+        {props.create ? "Create" : "Update"}
+      </button>
     </div>
   );
 }

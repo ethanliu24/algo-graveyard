@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from 'primereact/inputtextarea';
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faRotate } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Dropdown, MultiSelect } from "../common/drop_down.jsx";
 import { getReqHeader, formatQueries } from "../../utils/utils";
@@ -216,7 +216,7 @@ export default function QuestionForm(props) {
       {/* <QuestionHelper title="Test Cases" helperTemplate={HelperTestCaseTemplate} defaultValue={{ parameters: [], explanation: "" }}
         list={testCases} updateList={updateTestCases} setList={(l) => setTestCases(l)} /> */}
       <button onClick={handleSubmit} className="my-3 text-base">
-        <FontAwesomeIcon icon={faPlus} className="mr-2" />
+        <FontAwesomeIcon icon={props.create ? faPlus : faRotate} className="mr-2" />
         {props.create ? "Create" : "Update"}
       </button>
     </div>
