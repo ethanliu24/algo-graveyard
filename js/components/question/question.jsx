@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import Sidebar from "../common/side_bar.jsx";
 import Verify from "../auth/verify.jsx";
-import QuestionTab from "./question_tab.jsx";
+import Description from "./description_tab.jsx";
 import SolutionTab from "./solutions_tab.jsx";
 import { getReqHeader } from "../../utils/utils.js";
+import DescriptionTab from "./description_tab.jsx";
 
 export default function Question() {
   const [tabs, setTabs] = useState([]);
@@ -26,8 +27,8 @@ export default function Question() {
         document.title = data.title;
         setTabs([
           {
-            label: "Question",
-            content: <QuestionTab data={data} setIsAdmin={(b) => setIsAdmin(b)} />
+            label: "Description",
+            content: <DescriptionTab data={data} setIsAdmin={(b) => setIsAdmin(b)} />
           },
           {
             label: "Solutions",

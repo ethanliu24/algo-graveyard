@@ -8,7 +8,7 @@ import TextDisplay from "../common/text_display.jsx";
 import { getStatusIcon, getDifficultyStyle } from "../../utils/assets.jsx";
 import { formatDate, capitalizeFirst, getReqHeader } from "../../utils/utils.js";
 
-export default function QuestionTab(props) {
+export default function DescriptionTab(props) {
   const [openModal, setOpenModal] = useState(false);
   const [data, setData] = useState(props.data);
 
