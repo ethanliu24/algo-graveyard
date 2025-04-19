@@ -5,11 +5,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ModalContainer from "../common/modal.jsx";
 import QuestionForm from "./question_form.jsx";
 import TextDisplay from "../common/text_display.jsx";
+import { useToastContext } from "../../contexts/toast_context.jsx";
 import { getStatusIcon, getDifficultyStyle } from "../../utils/assets.jsx";
 import { formatDate, capitalizeFirst, getReqHeader } from "../../utils/utils.js";
 
 export default function DescriptionTab(props) {
   const [openModal, setOpenModal] = useState(false);
+  const toast = useToastContext();
 
   const handleDelete = () => {
     if (!window.confirm("Are you sure you want to delete the question?")) {
@@ -26,10 +28,12 @@ export default function DescriptionTab(props) {
         if (response.ok) {
           window.location.href = "/";
         } else if (response.status == 401 || response.status === 403) {
-          alert("ur not admin lmao");
+          toast.show({ severity: "danger", summary: "Error", className: "error", detail: "Ur not admin lol" })
           props.setIsAdmin(false);
+        } else if (response.status >= 500) {
+          toast.show({ severity: "warning", summary: "Warning", className: "warning", detail: `Internal server error ${response.status}` })
         } else {
-          alert("handle error del q");
+          toast.show({ severity: "danger", summary: "Error", className: "error", detail: `Error: ${response.status}` })
         }
       })
       .catch(err => {
@@ -40,11 +44,12 @@ export default function DescriptionTab(props) {
   const handleUpdate = (newData) => {
     setOpenModal(false);
     props.updateQuestion(newData);
+    toast.show({ severity: "success", summary: "Success", className: "success", detail: "Question updated!" });
   };
 
   return (
-    <div className="flex flex-col justify-between items-start gap-16 w-full h-full">
-      <div className="w-full flex-1">
+    <div className="flex flex-col justify-start items-stretch gap-8 w-full h-full">
+      <div className="w-full h-fit">
         <div className="flex justify-start items-center gap-4 mb-2">
           {getStatusIcon(props.data.status, 0, false)}
           <h1 className="text-xl text-wrap">{props.data.title}</h1>

@@ -6,6 +6,7 @@ import { InputText } from "primereact/inputtext";
 import { InputTextarea } from 'primereact/inputtextarea';
 import Verify from "../auth/verify.jsx";
 import { Dropdown } from "../common/drop_down.jsx";
+import { useToastContext } from "../../contexts/toast_context.jsx";
 import { formatQueries, getReqHeader, getLanguageHighlighter } from "../../utils/utils.js";
 
 export default function SolutionForm(props) {
@@ -18,6 +19,7 @@ export default function SolutionForm(props) {
   const [accepted, setAccepted] = useState(props.data.accepted || true);
   const [languages, setLanguages] = useState([]);
   const [showVerify, setShowVerify] = useState(false);
+  const toast = useToastContext();
 
   useEffect(() => {
     const req = {
@@ -53,8 +55,20 @@ export default function SolutionForm(props) {
   };
 
   const isFormValid = (data) => {
-    if (!data.language || !data.summary || data.summary.length >= 50) {
-      alert("invalid data");
+    if (!data.language || !data.summary) {
+      let msg = [
+        !data.summary && "Summary",
+        !data.accepted && "Accepted",
+        !data.language && "Language",
+      ].filter(Boolean).join(", ");
+      msg += " must be selected."
+
+      toast.show({ severity: "danger", summary: "Error", className: "error", detail:  msg });
+      return false;
+    }
+
+    if (data.summary.length > 70) {
+      toast.show({ severity: "danger", summary: "Error", className: "error", detail:  "Summary must be under 70 characters." });
       return false;
     }
 
@@ -70,23 +84,19 @@ export default function SolutionForm(props) {
 
     fetch(`/api/questions/${props.questionId}/solutions`, req)
       .then(response => {
-        if (!response.ok) {
-          if (response.status == 401) {
-            alert("Show unauthed Toast");
-            setShowVerify(true);
-          } else {
-            alert("Error handling");
-          }
+        if (response.status == 401 || response.status === 403) {
+          setShowVerify(true);
         }
 
         return response;
       })
       .then(res => res.json())
       .then(json => {
-        if (!json.id) {  // This means creation was successful
-          alert("print errors in toast");
-        } else {
+        if (json.id) {
+          toast.show({ severity: "success", summary: "Success", className: "success", detail: "Solution created!" });
           props.methodSuccessful(json);
+        } else {
+          toast.show({ severity: "danger", summary: "Error", className: "error", detail: json.detail });
         }
       })
       .catch(err => {
@@ -103,23 +113,20 @@ export default function SolutionForm(props) {
 
     fetch(`/api/questions/${props.questionId}/solutions/${props.data.id}`, req)
       .then(response => {
-        if (response.ok) {
-          alert("show successful toast");
-          return response;
-        } else {
-          if (response.status == 401) {
-            alert("show unauthed toast");
-            setShowVerify(true);
-          } else {
-            alert(response.status);
-          }
-
-          return null;
+        if (response.status == 401 || response.status == 403) {
+          setShowVerify(true);
         }
+
+        return response;
       })
-      .then(res => res ? res.json() : null)
+      .then(res => res.json())
       .then(json => {
-        if (json) props.methodSuccessful(json);
+        if (json.detail) {
+          toast.show({ severity: "danger", summary: "Error", className: "error", detail: json.detail });
+        } else {
+          toast.show({ severity: "success", summary: "Success", className: "success", detail: "Solution created!" });
+          props.methodSuccessful(json);
+        }
       })
       .catch(err => {
         throw err;
