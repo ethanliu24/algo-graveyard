@@ -51,6 +51,10 @@ export default function Question() {
     // });
   }, []);
 
+  const updateQuestion = (newData) => {
+    setQuestion(newData);
+  }
+
   const displaySolution = (data) => {
     setCurSolution(data);
   }
@@ -103,7 +107,7 @@ export default function Question() {
               );
           })}</div>
           {activeTab === "Description"
-            && <DescriptionTab data={question} setIsAdmin={setIsAdmin} />}
+            && <DescriptionTab data={question} setIsAdmin={setIsAdmin} updateQuestion={updateQuestion} />}
           {activeTab === "Solutions"
             && (<SolutionTab questionId={question.id} solutions={solutions} setIsAdmin={(b) => setIsAdmin(b)}
               displaySolution={displaySolution} addSolution={addSolution} />)}
