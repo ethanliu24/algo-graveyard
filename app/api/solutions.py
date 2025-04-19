@@ -50,10 +50,11 @@ async def create_solution(
 async def update_solution(
     question_id: str,
     solution_id: str,
-    data: dict,
+    request: Request,
     solution_service: Annotated[SolutionManager, Depends(get_solution_service)]
 ) -> Solution:
     try:
+        data = await request.json()
         return await solution_service.update_solution(question_id, solution_id, data)
     except EntityNotFoundError as e:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))

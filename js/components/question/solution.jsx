@@ -4,10 +4,14 @@ import { faRotate, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Tooltip } from "react-tooltip";
 import TextDisplay from "../common/text_display";
-import { formatDate, getLanguageHighlighter } from "../../utils/utils";
+import ModalContainer from "../common/modal";
+import SolutionForm from "./solution_form";
+import { formatDate, getLanguageHighlighter, getReqHeader } from "../../utils/utils";
 
 export default function Solution(props) {
-  const [height, setHeight] = useState(200);
+  const [openForm, setOpenForm] = useState(false);
+  const [editorHeight, setEditorHeight] = useState(200);
+
   const containerRef = useRef(null);
   const editorRef = useRef(null);
 
@@ -16,7 +20,7 @@ export default function Solution(props) {
 
     const updateHeight = () => {
       const contentHeight = editor.getContentHeight();
-      setHeight(contentHeight);
+      setEditorHeight(contentHeight);
       editor.layout(); // re-layout the editor
     };
 
@@ -33,11 +37,39 @@ export default function Solution(props) {
     if (editorRef.current) {
       editorRef.current.layout();
     }
-  }, [height]);
+  }, [editorHeight]);
 
   const handleDelete = () => {
+    if (!window.confirm("Are you sure you want to delete this solution?")) {
+      return;
+    }
 
-  }
+    const req = {
+      method: "DELETE",
+      headers: getReqHeader(),
+    };
+
+    fetch(`/api/questions/${props.questionId}/solutions/${props.data.id}`, req)
+      .then(response => {
+        if (response.ok) {
+          alert("toast delete successful");
+          props.removeSolution(props.data.id);
+        } else if (response.status == 401 || response.status === 403) {
+          alert("ur not admin lmao");
+          props.setIsAdmin(false);
+        } else {
+          alert("handle error del q");
+        }
+      })
+      .catch(err => {
+        throw err;
+      });
+  };
+
+  const updateSuccess = (newData) => {
+    props.updateSolution(newData.id, newData);
+    setOpenForm(false);
+  };
 
   return (!props.data
     ? (
@@ -51,7 +83,7 @@ export default function Solution(props) {
         <div className="flex justify-start items-stretch gap-2 mb-4">
           <div className="chip w-fit text-nowrap">{formatDate(props.data.last_modified)}</div>
           <button className="chip p-1 hover:bg-gray-300 text-black"
-            onClick={() => setOpenModal(true)}
+            onClick={() => setOpenForm(true)}
             data-tooltip-id="edit-solution" data-tooltip-content="Edit solution">
             <FontAwesomeIcon icon={faRotate} />
             <Tooltip id="edit-solution" />
@@ -63,8 +95,8 @@ export default function Solution(props) {
             <Tooltip id="delete-solution" />
           </button>
         </div>
-        <h2 className="text-md first-letter:text-primary">{`Time: (${props.data.time_complexity})`}</h2>
-        <h2 className="text-md first-letter:text-primary mb-4">{`Space: (${props.data.space_complexity})`}</h2>
+        <h2 className="text-md first-letter:text-primary">{`Time: O(${props.data.time_complexity})`}</h2>
+        <h2 className="text-md first-letter:text-primary mb-4">{`Space: O(${props.data.space_complexity})`}</h2>
         <TextDisplay content={props.data.explanation} />
         <div className="text-[14px] mb-8">
           <h1 className="text-[18px] mb-2 first-letter:text-primary">Ai Analysis</h1>
@@ -73,7 +105,7 @@ export default function Solution(props) {
         </div>
         <div ref={containerRef} className="w-full">
           <Editor
-            height={height}
+            height={editorHeight}
             width="100%"
             language={getLanguageHighlighter(props.data.language) || "plaintext"}
             options={{
@@ -88,6 +120,10 @@ export default function Solution(props) {
             onMount={handleEditorDidMount}
           />
         </div>
+        {openForm
+          ? <ModalContainer closeModal={() => setOpenForm(false)} title="Edit Question"
+              content={<SolutionForm create={false} questionId={props.questionId} data={props.data} methodSuccessful={(d) => updateSuccess(d)} />} />
+          : null}
       </div>
     )
   );

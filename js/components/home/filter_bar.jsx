@@ -22,7 +22,6 @@ export default function FilterBar(props) {
     if (tags.length !== 0) query = { ...query, tags: tags };
     if (search) query = { ...query, search: search };
 
-    console.log(query)
     props.searchQuestions(query);
   };
 

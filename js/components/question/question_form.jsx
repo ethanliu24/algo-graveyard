@@ -153,7 +153,7 @@ export default function QuestionForm(props) {
     };
 
     fetch(`/api/questions/${props.questionId}`, req)
-      .then(async response => {
+      .then(response => {
         if (response.ok) {
           alert("show successful toast");
           return response;
@@ -165,7 +165,7 @@ export default function QuestionForm(props) {
             alert(response.status);
           }
 
-          return null
+          return null;
         }
       })
       .then(res => res ? res.json() : null)

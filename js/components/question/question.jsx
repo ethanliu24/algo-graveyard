@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { act, useEffect, useRef, useState } from "react";
 import Sidebar from "../common/side_bar.jsx";
 import Verify from "../auth/verify.jsx";
 import Solution from "./solution.jsx";
@@ -7,10 +7,10 @@ import SolutionTab from "./solutions_tab.jsx";
 import { getReqHeader } from "../../utils/utils.js";
 
 export default function Question() {
-  const [tabs, setTabs] = useState([]);
-  const [solutions, setSolutions] = useState([]);
+  const [question, setQuestion] = useState("");
   const [curSolution, setCurSolution] = useState(null);
-  const [activeTab, setActiveTab] = useState(0);
+  const [solutions, setSolutions] = useState([]);
+  const [activeTab, setActiveTab] = useState("");
   const [isAdmin, setIsAdmin] = useState(true);
 
   const questionPanel = useRef(null);
@@ -28,18 +28,9 @@ export default function Question() {
       .then(data => {
         document.title = data.title;
         setSolutions(data.solutions);
+        setQuestion(data);
         if (data.solutions.length !== 0) setCurSolution(data.solutions[0]);
-        console.log(data.solutions)
-        setTabs([
-          {
-            label: "Description",
-            content: <DescriptionTab data={data} setIsAdmin={(b) => setIsAdmin(b)} />
-          },
-          {
-            label: "Solutions",
-            content: <SolutionTab questionId={data.id} solutions={data.solutions} displaySolution={displaySolution} setIsAdmin={(b) => setIsAdmin(b)} />
-          }
-        ]);
+        setActiveTab("Description");
       })
       .catch(err => {
         throw err;
@@ -60,8 +51,30 @@ export default function Question() {
     // });
   }, []);
 
+  const updateQuestion = (newData) => {
+    setQuestion(newData);
+  }
+
   const displaySolution = (data) => {
     setCurSolution(data);
+  }
+
+  const addSolution = (data) => {
+    const updated = [...solutions, data];
+    setSolutions(updated)
+    setCurSolution(updated[updated.length - 1]);
+  }
+
+  const removeSolution = (id) => {
+    const removed = solutions.filter(solution => solution.id !== id)
+    setSolutions(removed);
+    setCurSolution(removed.length !== 0 ? removed[0] : null);
+  }
+
+  const updateSolution = (sId, newData) => {
+    const updated = solutions.map(sln => sln.id === sId ? newData : sln);
+    setSolutions(updated);
+    setCurSolution(newData)
   }
 
   const resizeHor = (e) => {
@@ -89,24 +102,29 @@ export default function Question() {
         flex flex-row max-md:flex-col justify-between items-center">
         <div className="w-3/7 h-full max-md:w-full max-md:h-2/5 p-8 pt-2 overflow-y-auto hide-scrollbar" ref={questionPanel}>
           <div className="flex justify-around items-center mb-4">{
-            tabs.map(({ label }, i) => {
+            ["Description", "Solutions"].map((label, i) => {
               return (
-                <button key={`tab-${label}-${i}`}
+                <button key={`tab-${label}`}
                   className={`bg-transparent rounded-none text-black h-full
-                    ${activeTab === i ? "text-primary border-b-2 border-b-primary" : ""}`}
-                    onClick={() => setActiveTab(i)}>
+                    ${activeTab === label ? "text-primary border-b-2 border-b-primary" : ""}`}
+                    onClick={() => setActiveTab(label)}>
                     {label}
                 </button>
               );
           })}</div>
-          {tabs[activeTab]?.content}
+          {activeTab === "Description"
+            && <DescriptionTab data={question} setIsAdmin={setIsAdmin} updateQuestion={updateQuestion} />}
+          {activeTab === "Solutions"
+            && (<SolutionTab questionId={question.id} solutions={solutions} setIsAdmin={(b) => setIsAdmin(b)}
+              displaySolution={displaySolution} addSolution={addSolution} />)}
         </div>
         <div className="border-gray-300 w-0 h-full border-2 max-md:hidden"
           ref={horDragBar}></div>
         <div className="border-gray-300 w-full h-0 border-2 md:hidden"
           ref={verDragBar}></div>
         <div className="flex-1 w-full h-full bg-white p-8 overflow-y-auto">
-          <Solution data={curSolution} />
+          <Solution questionId={question.id} data={curSolution} setIsAdmin={(b) => setIsAdmin(b)}
+            removeSolution={removeSolution} updateSolution={updateSolution} />
         </div>
       </div>
 
