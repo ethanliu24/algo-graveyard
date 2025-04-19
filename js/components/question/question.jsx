@@ -1,4 +1,6 @@
-import { act, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Toast } from "primereact/toast";
+import { ToastContext } from "../../contexts/toast_context.jsx";
 import Sidebar from "../common/side_bar.jsx";
 import Verify from "../auth/verify.jsx";
 import Solution from "./solution.jsx";
@@ -12,10 +14,12 @@ export default function Question() {
   const [solutions, setSolutions] = useState([]);
   const [activeTab, setActiveTab] = useState("");
   const [isAdmin, setIsAdmin] = useState(true);
+  const [toastReady, setToastReady] = useState(false);
 
   const questionPanel = useRef(null);
   const horDragBar = useRef(null);
   const verDragBar = useRef(null);
+  const toastRef = useRef(null);
 
   useEffect(() => {
     const req = {
@@ -50,6 +54,12 @@ export default function Question() {
     //   document.removeEventListener("mousemove", resizeVer);
     // });
   }, []);
+
+  useEffect(() => {
+    if (toastRef.current) {
+      setToastReady(true);
+    }
+  }, [toastRef.current]);
 
   const updateQuestion = (newData) => {
     setQuestion(newData);
@@ -97,41 +107,46 @@ export default function Question() {
 
   return (
     <div className="flex justify-center items-center gap-0 w-full h-screen">
-      <Sidebar open={false} />
-      <div className="flex-1 w-full h-full text-sm bg-white
-        flex flex-row max-md:flex-col justify-between items-center">
-        <div className="w-3/7 h-full max-md:w-full max-md:h-2/5 p-8 pt-2 overflow-y-auto hide-scrollbar" ref={questionPanel}>
-          <div className="flex justify-around items-center mb-4">{
-            ["Description", "Solutions"].map((label, i) => {
-              return (
-                <button key={`tab-${label}`}
-                  className={`bg-transparent rounded-none text-black h-full
-                    ${activeTab === label ? "text-primary border-b-2 border-b-primary" : ""}`}
-                    onClick={() => setActiveTab(label)}>
-                    {label}
-                </button>
-              );
-          })}</div>
-          {activeTab === "Description"
-            && <DescriptionTab data={question} setIsAdmin={setIsAdmin} updateQuestion={updateQuestion} />}
-          {activeTab === "Solutions"
-            && (<SolutionTab questionId={question.id} solutions={solutions} setIsAdmin={(b) => setIsAdmin(b)}
-              displaySolution={displaySolution} addSolution={addSolution} />)}
-        </div>
-        <div className="border-gray-300 w-0 h-full border-2 max-md:hidden"
-          ref={horDragBar}></div>
-        <div className="border-gray-300 w-full h-0 border-2 md:hidden"
-          ref={verDragBar}></div>
-        <div className="flex-1 w-full h-full bg-white p-8 overflow-y-auto">
-          <Solution questionId={question.id} data={curSolution} setIsAdmin={(b) => setIsAdmin(b)}
-            removeSolution={removeSolution} updateSolution={updateSolution} />
-        </div>
-      </div>
+      <ToastContext.Provider value={toastRef}>
+        {toastReady && <>
+          <Sidebar open={false} />
+          <div className="w-full h-full text-sm bg-white
+            flex flex-row max-md:flex-col justify-between items-center">
+            <div className="w-3/7 h-full max-md:w-full max-md:h-2/5 p-8 pt-2 overflow-y-auto hide-scrollbar" ref={questionPanel}>
+              <div className="flex justify-around items-center mb-4">{
+                ["Description", "Solutions"].map((label, i) => {
+                  return (
+                    <button key={`tab-${label}`}
+                      className={`bg-transparent rounded-none text-black h-full
+                        ${activeTab === label ? "text-primary border-b-2 border-b-primary" : ""}`}
+                        onClick={() => setActiveTab(label)}>
+                        {label}
+                    </button>
+                  );
+              })}</div>
+              {activeTab === "Description"
+                && <DescriptionTab data={question} setIsAdmin={setIsAdmin} updateQuestion={updateQuestion} />}
+              {activeTab === "Solutions"
+                && (<SolutionTab questionId={question.id} solutions={solutions} setIsAdmin={(b) => setIsAdmin(b)}
+                  displaySolution={displaySolution} addSolution={addSolution} />)}
+            </div>
+            <div className="border-gray-300 w-0 h-full border-2 max-md:hidden"
+              ref={horDragBar}></div>
+            <div className="border-gray-300 w-full h-0 border-2 md:hidden"
+              ref={verDragBar}></div>
+            <div className="flex-1 w-full h-full bg-white p-8 overflow-y-auto">
+              <Solution questionId={question.id} data={curSolution} setIsAdmin={(b) => setIsAdmin(b)}
+                removeSolution={removeSolution} updateSolution={updateSolution} />
+            </div>
+          </div>
 
-      {!isAdmin
-        ? <Verify closable={true} closeComponent={() => setIsAdmin(true)}
+          {!isAdmin
+            ? <Verify closable={true} closeComponent={() => setIsAdmin(true)}
             positionStyle="fixed top-0 right-0 m-8" className="text-base" />
-        : null}
+            : null}
+        </>}
+      </ToastContext.Provider>
+      <Toast ref={toastRef} position="bottom-right" />
     </div>
   );
 }

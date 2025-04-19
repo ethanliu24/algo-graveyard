@@ -3,15 +3,18 @@ import { faCheck, faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ModalContainer from "../common/modal";
 import SolutionForm from "./solution_form";
+import { useToastContext } from "../../contexts/toast_context";
 import { formatDate } from "../../utils/utils";
 import { getLanguageIcon } from "../../utils/assets";
 
 export default function SolutionTab(props) {
   const [openForm, setOpenForm] = useState(false);
+  const toast = useToastContext();
 
   const creationSucess = (slnData) => {
     setOpenForm(false);
     props.addSolution(slnData);
+    toast.show({ severity: "success", summary: "Success", className: "success", detail: "Solution created!" });
   }
 
   return (

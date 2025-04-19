@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## Version 0.0.1
+- Add a single toast context for children to consume (#41)
 - Add UI for deleting and updating solutions (#40)
 - Display solutions (#39)
 - Add UI for deleting and updating questions (#38)
