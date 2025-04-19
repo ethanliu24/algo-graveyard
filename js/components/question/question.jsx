@@ -1,13 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import Sidebar from "../common/side_bar.jsx";
 import Verify from "../auth/verify.jsx";
-import Description from "./description_tab.jsx";
+import Solution from "./solution.jsx";
+import DescriptionTab from "./description_tab.jsx";
 import SolutionTab from "./solutions_tab.jsx";
 import { getReqHeader } from "../../utils/utils.js";
-import DescriptionTab from "./description_tab.jsx";
 
 export default function Question() {
   const [tabs, setTabs] = useState([]);
+  const [solutions, setSolutions] = useState([]);
+  const [curSolution, setCurSolution] = useState(null);
   const [activeTab, setActiveTab] = useState(0);
   const [isAdmin, setIsAdmin] = useState(true);
 
@@ -25,6 +27,9 @@ export default function Question() {
       .then(res => res.json())
       .then(data => {
         document.title = data.title;
+        setSolutions(data.solutions);
+        if (data.solutions.length !== 0) setCurSolution(data.solutions[0]);
+        console.log(data.solutions)
         setTabs([
           {
             label: "Description",
@@ -32,7 +37,7 @@ export default function Question() {
           },
           {
             label: "Solutions",
-            content: <SolutionTab questionId={data.id} solutions={data.solutions} setIsAdmin={(b) => setIsAdmin(b)} />
+            content: <SolutionTab questionId={data.id} solutions={data.solutions} displaySolution={displaySolution} setIsAdmin={(b) => setIsAdmin(b)} />
           }
         ]);
       })
@@ -54,6 +59,10 @@ export default function Question() {
       document.removeEventListener("mousemove", resizeVer);
     });
   }, []);
+
+  const displaySolution = (data) => {
+    setCurSolution(data);
+  }
 
   const resizeHor = (e) => {
     const containerLeft = questionPanel.current.getBoundingClientRect().left;
@@ -96,7 +105,9 @@ export default function Question() {
           ref={horDragBar}></div>
         <div className="border-gray-300 hover:border-primary w-full h-0 border-2 cursor-ns-resize md:hidden"
           ref={verDragBar}></div>
-        <div className="flex-1 w-full bg-white"></div>
+        <div className="flex-1 w-full h-full bg-white p-8 overflow-y-auto">
+          <Solution data={curSolution} />
+        </div>
       </div>
 
       {!isAdmin

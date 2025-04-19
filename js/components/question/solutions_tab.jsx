@@ -21,7 +21,8 @@ export default function SolutionTab(props) {
       {solutions.map((sln, i) => {
         return (
           <div className="flex justify-start items-center gap-4 min-w-full w-fit hover:bg-gray-200 cursor-pointer
-            px-4 py-2 text-[12px] rounded select-none">
+            px-4 py-2 text-[12px] rounded select-none"
+            onClick={() => props.displaySolution(sln)}>
             <div className="text-gray-500">{i + 1}</div>
             <FontAwesomeIcon icon={sln.accepted ? faCheck : faX} color={sln.accepted ? "#6bd177" : "#eb4b63"} />
             <div className="flex-1">
