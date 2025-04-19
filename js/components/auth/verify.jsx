@@ -53,7 +53,7 @@ export default function Verify(props) {
     }
 
     verificationRes.show(result);
-  };
+  };  
 
   return (
     <div className={`flex flex-col justify-center items-center w-fit h-fit rounded-sm

@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Dropdown, MultiSelect } from "../common/drop_down.jsx";
 import { getReqHeader, formatQueries } from "../../utils/utils";
 import QuestionHelper, { HelperStrTemplate } from "./question_helpers.jsx";
+import { useToastContext } from "../../contexts/toast_context.jsx";
 import Verify from "../auth/verify.jsx";
 
 export default function QuestionForm(props) {
@@ -21,6 +22,8 @@ export default function QuestionForm(props) {
   // const [testCases, setTestCases] = useState([]);
   const [metadata, setMetadata] = useState({});
   const [showVerify, setShowVerify] = useState(false);
+
+  const toast = useToastContext();
 
   useEffect(() => {
     getMetadata();
@@ -96,16 +99,33 @@ export default function QuestionForm(props) {
   };
 
   const isFormValid = (data) => {
-    // TODO show toast here
     if (data.link !== "") {
-      alert("handle source is valid");
+      if (!data.source) {
+        toast.show({ severity: "danger", summary: "Error", className: "error", detail: "Source must be selected" });
+      }
+
       return data.source !== "";
     }
 
-    if (!data.difficulty || !data.status || !data.source ||
-        data.title.length === 0 || data.title.length > 50 ||
-        data.prompt.length === 0) {
-      alert("invalid data");
+    if (!data.difficulty || !data.status || !data.source) {
+      let msg = [
+        !data.source && "Source",
+        !data.difficulty && "Difficulty",
+        !data.status && "Status"
+      ].filter(Boolean).join(", ");
+      msg += " must be selected."
+
+      toast.show({ severity: "danger", summary: "Error", className: "error", detail:  msg });
+      return false;
+    }
+
+    if (data.title.length === 0 || data.title.length > 70) {
+      toast.show({ severity: "danger", summary: "Error", className: "error", detail: "There must be a title and should be under 70 characters." });
+      return false;
+    }
+
+    if (data.prompt.length === 0) {
+      toast.show({ severity: "danger", summary: "Error", className: "error", detail: "Question prompt must be entered." });
       return false;
     }
 
@@ -123,10 +143,8 @@ export default function QuestionForm(props) {
       .then(response => {
         if (!response.ok) {
           if (response.status == 401 || response.status === 403) {
-            alert("Show unauthed Toast");
+            toast.show({ severity: "danger", summary: "Error", className: "error", detail: "You are not authorized to perform this action." });
             setShowVerify(true);
-          } else {
-            alert("Error handling");
           }
         }
 
@@ -137,7 +155,7 @@ export default function QuestionForm(props) {
         if (data.id) {  // This means creation was successful
           window.location.href = `/questions/${data.id}`;
         } else {
-          alert("print errors in toast");
+          toast.show({ severity: "danger", summary: "Error", className: "error", detail: data.detail });
         }
       })
       .catch(err => {
@@ -154,23 +172,22 @@ export default function QuestionForm(props) {
 
     fetch(`/api/questions/${props.questionId}`, req)
       .then(response => {
-        if (response.ok) {
-          alert("show successful toast");
-          return response;
-        } else {
-          if (response.status == 401) {
-            alert("show unauthed toast");
-            setShowVerify(true);
-          } else {
-            alert(response.status);
-          }
-
-          return null;
+        if (response.status == 401 || response.status === 403) {
+          setShowVerify(true);
         }
+
+        return response;
       })
-      .then(res => res ? res.json() : null)
-      .then(json => {
-        if (json) props.updateSuccessful(json);
+      .then(res => res.json())
+      .then(data => {
+        if (data.id) {
+          toast.show({ severity: "success", summary: "Success", className: "success", detail: "Question updated!" });
+          props.updateSuccessful(data);
+        }
+
+        if (data.detail) {
+          toast.show({ severity: "danger", summary: "Error", className: "error", detail: data.detail });
+        }
       })
       .catch(err => {
         throw err

@@ -6,11 +6,13 @@ import { Tooltip } from "react-tooltip";
 import TextDisplay from "../common/text_display";
 import ModalContainer from "../common/modal";
 import SolutionForm from "./solution_form";
+import { useToastContext } from "../../contexts/toast_context";
 import { formatDate, getLanguageHighlighter, getReqHeader } from "../../utils/utils";
 
 export default function Solution(props) {
   const [openForm, setOpenForm] = useState(false);
   const [editorHeight, setEditorHeight] = useState(200);
+  const toast = useToastContext();
 
   const containerRef = useRef(null);
   const editorRef = useRef(null);
@@ -51,14 +53,18 @@ export default function Solution(props) {
 
     fetch(`/api/questions/${props.questionId}/solutions/${props.data.id}`, req)
       .then(response => {
-        if (response.ok) {
-          alert("toast delete successful");
-          props.removeSolution(props.data.id);
-        } else if (response.status == 401 || response.status === 403) {
-          alert("ur not admin lmao");
+        if (response.status == 401 || response.status === 403) {
           props.setIsAdmin(false);
-        } else {
-          alert("handle error del q");
+        }
+
+        return response.json();
+      })
+      .then(json => {
+        if (json === null) {  // delete successful
+          toast.show({ severity: "success", summary: "Success", className: "success", detail: "Solution deleted!" });
+          props.removeSolution(props.data.id);
+        } else if (json.detail) {
+          toast.show({ severity: "danger", summary: "Error", className: "error", detail: json.detail });
         }
       })
       .catch(err => {
@@ -69,6 +75,7 @@ export default function Solution(props) {
   const updateSuccess = (newData) => {
     props.updateSolution(newData.id, newData);
     setOpenForm(false);
+    toast.show({ severity: "success", summary: "Success", className: "success", detail: "Solution updated!" });
   };
 
   return (!props.data
