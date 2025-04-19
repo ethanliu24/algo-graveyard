@@ -7,7 +7,7 @@ export function getReqHeader() {
 }
 
 export function capitalizeFirst(s) {
-  return s.charAt(0).toUpperCase() + s.slice(1);
+  return typeof s !== "string" ? s : s.charAt(0).toUpperCase() + s.slice(1);
 };
 
 export function formatDate(dateStr) {
