@@ -7,13 +7,9 @@ import TextDisplay from "../common/text_display";
 import { formatDate, getLanguageHighlighter } from "../../utils/utils";
 
 export default function Solution(props) {
-  const handleDelete = () => {
-
-  }
-
+  const [height, setHeight] = useState(200);
   const containerRef = useRef(null);
   const editorRef = useRef(null);
-  const [height, setHeight] = useState(200); // default height
 
   const handleEditorDidMount = (editor) => {
     editorRef.current = editor;
@@ -39,6 +35,10 @@ export default function Solution(props) {
     }
   }, [height]);
 
+  const handleDelete = () => {
+
+  }
+
   return (!props.data
     ? (
       <div className="flex justify-center items-center w-full h-full">
@@ -49,7 +49,7 @@ export default function Solution(props) {
       <div>
         <h1 className="text-xl text-wrap mb-2">{props.data.summary}</h1>
         <div className="flex justify-start items-stretch gap-2 mb-4">
-          <div className="chip w-fit">{formatDate(props.data.last_modified)}</div>
+          <div className="chip w-fit text-nowrap">{formatDate(props.data.last_modified)}</div>
           <button className="chip p-1 hover:bg-gray-300 text-black"
             onClick={() => setOpenModal(true)}
             data-tooltip-id="edit-solution" data-tooltip-content="Edit solution">
@@ -81,6 +81,7 @@ export default function Solution(props) {
               domReadOnly: true,
               minimap: { enabled: false },
               scrollBeyondLastLine: false,
+              wordWrap: "on"
             }}
             value={props.data.code}
             theme="vs-dark"
