@@ -6,7 +6,8 @@ from typing import Annotated
 from ..config import get_question_service, auth_user_jwt
 from ..exceptions.entity_not_found import EntityNotFoundError
 from ..managers.question_manager import QuestionManager
-from ..schemas.question import Question, QuestionCreate, QuestionAll, Source, Difficulty, Status, Tag
+from ..schemas.pagination import Pagination
+from ..schemas.question import Question, QuestionCreate, Source, Difficulty, Status, Tag
 
 router = APIRouter(
     prefix="/questions",
@@ -26,7 +27,7 @@ async def get_all_questions(
     page: Annotated[int | None, Query()] = None,
     per_page: Annotated[int | None, Query()] = None,
     paginate: Annotated[bool | None, Query()] = None,
-) -> QuestionAll:
+) -> Pagination:
     try:
         return await question_service.get_all_questions(
             source=source,

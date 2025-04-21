@@ -1,5 +1,7 @@
+from google.cloud import firestore
 from typing import Any
-from ..schemas.question import Question, QuestionBasicInfo
+from ..schemas.question import Question, Source, Difficulty, Status, Tag
+from ..schemas.solution import Solution
 
 class QuestionDAO:
     db: Any
@@ -11,18 +13,41 @@ class QuestionDAO:
         self.question_collection = question_collection
         self.solution_collection = solution_collection
 
-    def get_all_questions(self) -> list[QuestionBasicInfo]:
-        # TODO implement filter, use where() function
-        # TODO implement pagination
-        questions = self.db.collection(self.question_collection).get()
+    def get_all_questions(
+        self,
+        source: Source,
+        difficulty: Difficulty,
+        status: Status,
+        tags: list[Tag],
+        search: str,
+        sort_by: str,
+        order: str,
+        page: int,
+        per_page: int,
+    ) -> list[Question]:
+        query = self.db.collection(self.question_collection)
+        query.where("tags", "array_contains", [t.value for t in tags])
+
+        if difficulty is not None:
+            query.where("difficulty", "==", difficulty.value)
+        if source is not None:
+            query.where("source", "==", source.value)
+        if status is not None:
+            query.where("status", "==", status.value)
+
+        sort_dir = firestore.Query.DESCENDING if order == 'desc' else firestore.Query.ASCENDING
+        questions = \
+            query.order_by(sort_by, direction=sort_dir) \
+            .offset((page - 1) * per_page) \
+            .limit(per_page) \
+            .stream()
+
         res = []
         for q_data in questions:
             d = q_data.to_dict()
-            d.update({ "solutions": [] })  # What the solution is doesn't matter
-            q = Question(**d)
-            data = {"id": q.id, "source": q.source.value, "difficulty": q.difficulty.value, "status": q.status.value,
-                    "title": q.title, "tags": q.tags, "created_at": q.created_at, "last_modified": q.last_modified}
-            res.append(QuestionBasicInfo(**data))
+            if search not in d["title"]: continue
+            d.update({ "solutions": [Solution(**sln) for sln in d["solutions"]] })
+            res.append(Question(**d))
         return res
 
     def get_question(self, id: str) -> Question:

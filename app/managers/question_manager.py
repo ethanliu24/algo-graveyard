@@ -24,31 +24,25 @@ class QuestionManager(object):
         page: int | None = None,
         per_page: int | None = None,
         paginate: bool | None = True
-    ) -> QuestionAll:
+    ) -> Pagination:
         # initialize query params
         tags = tags or []
         search = search or ""
-        sort_by_provided, sort_by = sort_by is not None, sort_by or "created_at"
+        sort_by = sort_by or "created_at"
         order = order or "asc"
         page = min(50, page) if page is not None else 1
         per_page = max(1, per_page) if per_page is not None else 20
         paginate = paginate if paginate is not None else True
 
-        # I am broke as fuck. I can't afford firebase queries. Efficiency ain't shit.
         if order not in ["asc", "desc"]:
             raise ValueError(f"Invalid order value {order}. Must be 'asc' or 'desc'.")
         if sort_by not in ["created_at", "difficulty", "title"]:
             raise ValueError(f"Invalid order value {order}. Must be 'created_at', 'difficulty' or 'title'.")
 
-        questions = self.question_dao.get_all_questions()
-        questions = self._filter_questions(questions, source, difficulty, status, tags, search)
-        # sorts questions in descending order by created_at sort by isn't provided
-        self._sort_questions(questions, sort_by, "desc" if not sort_by_provided else order)
-
-        return QuestionAll(**{
-            "paginated": False,
-            "data": questions if not paginate else self._paginate_questions(questions, page, per_page)
-        })
+        questions = self.question_dao.get_all_questions(
+            source, difficulty, status, tags, search, sort_by, order, page, per_page
+        )
+        return self._paginate_questions(questions, page, per_page)
 
     async def get_question(self, id: str) -> Question:
         question = self.question_dao.get_question(id)

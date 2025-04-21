@@ -65,7 +65,6 @@ export default function QuestionPanel() {
 
     return await fetch(`/api/questions?${formatQueries(queries)}`, req)
       .then(res => res.json())
-      .then(json => json.data)
       .catch(err => {
         throw err;
       })
