@@ -1,7 +1,7 @@
 import json
 import pytest
 
-from app.schemas.question import Question, QuestionBasicInfo, Difficulty
+from app.schemas.question import Question, Difficulty
 from tests.seed import QUESTIONS
 
 API = "/api/questions"
@@ -10,13 +10,13 @@ API = "/api/questions"
 @pytest.mark.asyncio
 async def test_get_all_questions_no_filter(endpoint):
     """ Test the properties of the result of the endpoint to get all questions_no_filter """
-    response = endpoint.get(f"{API}?paginate=false")
+    response = endpoint.get(f"{API}")
     assert response.status_code == 200
     data = response.json()["data"]
     assert len(data) > 0
     assert isinstance(data, list)
     for d in data:
-        QuestionBasicInfo(**d)  # validate
+        Question(**d)  # validate
 
 
 @pytest.mark.asyncio
@@ -221,7 +221,7 @@ async def test_pagination_query_all_pages(endpoint):
     """ Test pagination and query all pages. """
     response = endpoint.get(f"{API}")
     assert response.status_code == 200
-    pagination = response.json()["data"]
+    pagination = response.json()
 
     last_page = 1
     last_res = pagination["data"]
@@ -237,9 +237,9 @@ async def test_pagination_query_all_pages(endpoint):
 async def test_pagination_last_page(endpoint):
     """ Test pagination if requested beyond the total page size. """
     response = endpoint.get(f"{API}")
-    total_pages = response.json()["data"]["page"]
-    res1 = endpoint.get(f"{API}?page={total_pages}").json()["data"]["data"]
-    res2 = endpoint.get(f"{API}?page={total_pages + 100}").json()["data"]["data"]
+    total_pages = response.json()["pages"]
+    res1 = endpoint.get(f"{API}?page={total_pages}").json()["data"]
+    res2 = endpoint.get(f"{API}?page={total_pages + 100}").json()["data"]
     assert res1 == res2
 
 
@@ -248,7 +248,7 @@ async def test_pagination_one_per_page(endpoint):
     """ Test pagination quering one per page. """
     response = endpoint.get(f"{API}")
     assert response.status_code == 200
-    pagination = response.json()["data"]
+    pagination = response.json()
 
     total_pages = pagination["pages"]
     last_page = 1
@@ -268,7 +268,7 @@ async def test_pagination_no_results(endpoint):
     """ Test pagination but no results are returned in the query. """
     response = endpoint.get(f"{API}?search=no_pagination_results")
     assert response.status_code == 200
-    pagination = response.json()["data"]
+    pagination = response.json()
     assert pagination["data"] == []
     assert pagination["page"] == 1
     assert pagination["pages"] == 1
@@ -281,7 +281,7 @@ async def test_search_questions(endpoint):
     """ Testing if searching questions works. """
     response = endpoint.get(f"{API}?per_page=20&search=paginate")
     assert response.status_code == 200
-    pagination = response.json()["data"]
+    pagination = response.json()
     assert pagination["total"] == 6
     assert len(pagination["data"]) == 6
     assert pagination["pages"] == 1
@@ -292,7 +292,7 @@ async def test_search_no_questions(endpoint):
     """ Testing if searching questions returns nothing if no questions match. """
     response = endpoint.get(f"{API}?per_page=20&search=paginate_no_match")
     assert response.status_code == 200
-    pagination = response.json()["data"]
+    pagination = response.json()
     assert pagination["total"] == 0
     assert len(pagination["data"]) == 0
     assert pagination["pages"] == 1
@@ -303,7 +303,7 @@ async def test_search_case_sensitive(endpoint):
     """ Test if search returns right result when it's not case sensitive. """
     response = endpoint.get(f"{API}?per_page=20&search=space")
     assert response.status_code == 200
-    pagination = response.json()["data"]
+    pagination = response.json()
     assert len(pagination["data"]) == 1
 
 
@@ -312,7 +312,7 @@ async def test_search_title_with_space(endpoint):
     """ Test with a space in the search value. """
     response = endpoint.get(f"{API}?per_page=20&search=Space%20Here")
     assert response.status_code == 200
-    pagination = response.json()["data"]
+    pagination = response.json()
     assert len(pagination["data"]) == 1
 
 
@@ -322,7 +322,7 @@ async def test_filtering_for_source(endpoint):
     """ Test filtering for source. """
     response = endpoint.get(f"{API}?per_page=20&search=paginate&source=leetcode")
     assert response.status_code == 200
-    pagination = response.json()["data"]
+    pagination = response.json()
     assert len(pagination["data"]) == 6
 
 
@@ -331,7 +331,7 @@ async def test_filtering_for_difficulty(endpoint):
     """ Test filtering for difficulty. """
     response = endpoint.get(f"{API}?per_page=20&search=paginate&difficulty=hard")
     assert response.status_code == 200
-    pagination = response.json()["data"]
+    pagination = response.json()
     assert len(pagination["data"]) == 1
 
 
@@ -340,7 +340,7 @@ async def test_filtering_for_status(endpoint):
     """ Test filtering for status. """
     response = endpoint.get(f"{API}?per_page=20&search=paginate&status=unoptimized")
     assert response.status_code == 200
-    pagination = response.json()["data"]
+    pagination = response.json()
     assert len(pagination["data"]) == 3
 
 
@@ -349,7 +349,7 @@ async def test_filtering_for_tags(endpoint):
     """ Test filtering for status. """
     response = endpoint.get(f"{API}?per_page=20&search=paginate&tags=graph&tags=dfs")
     assert response.status_code == 200
-    pagination = response.json()["data"]
+    pagination = response.json()
     assert len(pagination["data"]) == 5
 
 
@@ -357,10 +357,10 @@ async def test_filtering_for_tags(endpoint):
 async def test_filtering_without_search(endpoint):
     """ Test filtering without a search value. """
     response = endpoint.get(f"{API}?per_page=20&difficulty=easy")
-    pagination = response.json()["data"]
+    pagination = response.json()
     response = endpoint.get(f"{API}?per_page=20&paginate=false")  # get everything as a list
-    questions = response.json()["data"]
-    count = sum(1 for q in questions if q["difficulty"] == "easy")
+    questions = response.json()
+    count = sum(1 for q in questions["data"] if q["difficulty"] == "easy")
     assert len(pagination["data"]) == count
 
 
@@ -368,9 +368,9 @@ async def test_filtering_without_search(endpoint):
 async def test_multiple_filters(endpoint):
     """ Test filtering with a combination of the filters. """
     response = endpoint.get(f"{API}?per_page=20&search=paginate&source=leetcode&difficulty=easy&status=completed&tags=graph")
-    pagination = response.json()["data"]
+    pagination = response.json()
     assert response.status_code == 200
-    pagination = response.json()["data"]
+    pagination = response.json()
     assert len(pagination["data"]) == 1
 
 
@@ -381,13 +381,13 @@ async def test_sorting_by_created_at(endpoint):
     # check asc
     response = endpoint.get(f"{API}?per_page=20&search=paginate&sort_by=created_at&order=asc")
     assert response.status_code == 200
-    questions = response.json()["data"]["data"]
+    questions = response.json()["data"]
     assert all([questions[i-1]["created_at"] <= questions[i]["created_at"] for i in range(1, len(questions))])
 
     # check desc
     response = endpoint.get(f"{API}?per_page=20&sort_by=created_at&order=desc")
     assert response.status_code == 200
-    questions = response.json()["data"]["data"]
+    questions = response.json()["data"]
     assert all([questions[i-1]["created_at"] >= questions[i]["created_at"] for i in range(1, len(questions))])
 
 
@@ -399,13 +399,13 @@ async def test_sorting_by_difficulty(endpoint):
     # check asc
     response = endpoint.get(f"{API}?per_page=20&sort_by=difficulty&order=asc")
     assert response.status_code == 200
-    questions = response.json()["data"]["data"]
+    questions = response.json()["data"]
     assert all([prio[questions[i-1]["difficulty"]] <= prio[questions[i]["difficulty"]] for i in range(1, len(questions))])
 
     # check desc
     response = endpoint.get(f"{API}?per_page=20&search=paginate&sort_by=difficulty&order=desc")
     assert response.status_code == 200
-    questions = response.json()["data"]["data"]
+    questions = response.json()["data"]
     assert all([prio[questions[i-1]["difficulty"]] >= prio[questions[i]["difficulty"]] for i in range(1, len(questions))])
 
 
@@ -415,13 +415,13 @@ async def test_sorting_by_title(endpoint):
     # check asc
     response = endpoint.get(f"{API}?per_page=20&search=paginate&sort_by=title&order=asc")
     assert response.status_code == 200
-    questions = response.json()["data"]["data"]
+    questions = response.json()["data"]
     assert all([questions[i-1]["title"] <= questions[i]["title"] for i in range(1, len(questions))])
 
     # check desc
     response = endpoint.get(f"{API}?per_page=20&sort_by=title&order=desc")
     assert response.status_code == 200
-    questions = response.json()["data"]["data"]
+    questions = response.json()["data"]
     assert all([questions[i-1]["title"] >= questions[i]["title"] for i in range(1, len(questions))])
 
 
@@ -447,5 +447,5 @@ async def test_sorting_default(endpoint):
     # check asc
     response = endpoint.get(f"{API}?")
     assert response.status_code == 200
-    questions = response.json()["data"]["data"]
-    assert all([questions[i-1]["created_at"] >= questions[i]["created_at"] for i in range(1, len(questions))])
+    questions = response.json()["data"]
+    assert all([questions[i-1]["last_modified"] >= questions[i]["last_modified"] for i in range(1, len(questions))])

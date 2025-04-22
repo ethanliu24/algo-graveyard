@@ -48,9 +48,9 @@ class Configs:
                 cls.solution_collection
             )
 
-            cls.question_manager = QuestionManager(cls.question_dao)
-            cls.solution_manager = SolutionManager(cls.solution_dao)
             cls.metadata_manager = MetadataManager()
+            cls.question_manager = QuestionManager(cls.question_dao, cls.metadata_manager)
+            cls.solution_manager = SolutionManager(cls.solution_dao)
             cls.auth_manager = AuthManager(
                 ENV_VARS.get("APP_SECRET"),
                 ENV_VARS.get("JWT_SIGNITURE"),

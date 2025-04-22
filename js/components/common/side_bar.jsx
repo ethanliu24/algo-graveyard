@@ -20,7 +20,9 @@ export default function Sidebar(props) {
     localStorage.setItem("openSidebar", JSON.stringify(props.open));
 
     window.addEventListener("resize", () => {
-      setIsOpen(window.innerWidth > 768);
+      if (window.innerWidth <= 768) {
+        setIsOpen(false);
+      }
     });
 
     return () => {
