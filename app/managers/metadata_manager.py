@@ -10,12 +10,16 @@ class MetadataManager:
         statuses: bool | None = False,
         tags: bool | None = False,
         languages: bool | None = False,
+        sort_by: bool | None = False,
+        order: bool | None = False,
     ) -> dict[str, list[Any]]:
         sources = sources if sources is not None else False
         difficulties = difficulties if difficulties is not None else False
         statuses = statuses if statuses is not None else False
         tags = tags if tags is not None else False
         languages = languages if languages is not None else False
+        sort_by = sort_by if sort_by is not None else False
+        order = order if order is not None else False
 
         metadata = {}
         if sources: metadata.update({ "sources": self.get_sources() })
@@ -23,6 +27,8 @@ class MetadataManager:
         if statuses: metadata.update({ "statuses": self.get_statuses() })
         if tags: metadata.update({ "tags": self.get_tags() })
         if languages: metadata.update({ "languages": self.get_languages() })
+        if languages: metadata.update({ "sort_by": self.get_sort_by() })
+        if languages: metadata.update({ "order": self.get_order() })
 
         return metadata
 
@@ -40,3 +46,9 @@ class MetadataManager:
 
     def get_languages(self) -> list[str]:
         return [language.value for language in Language]
+
+    def get_sort_by(self) -> list[str]:
+        return ["created_at", "difficulty", "title"]
+
+    def get_order(self) -> list[str]:
+        return ["asc", "desc"]

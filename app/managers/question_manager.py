@@ -1,16 +1,19 @@
 from math import ceil
 from datetime import datetime, timezone
+from .metadata_manager import MetadataManager
 from ..daos.question_dao import QuestionDAO
 from ..exceptions.entity_not_found import EntityNotFoundError
 from ..schemas.pagination import Pagination
-from ..schemas.question import Question, QuestionCreate, QuestionBasicInfo, QuestionAll, \
+from ..schemas.question import Question, QuestionCreate, QuestionBasicInfo, \
     Source, Difficulty, Status, Tag
 
 class QuestionManager(object):
     question_dao: QuestionDAO
+    metadata_manager: MetadataManager
 
-    def __init__(self, question_dao: QuestionDAO):
+    def __init__(self, question_dao: QuestionDAO, metadata_manager: MetadataManager):
         self.question_dao = question_dao
+        self.metadata_manager = metadata_manager
 
     async def get_all_questions(
         self,
@@ -34,10 +37,10 @@ class QuestionManager(object):
         per_page = max(1, per_page) if per_page is not None else 20
         paginate = paginate if paginate is not None else True
 
-        if order not in ["asc", "desc"]:
-            raise ValueError(f"Invalid order value {order}. Must be 'asc' or 'desc'.")
-        if sort_by not in ["created_at", "difficulty", "title"]:
-            raise ValueError(f"Invalid order value {order}. Must be 'created_at', 'difficulty' or 'title'.")
+        if order not in self.metadata_manager.get_order():
+            raise ValueError(f"Invalid order value {order}. Valid values: {self.metadata_manager.get_order()}.")
+        if sort_by not in self.metadata_manager.get_sort_by():
+            raise ValueError(f"Invalid order value {order}. Valid values: {self.metadata_manager.get_sort_by()}.")
 
         questions = self.question_dao.get_all_questions(
             source, difficulty, status, tags, search, sort_by, order, page, per_page

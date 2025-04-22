@@ -16,5 +16,7 @@ async def get_all_metadata(
     statuses: Annotated[bool | None, Query] = None,
     tags: Annotated[bool | None, Query] = None,
     languages: Annotated[bool | None, Query] = None,
+    sort_by: Annotated[bool | None, Query] = None,
+    order: Annotated[bool | None, Query] = None,
 ) -> dict[str, list[Any]]:
-    return metadata_service.get_metadata(sources, difficulties, statuses, tags, languages)
+    return metadata_service.get_metadata(sources, difficulties, statuses, tags, languages, sort_by, order)
