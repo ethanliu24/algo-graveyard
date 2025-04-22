@@ -15,9 +15,9 @@ class QuestionDAO:
 
     def get_all_questions(
         self,
-        source: Source,
-        difficulty: Difficulty,
-        status: Status,
+        source: Source | None,
+        difficulty: Difficulty | None,
+        status: Status | None,
         tags: list[Tag],
         search: str,
         sort_by: str,

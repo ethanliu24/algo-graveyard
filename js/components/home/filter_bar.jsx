@@ -24,7 +24,7 @@ export default function FilterBar(props) {
     if (tags.length !== 0) query = { ...query, tags: tags };
     if (search) query = { ...query, search: search };
     if (sortBy) query = { ...query, sort_by: sortBy };
-    query = { ...query, search: asc ? "asc" : "desc" };
+    query = { ...query, order: asc ? "asc" : "desc" };
 
     props.searchQuestions(query);
   };
