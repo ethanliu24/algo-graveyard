@@ -58,12 +58,23 @@ export default function QuestionPanel() {
   };
 
   const getQuestions = async (queries = {}) => {
+    const tagsQueryStr = (tags) => {
+      if (!Array.isArray(tags)) return ""
+      const individualQuery = tags.map(tag => `tags=${tag}`);
+      return individualQuery.join("&");
+    };
+
     const req = {
       method: "GET",
       headers: getReqHeader(),
     }
 
-    return await fetch(`/api/questions?${formatQueries(queries)}`, req)
+    const t = queries.tags;
+    delete queries.tags;
+    let queryStr = formatQueries(queries) + "&";
+    queryStr += tagsQueryStr(t);
+
+    return await fetch(`/api/questions?${queryStr}`, req)
       .then(res => res.json())
       .catch(err => {
         throw err;

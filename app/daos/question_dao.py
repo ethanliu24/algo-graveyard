@@ -26,14 +26,13 @@ class QuestionDAO:
         per_page: int,
     ) -> list[Question]:
         query = self.db.collection(self.question_collection)
-        query.where("tags", "array_contains", [t.value for t in tags])
 
         if difficulty is not None:
-            query.where("difficulty", "==", difficulty.value)
+            query = query.where("difficulty", "==", difficulty.value)
         if source is not None:
-            query.where("source", "==", source.value)
+            query = query.where("source", "==", source.value)
         if status is not None:
-            query.where("status", "==", status.value)
+            query = query.where("status", "==", status.value)
 
         sort_dir = firestore.Query.DESCENDING if order == 'desc' else firestore.Query.ASCENDING
         questions = \
@@ -45,9 +44,21 @@ class QuestionDAO:
         res = []
         for q_data in questions:
             d = q_data.to_dict()
-            if search not in d["title"]: continue
+            if search not in d["title"]:
+                continue
+
             d.update({ "solutions": [Solution(**sln) for sln in d["solutions"]] })
-            res.append(Question(**d))
+            q = Question(**d)
+
+            if not tags:
+                res.append(q)
+                continue
+
+            for tag in tags:
+                if tag.value in d["tags"]:
+                    res.append(q)
+                    break
+
         return res
 
     def get_question(self, id: str) -> Question:
@@ -56,7 +67,8 @@ class QuestionDAO:
             return None
 
         question_data = doc_ref.get().to_dict()
-        solutions_ref = doc_ref.collection(self.solution_collection)
+        solutions_ref = doc_ref.collection(self.solution_collection) \
+            .order_by("last_modified", direction=firestore.Query.DESCENDING)
         solutions = [s.to_dict() for s in solutions_ref.get()]
         question_data.update({ "solutions": solutions })
         return Question(**question_data)

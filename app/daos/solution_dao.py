@@ -1,3 +1,4 @@
+from google.cloud import firestore
 from typing import Any
 from ..schemas.solution import Solution
 
@@ -16,7 +17,8 @@ class SolutionDAO:
         if not q_ref:
             return None
 
-        sol_refs = q_ref.collection(self.solution_collection).stream()
+        sol_refs = q_ref.collection(self.solution_collection) \
+            .order_by("last_modified", direction=firestore.Query.DESCENDING).stream()
         return [Solution(**(sol.to_dict())) for sol in sol_refs]
 
     def get_solution(self, question_id: str, solution_id: str) -> Solution | None:
