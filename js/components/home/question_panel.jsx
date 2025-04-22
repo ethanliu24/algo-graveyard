@@ -12,6 +12,8 @@ export default function QuestionPanel() {
   const [difficulties, setDifficulties] = useState([]);
   const [statuses, setStatuses] = useState([]);
   const [tags, setTags] = useState([]);
+  const [sortOptions, setSortOptions] = useState([]);
+  const [orderOptions, setOrderOptions] = useState([]);
 
 
   useEffect(async () => {
@@ -28,7 +30,9 @@ export default function QuestionPanel() {
       sources: true,
       difficulties: true,
       statuses: true,
-      tags: true
+      tags: true,
+      sort_by: true,
+      order: true,
     };
 
     fetch(`/api/metadata?${formatQueries(metadataQuery)}`, req)
@@ -38,6 +42,8 @@ export default function QuestionPanel() {
         setDifficulties(data.difficulties);
         setStatuses(data.statuses);
         setTags(data.tags);
+        setSortOptions(data.sort_by);
+        setOrderOptions(data.order);
       })
       .catch(err => {
         throw err;
@@ -83,7 +89,8 @@ export default function QuestionPanel() {
 
   return (
     <div>
-      <FilterBar sources={sources} difficulties={difficulties} statuses={statuses} tags={tags} searchQuestions={searchQuestions} />
+      <FilterBar sources={sources} difficulties={difficulties} statuses={statuses} tags={tags}
+        sortOptions={sortOptions} orderOptions={orderOptions} searchQuestions={searchQuestions} />
       <QuestionList questions={questions} />
       <PaginationBoxes page={page} totalPages={totalPages} fetchForPage={fetchForPage} />
     </div>
