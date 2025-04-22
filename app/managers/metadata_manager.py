@@ -11,7 +11,7 @@ class MetadataManager:
         tags: bool | None = False,
         languages: bool | None = False,
         sort_by: bool | None = False,
-        order: bool | None = False,
+        order: bool | None = False
     ) -> dict[str, list[Any]]:
         metadata = {}
         if sources: metadata.update({ "sources": self.get_sources() })
@@ -40,7 +40,7 @@ class MetadataManager:
         return [language.value for language in Language]
 
     def get_sort_by(self) -> list[str]:
-        return ["created_at", "difficulty", "title"]
+        return ["created_at", "last_modified", "difficulty", "title"]
 
     def get_order(self) -> list[str]:
         return ["asc", "desc"]

@@ -1,5 +1,9 @@
 from google.cloud import firestore
+from google.cloud.firestore_v1 import aggregation
+from google.cloud.firestore_v1.base_query import FieldFilter
+from math import ceil
 from typing import Any
+from ..schemas.pagination import Pagination
 from ..schemas.question import Question, Source, Difficulty, Status, Tag
 from ..schemas.solution import Solution
 
@@ -24,42 +28,70 @@ class QuestionDAO:
         order: str,
         page: int,
         per_page: int,
-    ) -> list[Question]:
-        query = self.db.collection(self.question_collection)
+    ) -> Pagination:
+        query = self.db.collection(self.question_collection).offset(0)
 
+        if tags:
+            query = query.where(filter=FieldFilter("tags", "array_contains_any", [t.value for t in tags]))
         if difficulty is not None:
-            query = query.where("difficulty", "==", difficulty.value)
+            query = query.where(filter=FieldFilter("difficulty", "==", difficulty.value))
         if source is not None:
-            query = query.where("source", "==", source.value)
+            query = query.where(filter=FieldFilter("source", "==", source.value))
         if status is not None:
-            query = query.where("status", "==", status.value)
+            query = query.where(filter=FieldFilter("status", "==", status.value))
 
-        sort_dir = firestore.Query.DESCENDING if order == 'desc' else firestore.Query.ASCENDING
-        questions = \
-            query.order_by(sort_by, direction=sort_dir) \
-            .offset((page - 1) * per_page) \
-            .limit(per_page) \
-            .stream()
+        # count number of questions before pagination
+        count_aggregation = aggregation.AggregationQuery(query).count(alias="total")
+        total_questions = 0
+        for result in count_aggregation.get():
+            total_questions += result[0].value
+        total_pages = max(1, ceil(total_questions / per_page))
+        questions = query.stream()
 
         res = []
         for q_data in questions:
             d = q_data.to_dict()
-            if search not in d["title"]:
+            if search.lower() not in d["title"].lower():
+                total_questions -= 1
                 continue
 
             d.update({ "solutions": [Solution(**sln) for sln in d["solutions"]] })
-            q = Question(**d)
 
-            if not tags:
-                res.append(q)
-                continue
+            res.append(Question(**d))
 
-            for tag in tags:
-                if tag.value in d["tags"]:
-                    res.append(q)
-                    break
+        page = min(page, total_pages)
+        start = (page - 1) * per_page
+        res = res[start:start+per_page]
+        self._sort_questions(res, sort_by, order)
 
-        return res
+        pagination = {
+            "data": res,
+            "page": page,
+            "per_page": per_page,
+            "pages": total_pages,
+            "total": total_questions,
+        }
+
+        return Pagination(**pagination)
+
+    def _sort_questions(self, questions: list[Question], sort_by: str, order: bool) -> None:
+        diff_prio = {
+            Difficulty.EASY.value: 0,
+            Difficulty.MEDIUM.value: 1,
+            Difficulty.HARD.value: 2,
+        }
+
+        sorting_key = {
+            "created_at": lambda q: (q.created_at.timestamp(), q.title),
+            "last_modified": lambda q: (q.last_modified.timestamp(), q.title),
+            "difficulty": lambda q: (diff_prio[q.difficulty.value], -q.created_at.timestamp()),
+            "title": lambda q: (q.title, -q.created_at.timestamp()),
+        }
+
+        questions.sort(
+            key=sorting_key[sort_by],
+            reverse=(False if order == "asc" else True)
+        )
 
     def get_question(self, id: str) -> Question:
         doc_ref = self.db.collection(self.question_collection).document(id)

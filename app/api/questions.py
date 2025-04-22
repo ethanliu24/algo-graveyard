@@ -26,7 +26,6 @@ async def get_all_questions(
     order: Annotated[str | None, Query()] = None,
     page: Annotated[int | None, Query()] = None,
     per_page: Annotated[int | None, Query()] = None,
-    paginate: Annotated[bool | None, Query()] = None,
 ) -> Pagination:
     try:
         return await question_service.get_all_questions(
@@ -39,7 +38,6 @@ async def get_all_questions(
             order=order,
             page=page,
             per_page=per_page,
-            paginate=paginate
         )
     except ValueError as e:
         raise HTTPException(status_code=fastapi.status.HTTP_400_BAD_REQUEST, detail=str(e))
