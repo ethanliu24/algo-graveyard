@@ -6,6 +6,7 @@ from .daos.solution_dao import SolutionDAO
 from .env_vars import ENV_VARS
 from .managers.auth_manager import AuthManager, JWTBearer
 from .managers.firebase_manager import FirebaseManager
+from .managers.ai_analysis_manager import AiAnalysisManager
 from .managers.metadata_manager import MetadataManager
 from .managers.question_manager import QuestionManager
 from .managers.solution_manager import SolutionManager
@@ -19,6 +20,7 @@ class Configs:
     solution_manager: SolutionManager = None
     auth_manager: AuthManager = None
     metadata_manager: MetadataManager = None
+    ai_analysis_manager = None
     question_collection: str = ""
     solution_collection: str = ""
 
@@ -60,6 +62,11 @@ class Configs:
                 ENV_VARS.get("JWT_AUD")
             )
 
+            cls.ai_analysis_manager = AiAnalysisManager(
+                ENV_VARS.get("GEMINI_API_KEY"),
+                ENV_VARS.get("GEMINI_MODEL")
+            )
+
         return cls.instance
 
 
@@ -81,6 +88,10 @@ def get_metadata_service(configs: Annotated[Configs, Depends(init_config)]):
 
 def get_auth_service(configs: Annotated[Configs, Depends(init_config)]):
     return configs.auth_manager
+
+
+def get_ai_analysis_service(configs: Annotated[Configs, Depends(init_config)]):
+    return configs.ai_analysis_manager
 
 
 auth_user_jwt = JWTBearer(Configs().auth_manager)
