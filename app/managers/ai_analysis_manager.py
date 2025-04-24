@@ -17,19 +17,21 @@ class AiAnalysisManager:
         self.model = model
         self.context = context
 
-    def get_feedback(self, title: str, prompt: str, language: str, solution: str) -> None:
-        if ENV_VARS.get("APP_ENV") == "test":
-            return AiAnalysis(**{"ai_analysis": {
+    def get_feedback(self, title: str, prompt: str, language: str, solution: str, additional_info: str = "") -> None:
+        if ENV_VARS.get("APP_ENV") == "test" or not prompt or not solution:
+            return AiAnalysis(**{
                 "time_complexity": "",
                 "space_complexity": "",
-                "feedback": ""
-            }})
+                "feedback": "No prompt or solution provided."
+            })
+
         response = self.client.models.generate_content(
             model=self.model,
             contents=[
                 self.context,
                 f"Question title: {title}",
                 f"Question prompt: {prompt}",
+                f"Additional info: {additional_info}",
                 f"Solution language: ${language}",
                 f"Solution: {solution}"
             ]

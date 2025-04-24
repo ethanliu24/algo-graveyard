@@ -24,24 +24,21 @@ class SolutionManager(object):
             raise EntityNotFoundError()
         return res
 
-    async def create_solution(
-        self,
-        question_id: str,
-        data: SolutionCreate,
-        title: str = "",
-        prompt: str = "",
-        id: str = None
-    ) -> Solution:
+    async def create_solution(self, question_id: str, data: SolutionCreate, id: str = None) -> Solution:
         solution = data.model_dump()
 
         solution["language"] = solution["language"].value
 
         solution.update({"ai_analysis": self.ai_analysis_service.get_feedback(
-            title,
-            prompt,
+            solution["question_title"],
+            solution["question_prompt"],
             solution["language"],
             solution["code"]
         ).model_dump()})
+
+        del solution["question_title"]
+        del solution["question_prompt"]
+        # print(solution)
 
         creation_time = datetime.now(timezone.utc)
         solution.update({ "created_at": creation_time, "last_modified": creation_time })

@@ -39,16 +39,9 @@ async def create_solution(
     solution_service: Annotated[SolutionManager, Depends(get_solution_service)]
 ) -> Solution:
     try:
-        data = await request.json()
-        title = data["question_title"]
-        prompt = data["question_prompt"]
-        del data["question_title"]
-        del data["question_prompt"]
-
-        solution_data = SolutionCreate(**data)
-        return await solution_service.create_solution(
-            question_id=question_id, data=solution_data, title=title, prompt=prompt
-        )
+        solution_data = SolutionCreate(**await request.json())
+        print(solution_data)
+        return await solution_service.create_solution(question_id=question_id, data=solution_data)
     except EntityNotFoundError as e:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
     except ValidationError as e:

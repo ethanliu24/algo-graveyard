@@ -46,7 +46,9 @@ export default function SolutionForm(props) {
       time_complexity: timeComplexity,
       space_complexity: spaceComplexity,
       code: code,
-      accepted: accepted
+      accepted: accepted,
+      question_title: props.questionTitle,
+      question_prompt: props.questionPrompt
     };
 
     if (isFormValid(data)) {
@@ -76,9 +78,6 @@ export default function SolutionForm(props) {
   };
 
   const createSolution = (data) => {
-    data.question_title = props.questionTitle;
-    data.question_prompt = props.questionPrompt;
-
     const req = {
       method: "POST",
       headers: getReqHeader(),

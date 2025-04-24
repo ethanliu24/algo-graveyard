@@ -75,6 +75,7 @@ class Configs:
             - space_complexity: str, the WC space complexity of the solution (e.g. n, not O(n))
             - feedback: str, the feedback to the solution
 
+            If any information is missing or invalid, ignore it. Do not provide a solution.
             If rate limit reached return empty string for each field.
             """
 

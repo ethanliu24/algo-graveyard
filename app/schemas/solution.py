@@ -28,6 +28,8 @@ class SolutionCreate(BaseModelConfig):
     space_complexity: str
     code: str
     accepted: bool
+    question_title: str
+    question_prompt: str
 
     @model_validator(mode="after")
     def sanitize_inputs(data: SolutionCreate) -> SolutionCreate:
