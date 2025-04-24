@@ -52,7 +52,7 @@ class SolutionManager(object):
         solution_data = solution.model_dump()
 
         # update ai analysis if code is modified
-        if "code" in data:
+        if "code" in data and data["code"] != solution_data["code"]:
             edited_code = data["code"]
             language = data.get("language", solution_data["language"])
 
@@ -66,8 +66,8 @@ class SolutionManager(object):
                 edited_code
             ).model_dump()})
 
-            del data["question_title"]
-            del data["question_prompt"]
+        data.pop("question_prompt", None)
+        data.pop("question_title", None)
 
         data.update({ "last_modified": datetime.now() })
         solution_data.update(data)
