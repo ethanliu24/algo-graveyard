@@ -5,6 +5,7 @@ from pydantic import field_validator, model_validator
 from .base_config import BaseModelConfig
 from .pagination import Pagination
 from .solution import Solution
+from ..utils import sanitize_str
 
 class Question(BaseModelConfig):
     id: str
@@ -33,7 +34,14 @@ class QuestionCreate(BaseModelConfig):
     hints: list[str]
     tags: list[Tag]
 
-    # TODO clean up fields (e.g. remove trailing spaces)
+    @model_validator(mode="after")
+    def sanitize_input(data: QuestionCreate) -> QuestionCreate:
+        data.title = sanitize_str(data.title)
+        data.prompt = sanitize_str(data.prompt)
+        data.notes = [sanitize_str(note) for note in data.notes if note.strip() != ""]
+        data.hints = [sanitize_str(hint) for hint in data.hints if hint.strip() != ""]
+        return data
+
     @model_validator(mode="after")
     def if_link_doesnt_exist(data: QuestionCreate) -> QuestionCreate:
         if data.link == "":
@@ -44,9 +52,9 @@ class QuestionCreate(BaseModelConfig):
         return data
 
     @field_validator("title")
-    def title_exists_and_is_long_enough(title: str) -> int:
-        if len(title) > 50:
-            raise ValueError("The title should be less or equal than 50 characters.")
+    def validate_title(title: str) -> int:
+        if len(title) > 70:
+            raise ValueError("The title should be less or equal than 70 characters.")
         return title
 
 

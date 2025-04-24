@@ -153,6 +153,30 @@ async def test_create_question_validate_prompt(endpoint):
     assert response.status_code == 200
 
 
+@pytest.mark.asyncio
+async def test_question_sanitization(endpoint):
+    """ Test data sanitization. """
+    question = {
+        "source": "leetcode",
+        "link": "",
+        "difficulty": "easy",
+        "status": "completed",
+        "title": "not capitalized      \n",
+        "prompt": "     a",
+        "notes": ["a    "],
+        "hints": ["    "],
+        "tags": []
+    }
+
+    response = endpoint.post(f"{API}", content=json.dumps(question))
+    assert response.status_code == 200
+    q = Question(**response.json())
+    assert q.title == "Not capitalized"
+    assert q.prompt == "A"
+    assert q.notes == ["A"]
+    assert q.hints == []
+
+
 # Updating questions
 @pytest.mark.asyncio
 async def test_update_question_basic(endpoint):

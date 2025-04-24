@@ -162,6 +162,29 @@ async def test_create_question_validate_summary(endpoint):
     assert response.status_code == 200
 
 
+@pytest.mark.asyncio
+async def test_solution_sanitization(endpoint):
+    """ Test data sanitization. """
+    solution = {
+        "summary": "capitalize c",
+        "explanation": "  abcde    ",
+        "language": "python",
+        "time_complexity": "n\n",
+        "space_complexity": " n  ",
+        "code": "print()       \n",
+        "accepted": True
+    }
+
+    response = endpoint.post(f"{API}/modify/solutions", content=json.dumps(solution))
+    assert response.status_code == 200
+    q = Solution(**response.json())
+    assert q.summary == "Capitalize c"
+    assert q.explanation == "Abcde"
+    assert q.code == "print()"
+    assert q.time_complexity == "n"
+    assert q.space_complexity == "n"
+
+
 # Updating solutions
 @pytest.mark.asyncio
 async def test_update_solution(endpoint):
