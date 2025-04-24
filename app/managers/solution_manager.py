@@ -2,12 +2,15 @@ from datetime import datetime, timezone
 from ..daos.solution_dao import SolutionDAO
 from ..exceptions.entity_not_found import EntityNotFoundError
 from ..schemas.solution import Solution, SolutionCreate
+from ..managers.ai_analysis_manager import AiAnalysisManager
 
 class SolutionManager(object):
     solution_dao: SolutionDAO
+    ai_analysis_service: AiAnalysisManager
 
-    def __init__(self, solution_dao: SolutionDAO):
+    def __init__(self, solution_dao: SolutionDAO, ai_analysis_service: AiAnalysisManager):
         self.solution_dao = solution_dao
+        self.ai_analysis_service = ai_analysis_service
 
     async def get_all_solutions(self, question_id: str) -> list[Solution]:
         res = self.solution_dao.get_all_solutions(question_id)
@@ -21,17 +24,24 @@ class SolutionManager(object):
             raise EntityNotFoundError()
         return res
 
-    async def create_solution(self, question_id: str, data: SolutionCreate, id: str = None) -> Solution:
+    async def create_solution(
+        self,
+        question_id: str,
+        data: SolutionCreate,
+        title: str = "",
+        prompt: str = "",
+        id: str = None
+    ) -> Solution:
         solution = data.model_dump()
 
         solution["language"] = solution["language"].value
 
-        # TODO add ai analysis
-        solution.update({"ai_analysis": {
-            "time_complexity": "",
-            "space_complexity": "",
-            "feedback": ""
-        }})
+        solution.update({"ai_analysis": self.ai_analysis_service.get_feedback(
+            title,
+            prompt,
+            solution["language"],
+            solution["code"]
+        ).model_dump()})
 
         creation_time = datetime.now(timezone.utc)
         solution.update({ "created_at": creation_time, "last_modified": creation_time })

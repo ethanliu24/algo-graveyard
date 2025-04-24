@@ -51,8 +51,7 @@ class Configs:
             )
 
             cls.metadata_manager = MetadataManager()
-            cls.question_manager = QuestionManager(cls.question_dao, cls.metadata_manager)
-            cls.solution_manager = SolutionManager(cls.solution_dao)
+
             cls.auth_manager = AuthManager(
                 ENV_VARS.get("APP_SECRET"),
                 ENV_VARS.get("JWT_SIGNITURE"),
@@ -62,10 +61,29 @@ class Configs:
                 ENV_VARS.get("JWT_AUD")
             )
 
+            ai_ctx = """
+            You are an expert code reviewer. You will be given a coding problem,
+            a solution and the language its written in.
+            Analyze the solution briefly but insightfully in 1-2 paragraphs.
+
+            Your feedback should assess correctness, efficiency, and clarity.
+            Mention strengths and suggest improvements if applicable.
+            Highlight the worst-case time and space complexity.
+
+            Return the data in a serilized JSON string for python to deserialize with the following fields:
+            - time_complexity: str, the WC time complexity of the solution (e.g. n^2, not O(n^2))
+            - space_complexity: str, the WC space complexity of the solution (e.g. n, not O(n))
+            - feedback: str, the feedback to the solution
+
+            If rate limit reached return empty string for each field.
+            """
+
             cls.ai_analysis_manager = AiAnalysisManager(
-                ENV_VARS.get("GEMINI_API_KEY"),
-                ENV_VARS.get("GEMINI_MODEL")
+                ENV_VARS.get("GEMINI_API_KEY"), ENV_VARS.get("GEMINI_MODEL"), ai_ctx
             )
+
+            cls.question_manager = QuestionManager(cls.question_dao, cls.metadata_manager)
+            cls.solution_manager = SolutionManager(cls.solution_dao, cls.ai_analysis_manager)
 
         return cls.instance
 
