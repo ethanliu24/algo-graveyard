@@ -113,10 +113,10 @@ async def test_create_question_validate_title(endpoint):
     question["title"] = "a"
     response = endpoint.post(f"{API}", content=json.dumps(question))
     assert response.status_code == 200
-    question["title"] = "a" * 51
+    question["title"] = "a" * 71
     response = endpoint.post(f"{API}", content=json.dumps(question))
     assert response.status_code == 422
-    question["title"] = "a" * 50  # upperbound, should pass
+    question["title"] = "a" * 70  # upperbound, should pass
     response = endpoint.post(f"{API}", content=json.dumps(question))
     assert response.status_code == 200
 

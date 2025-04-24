@@ -26,7 +26,9 @@ S_JSON = {
     "time_complexity": "n!",
     "space_complexity": "n!",
     "code": "",
-    "accepted": False
+    "accepted": False,
+    "question_title": "A",
+    "question_prompt": "A"
 }
 
 
