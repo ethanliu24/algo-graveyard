@@ -33,7 +33,13 @@ class QuestionCreate(BaseModelConfig):
     hints: list[str]
     tags: list[Tag]
 
-    # TODO clean up fields (e.g. remove trailing spaces)
+    @model_validator(mode="after")
+    def sanitize_input(data: QuestionCreate) -> QuestionCreate:
+        data.title = data.title.strip()
+        data.title = data.title[0].upper() + data.title[1:]
+        data.prompt = data.prompt.strip()
+        return data
+
     @model_validator(mode="after")
     def if_link_doesnt_exist(data: QuestionCreate) -> QuestionCreate:
         if data.link == "":

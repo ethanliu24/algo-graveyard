@@ -1,7 +1,7 @@
 from __future__ import annotations
 from datetime import datetime
 from enum import Enum
-from pydantic import field_validator
+from pydantic import field_validator, model_validator
 from .ai_analysis import AiAnalysis
 from .base_config import BaseModelConfig
 
@@ -27,6 +27,13 @@ class SolutionCreate(BaseModelConfig):
     space_complexity: str
     code: str
     accepted: bool
+
+    @model_validator(mode="after")
+    def sanitize_inputs(data: SolutionCreate) -> SolutionCreate:
+        data.summary = data.summary.strip()
+        data.summary = data.summary[0].upper() + data.summary[1:]
+        data.explanation = data.explanation.strip()
+        return data
 
     @field_validator("summary")
     def summary_exists_and_is_long_enough(title: str) -> int:
