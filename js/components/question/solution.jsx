@@ -124,7 +124,7 @@ export default function Solution(props) {
             }}
             value={props.data.code}
             theme="vs-dark"
-            onMount={handleEditorDidMount}
+            // onMount={handleEditorDidMount}
           />
         </div>
         {openForm

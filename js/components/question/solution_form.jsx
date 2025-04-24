@@ -76,6 +76,9 @@ export default function SolutionForm(props) {
   };
 
   const createSolution = (data) => {
+    data.question_title = props.questionTitle;
+    data.question_prompt = props.questionPrompt;
+
     const req = {
       method: "POST",
       headers: getReqHeader(),

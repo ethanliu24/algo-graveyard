@@ -37,7 +37,9 @@ export default function SolutionTab(props) {
       })}
       {openForm
         ? <ModalContainer closeModal={() => setOpenForm(false)} title="Add Solution"
-            content={<SolutionForm create={true} questionId={props.questionId} data={{}} methodSuccessful={(d) => creationSucess(d)} />} />
+            content={<SolutionForm create={true} data={{}} questionId={props.question.id}
+            questionTitle={props.question.title} questionPrompt={props.question.prompt}
+              methodSuccessful={(d) => creationSucess(d)} />} />
         : null
       }
     </div>

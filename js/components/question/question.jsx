@@ -127,8 +127,8 @@ export default function Question() {
               {activeTab === "Description"
                 && <DescriptionTab data={question} setIsAdmin={setIsAdmin} updateQuestion={updateQuestion} />}
               {activeTab === "Solutions"
-                && (<SolutionTab questionId={question.id} solutions={solutions} setIsAdmin={(b) => setIsAdmin(b)}
-                  displaySolution={displaySolution} addSolution={addSolution} />)}
+                && (<SolutionTab question={question} solutions={solutions}
+                  setIsAdmin={(b) => setIsAdmin(b)} displaySolution={displaySolution} addSolution={addSolution} />)}
             </div>
             <div className="border-gray-300 w-0 h-full border-2 max-md:hidden"
               ref={horDragBar}></div>
