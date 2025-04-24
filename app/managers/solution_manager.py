@@ -38,7 +38,6 @@ class SolutionManager(object):
 
         del solution["question_title"]
         del solution["question_prompt"]
-        # print(solution)
 
         creation_time = datetime.now(timezone.utc)
         solution.update({ "created_at": creation_time, "last_modified": creation_time })
@@ -51,6 +50,25 @@ class SolutionManager(object):
     async def update_solution(self, question_id: str, solution_id: str, data: dict) -> Solution:
         solution = await self.get_solution(question_id, solution_id)
         solution_data = solution.model_dump()
+
+        # update ai analysis if code is modified
+        if "code" in data:
+            edited_code = data["code"]
+            language = data.get("language", solution_data["language"])
+
+            if "question_title" not in data or "question_prompt" not in data:
+                raise ValueError("Question title and prompt must be provided")
+
+            data.update({ "ai_analysis": self.ai_analysis_service.get_feedback(
+                data["question_title"],
+                data["question_prompt"],
+                language,
+                edited_code
+            ).model_dump()})
+
+            del data["question_title"]
+            del data["question_prompt"]
+
         data.update({ "last_modified": datetime.now() })
         solution_data.update(data)
         _ = Solution(**solution_data) # validate data

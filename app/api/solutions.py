@@ -40,7 +40,6 @@ async def create_solution(
 ) -> Solution:
     try:
         solution_data = SolutionCreate(**await request.json())
-        print(solution_data)
         return await solution_service.create_solution(question_id=question_id, data=solution_data)
     except EntityNotFoundError as e:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
@@ -64,6 +63,8 @@ async def update_solution(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail="Unprocessable entity. Check if field exists or its value is accepted by the backend."
         )
+    except ValueError as e:
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(e))
 
 @router.delete("/{solution_id}", status_code=status.HTTP_200_OK, dependencies=[Depends(auth_user_jwt)])
 async def delete_solution(
