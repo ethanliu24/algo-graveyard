@@ -12,7 +12,7 @@ export function Dropdown(props) {
 
   return (
     <select value={props.value ? props.value : ""} onChange={handleChange}
-      className="drop-down cursor-pointer">
+      className={`drop-down cursor-pointer ${props.className ? props.className : ""}`}>
       {!props.value ? <option value="" disabled>{props.title}</option> : null}
       {props.options.map((option, index) => {
         return <option key={index} value={option}>{capitalizeFirst(option)}</option>

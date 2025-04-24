@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## Version 0.0.1
+- Added ai analysis for each solution (#44)
 - Sanitize user inputs (#43)
 - Improve query using firebase database utility functions (#42)
 - Add sort_by and ordering to filter in front end (#42)

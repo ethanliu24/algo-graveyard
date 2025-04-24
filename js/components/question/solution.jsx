@@ -124,12 +124,13 @@ export default function Solution(props) {
             }}
             value={props.data.code}
             theme="vs-dark"
-            onMount={handleEditorDidMount}
+            // onMount={handleEditorDidMount}
           />
         </div>
         {openForm
           ? <ModalContainer closeModal={() => setOpenForm(false)} title="Edit Question"
-              content={<SolutionForm create={false} questionId={props.questionId} data={props.data} methodSuccessful={(d) => updateSuccess(d)} />} />
+              content={<SolutionForm create={false} data={props.data} methodSuccessful={(d) => updateSuccess(d)}
+                questionId={props.question.id} questionTitle={props.question.title} questionPrompt={props.question.prompt} />} />
           : null}
       </div>
     )

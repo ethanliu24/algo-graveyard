@@ -78,7 +78,9 @@ async def test_create_solution_basic(endpoint):
         "time_complexity": "n!",
         "space_complexity": "n!",
         "code": "",
-        "accepted": True
+        "accepted": True,
+        "question_title": "A",
+        "question_prompt": "A"
     }
 
     response = endpoint.post(f"{API}/modify/solutions", content=json.dumps(solution))
@@ -99,7 +101,9 @@ async def test_create_solution_q_dne(endpoint):
         "time_complexity": "n!",
         "space_complexity": "n!",
         "code": "",
-        "accepted": False
+        "accepted": False,
+        "question_title": "A",
+        "question_prompt": "A"
     }
 
     response = endpoint.post(f"{API}/question_dne/solutions", content=json.dumps(solution))
@@ -146,18 +150,20 @@ async def test_create_question_validate_summary(endpoint):
         "time_complexity": "n!",
         "space_complexity": "n!",
         "code": "",
-        "accepted": True
+        "accepted": True,
+        "question_title": "A",
+        "question_prompt": "A"
     }
 
     solution["summary"] = ""
     response = endpoint.post(f"{API}/modify/solutions", content=json.dumps(solution))
     assert response.status_code == 422
 
-    solution["summary"] = "a" * 51
+    solution["summary"] = "a" * 71
     response = endpoint.post(f"{API}/modify/solutions", content=json.dumps(solution))
     assert response.status_code == 422
 
-    solution["summary"] = "a" * 50  # upperbound
+    solution["summary"] = "a" * 70  # upperbound
     response = endpoint.post(f"{API}/modify/solutions", content=json.dumps(solution))
     assert response.status_code == 200
 
@@ -172,7 +178,9 @@ async def test_solution_sanitization(endpoint):
         "time_complexity": "n\n",
         "space_complexity": " n  ",
         "code": "print()       \n",
-        "accepted": True
+        "accepted": True,
+        "question_title": "A",
+        "question_prompt": "A"
     }
 
     response = endpoint.post(f"{API}/modify/solutions", content=json.dumps(solution))
@@ -195,6 +203,8 @@ async def test_update_solution(endpoint):
     time_complexity = "1"
     space_complexity = "1"
     code = "print()"
+    title = "A"
+    prompt = "A"
     update_data = {
         "summary": summary,
         "explanation": explanation,
@@ -202,6 +212,8 @@ async def test_update_solution(endpoint):
         "time_complexity": time_complexity,
         "space_complexity": space_complexity,
         "code": code,
+        "question_title": title,
+        "question_prompt": prompt
     }
 
     response = endpoint.put(f"{API}/modify/solutions/s1", json=update_data)

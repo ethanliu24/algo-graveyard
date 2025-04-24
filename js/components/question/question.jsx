@@ -114,7 +114,7 @@ export default function Question() {
             flex flex-row max-md:flex-col justify-between items-center">
             <div className="w-3/7 h-full max-md:w-full max-md:h-2/5 p-8 pt-2 overflow-y-auto hide-scrollbar" ref={questionPanel}>
               <div className="flex justify-around items-center mb-4">{
-                ["Description", "Solutions"].map((label, i) => {
+                ["Description", "Solutions"].map((label) => {
                   return (
                     <button key={`tab-${label}`}
                       className={`bg-transparent rounded-none text-black h-full
@@ -127,15 +127,15 @@ export default function Question() {
               {activeTab === "Description"
                 && <DescriptionTab data={question} setIsAdmin={setIsAdmin} updateQuestion={updateQuestion} />}
               {activeTab === "Solutions"
-                && (<SolutionTab questionId={question.id} solutions={solutions} setIsAdmin={(b) => setIsAdmin(b)}
-                  displaySolution={displaySolution} addSolution={addSolution} />)}
+                && (<SolutionTab question={question} solutions={solutions}
+                  setIsAdmin={(b) => setIsAdmin(b)} displaySolution={displaySolution} addSolution={addSolution} />)}
             </div>
             <div className="border-gray-300 w-0 h-full border-2 max-md:hidden"
               ref={horDragBar}></div>
             <div className="border-gray-300 w-full h-0 border-2 md:hidden"
               ref={verDragBar}></div>
             <div className="flex-1 w-full h-full bg-white p-8 overflow-y-auto">
-              <Solution questionId={question.id} data={curSolution} setIsAdmin={(b) => setIsAdmin(b)}
+              <Solution question={question} data={curSolution} setIsAdmin={(b) => setIsAdmin(b)}
                 removeSolution={removeSolution} updateSolution={updateSolution} />
             </div>
           </div>
