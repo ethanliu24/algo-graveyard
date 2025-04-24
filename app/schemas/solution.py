@@ -4,6 +4,7 @@ from enum import Enum
 from pydantic import field_validator, model_validator
 from .ai_analysis import AiAnalysis
 from .base_config import BaseModelConfig
+from ..utils import sanitize_str
 
 class Solution(BaseModelConfig):
     id: str
@@ -30,9 +31,11 @@ class SolutionCreate(BaseModelConfig):
 
     @model_validator(mode="after")
     def sanitize_inputs(data: SolutionCreate) -> SolutionCreate:
-        data.summary = data.summary.strip()
-        data.summary = data.summary[0].upper() + data.summary[1:]
-        data.explanation = data.explanation.strip()
+        data.summary = sanitize_str(data.summary)
+        data.explanation = sanitize_str(data.explanation)
+        data.code = data.code.strip()
+        data.time_complexity = data.time_complexity.strip()
+        data.space_complexity = data.space_complexity.strip()
         return data
 
     @field_validator("summary")

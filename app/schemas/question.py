@@ -5,6 +5,7 @@ from pydantic import field_validator, model_validator
 from .base_config import BaseModelConfig
 from .pagination import Pagination
 from .solution import Solution
+from ..utils import sanitize_str
 
 class Question(BaseModelConfig):
     id: str
@@ -35,9 +36,10 @@ class QuestionCreate(BaseModelConfig):
 
     @model_validator(mode="after")
     def sanitize_input(data: QuestionCreate) -> QuestionCreate:
-        data.title = data.title.strip()
-        data.title = data.title[0].upper() + data.title[1:]
-        data.prompt = data.prompt.strip()
+        data.title = sanitize_str(data.title)
+        data.prompt = sanitize_str(data.prompt)
+        data.notes = [sanitize_str(note) for note in data.notes if note.strip() != ""]
+        data.hints = [sanitize_str(hint) for hint in data.hints if hint.strip() != ""]
         return data
 
     @model_validator(mode="after")
