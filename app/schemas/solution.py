@@ -40,8 +40,8 @@ class SolutionCreate(BaseModelConfig):
 
     @field_validator("summary")
     def summary_exists_and_is_long_enough(title: str) -> int:
-        if not (0 < len(title) <= 50):
-            raise ValueError("There must be a summary and it should be less or equal than 50 characters.")
+        if not (0 < len(title) <= 70):
+            raise ValueError("There must be a summary and it should be less or equal than 70 characters.")
         return title
 
 

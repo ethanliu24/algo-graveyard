@@ -52,9 +52,9 @@ class QuestionCreate(BaseModelConfig):
         return data
 
     @field_validator("title")
-    def title_exists_and_is_long_enough(title: str) -> int:
-        if len(title) > 50:
-            raise ValueError("The title should be less or equal than 50 characters.")
+    def validate_title(title: str) -> int:
+        if len(title) > 70:
+            raise ValueError("The title should be less or equal than 70 characters.")
         return title
 
 
