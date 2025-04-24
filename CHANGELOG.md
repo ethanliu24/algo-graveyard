@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## Version 0.0.1
+- Sanitize user inputs (#42)
 - Improve query using firebase database utility functions (#42)
 - Add sort_by and ordering to filter in front end (#42)
 - Add a single toast context for children to consume (#41)
