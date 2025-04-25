@@ -9,12 +9,12 @@ from ..schemas.question import Question, QuestionCreate, Source, Difficulty, Sta
 class QuestionManager(object):
     question_dao: QuestionDAO
     metadata_manager: MetadataManager
-    web_scrap_manager: WebScrapeManager
+    web_scrap_service: WebScrapeManager
 
-    def __init__(self, question_dao: QuestionDAO, metadata_manager: MetadataManager, web_scrap_manager: WebScrapeManager):
+    def __init__(self, question_dao: QuestionDAO, metadata_manager: MetadataManager, web_scrap_service: WebScrapeManager):
         self.question_dao = question_dao
         self.metadata_manager = metadata_manager
-        self.web_scrap_manager = web_scrap_manager
+        self.web_scrap_service = web_scrap_service
 
     async def get_all_questions(
         self,
@@ -53,6 +53,7 @@ class QuestionManager(object):
         return question
 
     async def create_question(self, data: QuestionCreate, id: str = None) -> Question:
+        # print(self.web_scrap_service.parse_question("", "leetcode"))
         question = data.model_dump()
         question["source"] = question["source"].value
         question["difficulty"] = question["difficulty"].value

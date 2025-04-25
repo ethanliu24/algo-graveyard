@@ -17,7 +17,7 @@ class AiAnalysisManager:
         self.model = model
         self.context = context
 
-    def get_feedback(self, title: str, prompt: str, language: str, solution: str, additional_info: str = "") -> None:
+    async def get_feedback(self, title: str, prompt: str, language: str, solution: str, additional_info: str = "") -> None:
         if ENV_VARS.get("APP_ENV") == "test" or not prompt or not solution:
             return AiAnalysis(**{
                 "time_complexity": "",
