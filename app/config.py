@@ -87,7 +87,7 @@ class Configs:
             )
 
             cls.metadata_manager = MetadataManager()
-            cls.web_scrape_manager = WebScrapeManager()
+            cls.web_scrape_manager = WebScrapeManager(cls.metadata_manager)
 
             cls.question_manager = QuestionManager(cls.question_dao, cls.metadata_manager, cls.web_scrape_manager)
             cls.solution_manager = SolutionManager(cls.solution_dao, cls.ai_analysis_manager)

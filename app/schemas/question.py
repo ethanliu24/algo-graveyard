@@ -122,7 +122,7 @@ class Tag(Enum):
     QUEUE = "queue"
     RECURSION = "recursion"
     DIVIDE_AND_CONQUER = "divide and conquer"
-    BINARY_SEARCH_TREE = "binary search tree"
+    BINARY_SEARCH_TREE = "bst"
     RANDOMIZED = "randomized"
     ITERATOR = "iterator"
     CONCURRENCY = "concurrency"

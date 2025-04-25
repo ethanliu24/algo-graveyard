@@ -57,7 +57,6 @@ class QuestionManager(object):
         scraped_data = {}
         if link != "":
             scraped_data = await self.web_scrap_service.parse_question(link, source)
-            self._sanitize_scraped_data(scraped_data)
 
             if not scraped_data["title"] or not scraped_data["prompt"]:
                 raise ValueError("Parsing failed.")
@@ -75,12 +74,6 @@ class QuestionManager(object):
         data.update({ "created_at": creation_time, "last_modified": creation_time })
 
         return self.question_dao.create_question(data, id)
-
-    def _sanitize_scraped_data(self, data: dict) -> None:
-        if not data["difficulty"] in self.metadata_manager.get_difficulties():
-            data["difficulty"] = Difficulty.EASY.value
-
-        data["tags"] = [tag for tag in data["tags"] if tag in self.metadata_manager.get_tags()]
 
     def _merge_data(self, data: dict, scraped_data: dict):
         title = data.get("title", "")
