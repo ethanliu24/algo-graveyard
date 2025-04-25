@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 from .metadata_manager import MetadataManager
+from .web_scrape_manager import WebScrapeManager
 from ..daos.question_dao import QuestionDAO
 from ..exceptions.entity_not_found import EntityNotFoundError
 from ..schemas.pagination import Pagination
@@ -8,10 +9,12 @@ from ..schemas.question import Question, QuestionCreate, Source, Difficulty, Sta
 class QuestionManager(object):
     question_dao: QuestionDAO
     metadata_manager: MetadataManager
+    web_scrap_manager: WebScrapeManager
 
-    def __init__(self, question_dao: QuestionDAO, metadata_manager: MetadataManager):
+    def __init__(self, question_dao: QuestionDAO, metadata_manager: MetadataManager, web_scrap_manager: WebScrapeManager):
         self.question_dao = question_dao
         self.metadata_manager = metadata_manager
+        self.web_scrap_manager = web_scrap_manager
 
     async def get_all_questions(
         self,
