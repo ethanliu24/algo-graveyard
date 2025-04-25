@@ -45,15 +45,16 @@ class QuestionManager(object):
             source, difficulty, status, tags, search, sort_by, order, page, per_page
         )
 
-
     async def get_question(self, id: str) -> Question:
+        print(await self.web_scrap_service.parse_question("https://leetcode.com/problems/palindrome-number/description/", "leetcode"))
+
         question = self.question_dao.get_question(id)
         if not question:
             raise EntityNotFoundError("Invalid question ID.")
         return question
 
     async def create_question(self, data: QuestionCreate, id: str = None) -> Question:
-        # print(self.web_scrap_service.parse_question("", "leetcode"))
+        # TODO remove print from questions
         question = data.model_dump()
         question["source"] = question["source"].value
         question["difficulty"] = question["difficulty"].value
