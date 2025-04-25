@@ -46,26 +46,51 @@ class QuestionManager(object):
         )
 
     async def get_question(self, id: str) -> Question:
-        print(await self.web_scrap_service.parse_question("https://leetcode.com/problems/palindrome-number/description/", "leetcode"))
-
         question = self.question_dao.get_question(id)
         if not question:
             raise EntityNotFoundError("Invalid question ID.")
         return question
 
-    async def create_question(self, data: QuestionCreate, id: str = None) -> Question:
-        # TODO remove print from questions
-        question = data.model_dump()
-        question["source"] = question["source"].value
-        question["difficulty"] = question["difficulty"].value
-        question["status"] = question["status"].value
-        question["tags"] = [tag.value for tag in question["tags"]]
-        question["solutions"] = []
+    async def create_question(self, data: dict, id: str = None) -> Question:
+        link = data.get("link", "")
+        source = data.get("source", "")
+        scraped_data = {}
+        if link != "":
+            scraped_data = await self.web_scrap_service.parse_question(link, source)
+            self._sanitize_scraped_data(scraped_data)
 
+            if not scraped_data["title"] or not scraped_data["prompt"]:
+                raise ValueError("Parsing failed.")
+
+            self._merge_data(data, scraped_data)
+
+        # validate data
+        data = QuestionCreate(**data).model_dump()
+        data["solutions"] = []
+        data["source"] = data["source"].value
+        data["difficulty"] = data["difficulty"].value
+        data["status"] = data["status"].value
+        data["tags"] = [t.value for t in data["tags"]]
         creation_time = datetime.now(timezone.utc)
-        question.update({ "created_at": creation_time, "last_modified": creation_time })
+        data.update({ "created_at": creation_time, "last_modified": creation_time })
 
-        return self.question_dao.create_question(question, id)
+        return self.question_dao.create_question(data, id)
+
+    def _sanitize_scraped_data(self, data: dict) -> None:
+        if not data["difficulty"] in self.metadata_manager.get_difficulties():
+            data["difficulty"] = Difficulty.EASY.value
+
+        data["tags"] = [tag for tag in data["tags"] if tag in self.metadata_manager.get_tags()]
+
+    def _merge_data(self, data: dict, scraped_data: dict):
+        title = data.get("title", "")
+        data["title"] = title if title else scraped_data["title"]
+        prompt = data.get("prompt", "")
+        data["prompt"] = prompt if prompt else scraped_data["title"]
+        difficulty = data.get("difficulty", "")
+        data["difficulty"] = difficulty if difficulty else scraped_data["difficulty"]
+        data["hints"] = data.get("hints", []) + scraped_data["hints"]
+        data["tags"] = list(set(data.get("tags", []) + scraped_data["tags"]))
 
     async def update_question(self, data: dict, id: str) -> Question:
         question = await self.get_question(id)

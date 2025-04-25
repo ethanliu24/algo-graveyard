@@ -18,7 +18,9 @@ class WebScrapeManager:
                 locale="en-CA"
             )
             page = await context.new_page()
-            await page.goto(link)
+            response = await page.goto(link)
+            if not (response.status >= 200 and response.status < 300):
+                raise ValueError("Invalid link, parsing failed.")
 
             try:
                 if src == Source.LEETCODE.value:
@@ -27,18 +29,15 @@ class WebScrapeManager:
                     data = {}
                 else:
                     data = None
-
-                if data is None:
-                    raise ValueError("Parsing unsupported for source: " + src)
-                return data
-            except ValueError:
-                raise
             except Exception as e:
                 print(e)
             finally:
                 await browser.close()
 
-        return {}
+        if data is None:
+            raise ValueError("Parsing unsupported for source: " + src)
+        # data.update({ "link": link, "source": src })
+        return data
 
     async def _parse_leetcode(self, page: Any) -> dict:
         await page.wait_for_selector("#__next", timeout=self.timeout)

@@ -7,7 +7,7 @@ from ..config import get_question_service, auth_user_jwt
 from ..exceptions.entity_not_found import EntityNotFoundError
 from ..managers.question_manager import QuestionManager
 from ..schemas.pagination import Pagination
-from ..schemas.question import Question, QuestionCreate, Source, Difficulty, Status, Tag
+from ..schemas.question import Question, Source, Difficulty, Status, Tag
 
 router = APIRouter(
     prefix="/questions",
@@ -58,7 +58,7 @@ async def create_question(
     question_service: Annotated[QuestionManager, Depends(get_question_service)]
 ) -> None:
     try:
-        question_data = QuestionCreate(**await request.json())
+        question_data = await request.json()
         return await question_service.create_question(data=question_data)
     except ValidationError as e:
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(e))
