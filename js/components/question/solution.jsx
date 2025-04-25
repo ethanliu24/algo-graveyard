@@ -11,7 +11,7 @@ import { formatDate, getLanguageHighlighter, getReqHeader } from "../../utils/ut
 
 export default function Solution(props) {
   const [openForm, setOpenForm] = useState(false);
-  const [editorHeight, setEditorHeight] = useState(200);
+  const [editorHeight, setEditorHeight] = useState(500);
   const toast = useToastContext();
 
   const containerRef = useRef(null);
@@ -51,7 +51,7 @@ export default function Solution(props) {
       headers: getReqHeader(),
     };
 
-    fetch(`/api/questions/${props.questionId}/solutions/${props.data.id}`, req)
+    fetch(`/api/questions/${props.question.id}/solutions/${props.data.id}`, req)
       .then(response => {
         if (response.status == 401 || response.status === 403) {
           props.setIsAdmin(false);
