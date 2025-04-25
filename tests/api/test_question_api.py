@@ -1,8 +1,9 @@
 import json
 import pytest
+from unittest.mock import patch
 
 from app.schemas.question import Question, Difficulty
-from tests.seed import QUESTIONS
+from tests.seed import QUESTIONS, WEB_SCRAPE_DATA
 
 API = "/api/questions"
 
@@ -120,10 +121,15 @@ async def test_create_question_validate_title(endpoint):
     response = endpoint.post(f"{API}", content=json.dumps(question))
     assert response.status_code == 200
 
-    question["link"] = "link" # TODO might fail when web parsing, update real link
-    question["title"] = ""
-    response = endpoint.post(f"{API}", content=json.dumps(question))
-    assert response.status_code == 200
+    with patch(
+        "app.managers.web_scrape_manager.WebScrapeManager.parse_question",
+        return_value=WEB_SCRAPE_DATA[0]
+    ) as mock_parse:
+        question["link"] = "link"
+        question["title"] = ""
+        response = endpoint.post(f"{API}", content=json.dumps(question))
+        assert response.status_code == 200
+        mock_parse.assert_called_once()
 
 
 @pytest.mark.asyncio
@@ -147,10 +153,14 @@ async def test_create_question_validate_prompt(endpoint):
     response = endpoint.post(f"{API}", content=json.dumps(question))
     assert response.status_code == 200
 
-    question["link"] = "link" # TODO might fail when web parsing, update real link
-    question["prompt"] = ""
-    response = endpoint.post(f"{API}", content=json.dumps(question))
-    assert response.status_code == 200
+    with patch(
+        "app.managers.web_scrape_manager.WebScrapeManager.parse_question",
+        return_value=WEB_SCRAPE_DATA[0]
+    ) as mock_parse:
+        question["link"] = "link" 
+        question["prompt"] = ""
+        response = endpoint.post(f"{API}", content=json.dumps(question))
+        assert response.status_code == 200
 
 
 @pytest.mark.asyncio
