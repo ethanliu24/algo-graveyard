@@ -78,8 +78,7 @@ class QuestionManager(object):
     def _merge_data(self, data: dict, scraped_data: dict):
         title = data.get("title", "")
         data["title"] = title if title else scraped_data["title"]
-        prompt = data.get("prompt", "")
-        data["prompt"] = prompt + "\n\n\n" +  scraped_data["prompt"]
+        data["prompt"] = data.get("prompt", "") + "\n\n\n" + scraped_data["prompt"]
         difficulty = data.get("difficulty", "")
         data["difficulty"] = difficulty if difficulty else scraped_data["difficulty"]
         data["hints"] = data.get("hints", []) + scraped_data["hints"]
