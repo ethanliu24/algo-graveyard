@@ -155,7 +155,7 @@ export default function QuestionForm(props) {
         if (data.id) {  // This means creation was successful
           window.location.href = `/questions/${data.id}`;
         } else {
-          toast.show({ severity: "danger", summary: "Error", className: "error", detail: data.detail });
+          toast.show({ severity: "danger", summary: "Error", life: 7000, className: "error", detail: data.detail });
         }
       })
       .catch(err => {
@@ -186,7 +186,7 @@ export default function QuestionForm(props) {
         }
 
         if (data.detail) {
-          toast.show({ severity: "danger", summary: "Error", className: "error", detail: data.detail });
+          toast.show({ severity: "danger", summary: "Error", life: 7000, className: "error", detail: data.detail });
         }
       })
       .catch(err => {

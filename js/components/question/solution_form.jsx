@@ -98,7 +98,7 @@ export default function SolutionForm(props) {
           toast.show({ severity: "success", summary: "Success", className: "success", detail: "Solution created!" });
           props.methodSuccessful(json);
         } else {
-          toast.show({ severity: "danger", summary: "Error", className: "error", detail: json.detail });
+          toast.show({ severity: "danger", summary: "Error", life: 7000, className: "error", detail: json.detail });
         }
       })
       .catch(err => {
@@ -124,7 +124,7 @@ export default function SolutionForm(props) {
       .then(res => res.json())
       .then(json => {
         if (json.detail) {
-          toast.show({ severity: "danger", summary: "Error", className: "error", detail: json.detail });
+          toast.show({ severity: "danger", summary: "Error", life: 7000, className: "error", detail: json.detail });
         } else {
           toast.show({ severity: "success", summary: "Success", className: "success", detail: "Solution created!" });
           props.methodSuccessful(json);
