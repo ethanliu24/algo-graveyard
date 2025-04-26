@@ -88,7 +88,11 @@ export default function DescriptionTab(props) {
       <div className="w-full h-fit">
         <div className="flex justify-start items-center gap-4 mb-2">
           {getStatusIcon(props.data.status, 0, false)}
-          <h1 className="text-xl text-wrap">{props.data.title}</h1>
+          <h1 className="text-xl truncate"
+            data-tooltip-id="title-tooltip" data-tooltip-content={props.data.title}>
+            {props.data.title}
+          </h1>
+          <Tooltip id="title-tooltip" />
         </div>
         <div className="flex justify-start items-center gap-2 text-xs mb-4 overflow-x-auto">
           <div className="chip" style={getDifficultyStyle(props.data.difficulty)}>{capitalizeFirst(props.data.difficulty)}</div>
