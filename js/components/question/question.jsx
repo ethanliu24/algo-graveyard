@@ -149,7 +149,7 @@ export default function Question() {
             : null}
 
           {isLoading
-            ? <div open className="fixed top-0 left-0 w-screen h-screen bg-black/70 flex justify-center items-center">
+            ? <div open className="fixed top-0 left-0 w-screen h-screen bg-black/70 flex justify-center items-center z-[1000]">
                 <Loader dimension={8} />
               </div>
             : null}
