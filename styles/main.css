@@ -85,7 +85,7 @@
   }
 
   .p-toast-message > div {
-    @apply mb-4 bg-[var(--toast-bg)] backdrop-blur-xl rounded p-2 text-[var(--toast-acc)] text-[12px] border-l-6 flex items-center;
+    @apply mb-4 bg-[var(--toast-bg)] backdrop-blur-3xl rounded p-2 text-[var(--toast-acc)] text-[12px] border-l-6 flex items-center;
   }
 
   .p-toast-summary {
