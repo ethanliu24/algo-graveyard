@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Editor } from "@monaco-editor/react";
-import { faRotate, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faTrash, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Tooltip } from "react-tooltip";
 import Markdown from "react-markdown";
@@ -106,13 +106,13 @@ export default function Solution(props) {
         </div>
         <div className="flex justify-start items-stretch gap-2 mb-4">
           <div className="chip w-fit text-nowrap">{formatDate(props.data.last_modified)}</div>
-          <button className="chip p-1 hover:bg-gray-300 text-black"
+          <button className="chip chip-btn"
             onClick={() => setOpenForm(true)}
             data-tooltip-id="edit-solution" data-tooltip-content="Edit solution">
-            <FontAwesomeIcon icon={faRotate} />
+            <FontAwesomeIcon icon={faPenToSquare} />
             <Tooltip id="edit-solution" />
           </button>
-          <button className="chip p-1 hover:bg-gray-300 text-black"
+          <button className="chip chip-btn"
             onClick={handleDelete}
             data-tooltip-id="delete-solution" data-tooltip-content="Delete solution">
             <FontAwesomeIcon icon={faTrash} />

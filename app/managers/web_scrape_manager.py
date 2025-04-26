@@ -2,7 +2,7 @@ from markdownify import markdownify
 from playwright.async_api import async_playwright, Error
 from typing import Any
 from ..managers.metadata_manager import MetadataManager
-from ..schemas.question import Source, Difficulty, Tag
+from ..schemas.question import ParseResult, Source, Difficulty, Tag
 
 class WebScrapeManager:
     timeout: int
@@ -12,7 +12,7 @@ class WebScrapeManager:
         self.metadata_manager = metadata_manager
         self.timeout = timeout
 
-    async def parse_question(self, link: str, src: str) -> dict:
+    async def parse_question(self, link: str, src: str) -> ParseResult:
         async with async_playwright() as pw:
             try:
                 browser = await pw.chromium.launch(headless=True)
@@ -36,11 +36,11 @@ class WebScrapeManager:
             finally:
                 await browser.close()
 
-        if data is None:
+        if not data:
             raise ValueError("Parsing unsupported for source: " + src)
         return data
 
-    async def parse_leetcode(self, page: Any) -> dict:
+    async def parse_leetcode(self, page: Any) -> ParseResult:
         await page.wait_for_selector("#__next", timeout=self.timeout)
 
         title = (await page.title()).strip().removesuffix("- LeetCode")
@@ -57,7 +57,7 @@ class WebScrapeManager:
             "tags": tags,
         }
         self._sanitize_leetcode_data(data)
-        return data
+        return ParseResult(**data)
 
     def _sanitize_leetcode_data(self, data: dict) -> None:
         if not data["difficulty"] in self.metadata_manager.get_difficulties():

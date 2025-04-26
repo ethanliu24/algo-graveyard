@@ -5,6 +5,7 @@ from ..daos.question_dao import QuestionDAO
 from ..exceptions.entity_not_found import EntityNotFoundError
 from ..schemas.pagination import Pagination
 from ..schemas.question import Question, QuestionCreate, Source, Difficulty, Status, Tag
+from ..schemas.solution import Language
 
 class QuestionManager(object):
     question_dao: QuestionDAO
@@ -58,18 +59,15 @@ class QuestionManager(object):
         if link != "":
             scraped_data = await self.web_scrap_service.parse_question(link, source)
 
-            if not scraped_data["title"] or not scraped_data["prompt"]:
+            if not scraped_data.title or not scraped_data.prompt:
                 raise ValueError("Parsing failed.")
 
-            self._merge_data(data, scraped_data)
+            self._merge_data(data, scraped_data.model_dump())
 
         # validate data
         data = QuestionCreate(**data).model_dump()
         data["solutions"] = []
-        data["source"] = data["source"].value
-        data["difficulty"] = data["difficulty"].value
-        data["status"] = data["status"].value
-        data["tags"] = [t.value for t in data["tags"]]
+        self._question_enums_to_value(data)
         creation_time = datetime.now(timezone.utc)
         data.update({ "created_at": creation_time, "last_modified": creation_time })
 
@@ -84,14 +82,28 @@ class QuestionManager(object):
         data["hints"] = data.get("hints", []) + scraped_data["hints"]
         data["tags"] = list(set(data.get("tags", []) + scraped_data["tags"]))
 
-    async def update_question(self, data: dict, id: str) -> Question:
+    async def update_question(self, new_data: dict, id: str) -> Question:
         question = await self.get_question(id)
         question_data = question.model_dump()
-        data.update({ "last_modified": datetime.now() })
-        question_data.update(data)
+        new_data.update({ "last_modified": datetime.now() })
+        question_data.update(new_data)
+        self._question_enums_to_value(question_data)
         _ = Question(**question_data) # validate data
-        return self.question_dao.update_question(id, data)
+        return self.question_dao.update_question(id, question_data)
 
     async def delete_question(self, id: str) -> None:
         if not self.question_dao.delete_question(id):
             raise EntityNotFoundError("Invalid question ID.")
+
+    def _question_enums_to_value(self, data: dict) -> None:
+        if isinstance(data["source"], Source):
+            data["source"] = data["source"].value
+        if isinstance(data["difficulty"], Difficulty):
+            data["difficulty"] = data["difficulty"].value
+        if isinstance(data["status"], Status):
+            data["status"] = data["status"].value
+        if len(data["tags"]) > 0 and isinstance(data["tags"][0], Tag):
+            data["tags"] = [t.value for t in data["tags"]]
+        for solution in data["solutions"]:
+            if isinstance(solution["language"], Language):
+                solution["language"] = solution["language"].value
