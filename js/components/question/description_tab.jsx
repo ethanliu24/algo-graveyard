@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Tooltip } from "react-tooltip";
-import { faRotate, faTrash, faPen, faLightbulb, faHashtag, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import {
+  faRotate, faTrash, faPen, faLightbulb, faHashtag, faPenToSquare, faUpRightFromSquare
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Markdown from "react-markdown";
 import ModalContainer from "../common/modal.jsx";
@@ -88,7 +90,7 @@ export default function DescriptionTab(props) {
           {getStatusIcon(props.data.status, 0, false)}
           <h1 className="text-xl text-wrap">{props.data.title}</h1>
         </div>
-        <div className="flex justify-start items-center gap-2 text-xs mb-4">
+        <div className="flex justify-start items-center gap-2 text-xs mb-4 overflow-x-auto">
           <div className="chip" style={getDifficultyStyle(props.data.difficulty)}>{capitalizeFirst(props.data.difficulty)}</div>
           <div className="chip">{capitalizeFirst(props.data.source)}</div>
           <div className="chip text-nowrap">{formatDate(props.data.created_at)}</div>
@@ -106,10 +108,15 @@ export default function DescriptionTab(props) {
           </button>
           <button className="chip chip-btn"
             onClick={handleReparse}
-            data-tooltip-id="edit-question" data-tooltip-content="Reparse question">
+            data-tooltip-id="reparse-question" data-tooltip-content="Reparse question">
             <FontAwesomeIcon icon={faRotate} />
             <Tooltip id="reparse-question" />
           </button>
+          <a href={props.data.link} target="_blank" rel="noreferrer noopener" className="chip chip-btn"
+            data-tooltip-id="navigate-to-source" data-tooltip-content="Navigate to source">
+            <FontAwesomeIcon icon={faUpRightFromSquare} />
+            <Tooltip id="navigate-to-source" />
+          </a>
         </div>
         <div className="markdown-content"><Markdown children={props.data.prompt} /></div>
       </div>
