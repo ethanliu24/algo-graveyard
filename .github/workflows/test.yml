@@ -30,6 +30,8 @@ jobs:
           echo "JWT_ISS=algograveyard" >> $GITHUB_ENV
           echo "JWT_AUD=algograveyard" >> $GITHUB_ENV
           echo "JWT_COOKIE=jwt_token_algograveyard" >> $GITHUB_ENV
+          echo "GEMINI_API_KEY=gemini_api_key" >> $GITHUB_ENV
+          echo "GEMINI_MODEL=gemini-2.0-flash" >> $GITHUB_ENV
           echo "FIRESTORE_EMULATOR_HOST=localhost:8080" >> $GITHUB_ENV
 
       - name: Set up Python ${{ matrix.python-version }}
