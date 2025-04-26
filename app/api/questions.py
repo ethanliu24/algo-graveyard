@@ -57,7 +57,7 @@ async def get_question(
 async def create_question(
     request: Request,
     question_service: Annotated[QuestionManager, Depends(get_question_service)]
-) -> None:
+) -> Question:
     try:
         question_data = await request.json()
         return await question_service.create_question(data=question_data)

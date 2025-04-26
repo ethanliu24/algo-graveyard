@@ -6,6 +6,7 @@ import Verify from "../auth/verify.jsx";
 import Solution from "./solution.jsx";
 import DescriptionTab from "./description_tab.jsx";
 import SolutionTab from "./solutions_tab.jsx";
+import Loader from "../common/loader.jsx";
 import { getReqHeader } from "../../utils/utils.js";
 
 export default function Question() {
@@ -15,6 +16,7 @@ export default function Question() {
   const [activeTab, setActiveTab] = useState("");
   const [isAdmin, setIsAdmin] = useState(true);
   const [toastReady, setToastReady] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const questionPanel = useRef(null);
   const horDragBar = useRef(null);
@@ -125,10 +127,11 @@ export default function Question() {
                   );
               })}</div>
               {activeTab === "Description"
-                && <DescriptionTab data={question} setIsAdmin={setIsAdmin} updateQuestion={updateQuestion} />}
+                && <DescriptionTab data={question} setIsAdmin={setIsAdmin} updateQuestion={updateQuestion}
+                    setIsLoading={(i) => setIsLoading(i)} />}
               {activeTab === "Solutions"
-                && (<SolutionTab question={question} solutions={solutions}
-                  setIsAdmin={(b) => setIsAdmin(b)} displaySolution={displaySolution} addSolution={addSolution} />)}
+                && <SolutionTab question={question} solutions={solutions}
+                    setIsAdmin={(b) => setIsAdmin(b)} displaySolution={displaySolution} addSolution={addSolution} />}
             </div>
             <div className="border-gray-300 w-0 h-full border-2 max-md:hidden"
               ref={horDragBar}></div>
@@ -142,7 +145,13 @@ export default function Question() {
 
           {!isAdmin
             ? <Verify closable={true} closeComponent={() => setIsAdmin(true)}
-            positionStyle="fixed top-0 right-0 m-8" className="text-base" />
+                positionStyle="fixed top-0 right-0 m-8" className="text-base" />
+            : null}
+
+          {isLoading
+            ? <div open className="fixed top-0 left-0 w-screen h-screen bg-black/70 flex justify-center items-center">
+                <Loader dimension={8} />
+              </div>
             : null}
         </>}
       </ToastContext.Provider>

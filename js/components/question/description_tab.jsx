@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Tooltip } from "react-tooltip";
-import { faRotate, faTrash, faPen, faLightbulb, faHashtag } from "@fortawesome/free-solid-svg-icons";
+import { faRotate, faTrash, faPen, faLightbulb, faHashtag, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Markdown from "react-markdown";
 import ModalContainer from "../common/modal.jsx";
@@ -47,6 +47,40 @@ export default function DescriptionTab(props) {
     toast.show({ severity: "success", summary: "Success", className: "success", detail: "Question updated!" });
   };
 
+  const handleReparse = () => {
+    props.setIsLoading(true);
+
+    const req = {
+      method: "PUT",
+      headers: getReqHeader()
+    };
+
+    fetch(`/api/questions/${props.data.id}/parse`, req)
+      .then(response => {
+        if (response.status == 401 || response.status === 403) {
+          setIsAdmin(false);
+        }
+
+        return response;
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.id) {
+          toast.show({ severity: "success", summary: "Success", className: "success", detail: "Reparsed!" });
+          props.updateQuestion(data);
+        }
+
+        if (data.detail) {
+          toast.show({ severity: "danger", summary: "Error", life: 7000, className: "error", detail: data.detail });
+        }
+      })
+      .catch(err => {
+        throw err
+      }).finally(() => {
+        props.setIsLoading(false);
+      });
+  }
+
   return (
     <div className="flex flex-col justify-start items-stretch gap-8 w-full h-full">
       <div className="w-full h-fit">
@@ -58,17 +92,23 @@ export default function DescriptionTab(props) {
           <div className="chip" style={getDifficultyStyle(props.data.difficulty)}>{capitalizeFirst(props.data.difficulty)}</div>
           <div className="chip">{capitalizeFirst(props.data.source)}</div>
           <div className="chip text-nowrap">{formatDate(props.data.created_at)}</div>
-          <button className="chip p-1 hover:bg-gray-300 text-black"
+          <button className="chip chip-btn"
             onClick={() => setOpenModal(true)}
             data-tooltip-id="edit-question" data-tooltip-content="Edit question">
-            <FontAwesomeIcon icon={faRotate} />
+            <FontAwesomeIcon icon={faPenToSquare} />
             <Tooltip id="edit-question" />
           </button>
-          <button className="chip p-1 hover:bg-gray-300 text-black"
+          <button className="chip chip-btn"
             onClick={handleDelete}
             data-tooltip-id="delete-question" data-tooltip-content="Delete question">
             <FontAwesomeIcon icon={faTrash} />
             <Tooltip id="delete-question" />
+          </button>
+          <button className="chip chip-btn"
+            onClick={handleReparse}
+            data-tooltip-id="edit-question" data-tooltip-content="Reparse question">
+            <FontAwesomeIcon icon={faRotate} />
+            <Tooltip id="reparse-question" />
           </button>
         </div>
         <div className="markdown-content"><Markdown children={props.data.prompt} /></div>
