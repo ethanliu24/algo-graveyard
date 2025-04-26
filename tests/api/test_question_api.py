@@ -629,8 +629,8 @@ async def test_reparse_question_dne(endpoint):
         "link": "",
         "difficulty": "easy",
         "status": "completed",
-        "title": "",
-        "prompt": "",
+        "title": "Title",
+        "prompt": "Prompt",
         "notes": [],
         "hints": ["h1"],
         "tags": ["array"]

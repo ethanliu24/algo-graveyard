@@ -1,3 +1,4 @@
+from datetime import datetime
 from google.cloud import firestore
 from typing import Any
 from ..schemas.solution import Solution
@@ -33,6 +34,7 @@ class SolutionDAO:
         if not q_ref:
             return None
 
+        q_ref.update({"last_modified": data["last_modified"]})
         collection_ref = q_ref.collection(self.solution_collection)
         doc_ref = collection_ref.document(id) if id else collection_ref.document()
 
@@ -45,6 +47,7 @@ class SolutionDAO:
         if not q_ref:
             return None
 
+        q_ref.update({"last_modified": data["last_modified"]})
         doc_ref = q_ref.collection(self.solution_collection).document(solution_id)
         doc_ref.update(data)
         return Solution(**doc_ref.get().to_dict())
@@ -54,6 +57,7 @@ class SolutionDAO:
         if not q_ref:
             return False
 
+        q_ref.update({"last_modified": datetime.now()})
         s_ref = q_ref.collection(self.solution_collection).document(solution_id)
 
         res = s_ref.get().exists
