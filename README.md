@@ -43,7 +43,7 @@ The project uses Gemini to generate analyses for solutions.
 
 
 ### Create virtual environment
-Create a Python virtual environment with the command ` python -m venv .venv`
+Create a Python virtual environment with the command `python -m venv .venv`
 
 Notes:
 1. Change the Python interpreter to the .venv folder that's created. In VS Code, do `Ctrl/Cmd + Shift + P`, type in `Python: Select Interpreter` and select the current environment.
@@ -55,7 +55,7 @@ Notes:
 Run the following commands to install all required dependencies.
 ```
 # backend dependencies (make sure to run this in the virtual environment!)
-$ pip install -r requirement.txt
+$ pip install -r requirements.txt
 
 # frontend dependencies
 $ npm install
