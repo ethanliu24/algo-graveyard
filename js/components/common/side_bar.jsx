@@ -54,8 +54,8 @@ export default function Sidebar(props) {
           isOpen={isOpen} size="l" />
         <SidebarItem title="Admin" icon={faLock} link="/admin"
           isOpen={isOpen} size="l" />
-        <SidebarItem title="Analytics" icon={faChartSimple} link="/analytics"
-          isOpen={isOpen} size="l" />
+        {/* <SidebarItem title="Analytics" icon={faChartSimple} link="/analytics"
+          isOpen={isOpen} size="l" /> */}
         <SidebarItem title="Source" icon={faCode} link="https://github.com/ethanliu24/algo-graveyard"
           isOpen={isOpen} className={`${isOpen ? "-ml-[2px]" : ""}`} />
         <SidebarItem title="About" icon={faCircleInfo} link="/about"
