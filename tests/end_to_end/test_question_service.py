@@ -2,6 +2,7 @@ import pytest
 
 from unittest.mock import patch
 from app.exceptions.entity_not_found import EntityNotFoundError
+from app.schemas.question import ParseResult
 from tests.seed import WEB_SCRAPE_DATA
 
 @pytest.mark.asyncio
@@ -47,11 +48,11 @@ async def test_deleting_all_questions(question_service):
             break
 
     assert len((await question_service.get_all_questions()).data) == 0
-    
+
     # Insert back to database for other tests
     with patch(
         "app.managers.web_scrape_manager.WebScrapeManager.parse_question",
-        return_value=WEB_SCRAPE_DATA[0]
+        return_value=ParseResult(**WEB_SCRAPE_DATA[0])
     ):
         for q in deleted:
             data = {"source": q.source.value, "link": q.link, "difficulty": q.difficulty.value,

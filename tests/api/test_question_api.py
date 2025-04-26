@@ -2,7 +2,7 @@ import json
 import pytest
 
 from unittest.mock import patch
-from app.schemas.question import Question, Difficulty
+from app.schemas.question import Question, Difficulty, ParseResult
 from tests.seed import QUESTIONS, WEB_SCRAPE_DATA
 
 API = "/api/questions"
@@ -123,7 +123,7 @@ async def test_create_question_validate_title(endpoint):
 
     with patch(
         "app.managers.web_scrape_manager.WebScrapeManager.parse_question",
-        return_value=WEB_SCRAPE_DATA[0]
+        return_value=ParseResult(**WEB_SCRAPE_DATA[0])
     ) as mock_parse:
         question["link"] = "https://example.com"
         question["title"] = ""
@@ -155,7 +155,7 @@ async def test_create_question_validate_prompt(endpoint):
 
     with patch(
         "app.managers.web_scrape_manager.WebScrapeManager.parse_question",
-        return_value=WEB_SCRAPE_DATA[0]
+        return_value=ParseResult(**WEB_SCRAPE_DATA[0])
     ) as mock_parse:
         question["link"] = "https://example.com"
         question["prompt"] = ""
@@ -204,13 +204,13 @@ async def test_parse_leetcode_successful_no_extra_data(endpoint):
 
     with patch(
         "app.managers.web_scrape_manager.WebScrapeManager.parse_question",
-        return_value={
+        return_value=ParseResult(**{
             "title": "ABC",
             "prompt": "ABC",
             "difficulty": "easy",
             "hints": ["H1", "H2"],
             "tags": ["array"],
-        }
+        })
     ) as mock_parse:
         response = endpoint.post(f"{API}", content=json.dumps(question))
         assert response.status_code == 200
@@ -239,13 +239,13 @@ async def test_parse_leetcode_successful_extra_data(endpoint):
 
     with patch(
         "app.managers.web_scrape_manager.WebScrapeManager.parse_question",
-        return_value={
+        return_value=ParseResult(**{
             "title": "ABC",
             "prompt": "ABC",
             "difficulty": "easy",
             "hints": ["H1", "H2"],
             "tags": ["array", "graph"],
-        }
+        })
     ) as mock_parse:
         response = endpoint.post(f"{API}", content=json.dumps(question))
         assert response.status_code == 200

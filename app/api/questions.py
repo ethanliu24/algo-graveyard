@@ -99,7 +99,7 @@ async def parse_question(
     try:
         question = (await question_service.get_question(question_id))
         parsed_data = await web_scrape_service.parse_question(question.link, question.source.value)
-        return await question_service.update_question(parsed_data, question_id)
+        return await question_service.update_question(parsed_data.model_dump(), question_id)
     except EntityNotFoundError as e:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
     except ValueError as e:

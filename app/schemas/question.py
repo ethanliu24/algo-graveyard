@@ -71,7 +71,15 @@ class QuestionBasicInfo(BaseModelConfig):
 
 class QuestionAll(BaseModelConfig):
     paginated: bool
-    data: Pagination | list[QuestionBasicInfo]
+    data: Pagination
+
+
+class ParseResult(BaseModelConfig):
+    title: str
+    prompt: str
+    difficulty: Difficulty
+    hints: list[str]
+    tags: list[Tag]
 
 
 class Source(Enum):
@@ -90,8 +98,6 @@ class Difficulty(Enum):
     MEDIUM = "medium"
     HARD = "hard"
 
-
-from enum import Enum
 
 class Tag(Enum):
     ARRAY = "array"

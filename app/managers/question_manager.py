@@ -59,10 +59,10 @@ class QuestionManager(object):
         if link != "":
             scraped_data = await self.web_scrap_service.parse_question(link, source)
 
-            if not scraped_data["title"] or not scraped_data["prompt"]:
+            if not scraped_data.title or not scraped_data.prompt:
                 raise ValueError("Parsing failed.")
 
-            self._merge_data(data, scraped_data)
+            self._merge_data(data, scraped_data.model_dump())
 
         # validate data
         data = QuestionCreate(**data).model_dump()
