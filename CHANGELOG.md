@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## Version 0.0.1
+- Add README and about page that loads it (#47)
 - Web parse LeetCode questions to fill out question data (#45)
 - Added ai analysis for each solution (#44)
 - Sanitize user inputs (#43)
