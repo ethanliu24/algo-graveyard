@@ -2,9 +2,9 @@ import { useState } from "react";
 import { Tooltip } from "react-tooltip";
 import { faRotate, faTrash, faPen, faLightbulb, faHashtag } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Markdown from "react-markdown";
 import ModalContainer from "../common/modal.jsx";
 import QuestionForm from "./question_form.jsx";
-import TextDisplay from "../common/text_display.jsx";
 import { useToastContext } from "../../contexts/toast_context.jsx";
 import { getStatusIcon, getDifficultyStyle } from "../../utils/assets.jsx";
 import { formatDate, capitalizeFirst, getReqHeader } from "../../utils/utils.js";
@@ -71,7 +71,7 @@ export default function DescriptionTab(props) {
             <Tooltip id="delete-question" />
           </button>
         </div>
-        <TextDisplay content={props.data.prompt} />
+        <div className="markdown-content"><Markdown children={props.data.prompt} /></div>
       </div>
       <div>
         {props.data.tags.length !== 0
