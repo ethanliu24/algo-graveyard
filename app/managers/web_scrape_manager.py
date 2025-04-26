@@ -1,3 +1,4 @@
+from markdownify import markdownify
 from playwright.async_api import async_playwright, Error
 from typing import Any
 from ..managers.metadata_manager import MetadataManager
@@ -43,7 +44,7 @@ class WebScrapeManager:
         await page.wait_for_selector("#__next", timeout=self.timeout)
 
         title = (await page.title()).strip().removesuffix("- LeetCode")
-        prompt = (await page.locator('[data-track-load="description_content"]').all_inner_texts())[0]
+        prompt = markdownify(await page.locator('[data-track-load="description_content"]').inner_html(timeout=self.timeout))
         difficulty = (await page.locator('div[class*="text-difficulty-"]').inner_text(timeout=self.timeout)).lower()
         tags = [t.lower() for t in (await page.locator(".no-underline.hover\\:text-current.text-caption").all_inner_texts())]
         hints = (await page.locator(".text-body.elfjS").all_inner_texts())

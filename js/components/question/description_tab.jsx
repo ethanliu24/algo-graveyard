@@ -54,7 +54,7 @@ export default function DescriptionTab(props) {
           {getStatusIcon(props.data.status, 0, false)}
           <h1 className="text-xl text-wrap">{props.data.title}</h1>
         </div>
-        <div className="flex justify-start items-center gap-2 text-xs mb-8">
+        <div className="flex justify-start items-center gap-2 text-xs mb-4">
           <div className="chip" style={getDifficultyStyle(props.data.difficulty)}>{capitalizeFirst(props.data.difficulty)}</div>
           <div className="chip">{capitalizeFirst(props.data.source)}</div>
           <div className="chip text-nowrap">{formatDate(props.data.created_at)}</div>
