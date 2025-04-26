@@ -60,15 +60,14 @@ export default function DescriptionTab(props) {
     fetch(`/api/questions/${props.data.id}/parse`, req)
       .then(response => {
         if (response.status == 401 || response.status === 403) {
-          setIsAdmin(false);
+          props.setIsAdmin(false);
         }
 
-        return response;
+        return response.json();
       })
-      .then(res => res.json())
       .then(data => {
         if (data.id) {
-          toast.show({ severity: "success", summary: "Success", className: "success", detail: "Reparsed!" });
+          toast.show({ severity: "success", summary: "Success", className: "success", detail: "Reparsed successful." });
           props.updateQuestion(data);
         }
 
