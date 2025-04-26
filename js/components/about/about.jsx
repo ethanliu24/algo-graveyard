@@ -1,7 +1,7 @@
 import ReactMarkdown from 'react-markdown';
-import aboutContent from "../../../README.md?raw";
+import about from "../../../README.md?raw";
 
 export default function About() {
-    console.log(aboutContent)
-    return <ReactMarkdown children={aboutContent} />
+    const aboutContent = about.replace("Algo Graveyard", "").trim();
+    return <div className="prose prose-sm"><ReactMarkdown children={aboutContent} /></div>;
 }
