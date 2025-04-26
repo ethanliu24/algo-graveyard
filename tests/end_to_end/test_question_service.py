@@ -1,6 +1,6 @@
 import pytest
-from unittest.mock import patch
 
+from unittest.mock import patch
 from app.exceptions.entity_not_found import EntityNotFoundError
 from tests.seed import WEB_SCRAPE_DATA
 
@@ -28,17 +28,26 @@ async def test_all_crud_question_no_errors(question_service):
     assert str(info.value) == "Invalid question ID."
 
 @pytest.mark.asyncio
+# @pytest.mark.skip(reason="Doesn't fetch all questions due to pagination. Need to iteratively fetch. Fix later.")
 async def test_deleting_all_questions(question_service):
-    questions = (await question_service.get_all_questions()).data
-    assert len(questions) > 0
-
     deleted = []
-    for question in questions:
-        deleted.append(await question_service.get_question(question.id))
-        await question_service.delete_question(question.id)
+    page = 1
+
+    while True:
+        pagination = (await question_service.get_all_questions(page=page))
+        assert len(pagination.data) > 0
+
+        for question in pagination.data:
+            deleted.append(await question_service.get_question(question.id))
+            await question_service.delete_question(question.id)
+
+
+        page = pagination.page + 1
+        if pagination.page == pagination.pages:
+            break
 
     assert len((await question_service.get_all_questions()).data) == 0
-
+    
     # Insert back to database for other tests
     with patch(
         "app.managers.web_scrape_manager.WebScrapeManager.parse_question",

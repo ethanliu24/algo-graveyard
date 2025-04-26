@@ -1,7 +1,7 @@
 import json
 import pytest
-from unittest.mock import patch
 
+from unittest.mock import patch
 from app.schemas.question import Question, Difficulty
 from tests.seed import QUESTIONS, WEB_SCRAPE_DATA
 
@@ -125,7 +125,7 @@ async def test_create_question_validate_title(endpoint):
         "app.managers.web_scrape_manager.WebScrapeManager.parse_question",
         return_value=WEB_SCRAPE_DATA[0]
     ) as mock_parse:
-        question["link"] = "link"
+        question["link"] = "https://example.com"
         question["title"] = ""
         response = endpoint.post(f"{API}", content=json.dumps(question))
         assert response.status_code == 200
@@ -157,10 +157,11 @@ async def test_create_question_validate_prompt(endpoint):
         "app.managers.web_scrape_manager.WebScrapeManager.parse_question",
         return_value=WEB_SCRAPE_DATA[0]
     ) as mock_parse:
-        question["link"] = "link" 
+        question["link"] = "https://example.com"
         question["prompt"] = ""
         response = endpoint.post(f"{API}", content=json.dumps(question))
         assert response.status_code == 200
+        mock_parse.assert_called_once()
 
 
 @pytest.mark.asyncio
@@ -185,6 +186,94 @@ async def test_question_sanitization(endpoint):
     assert q.prompt == "A"
     assert q.notes == ["A"]
     assert q.hints == []
+
+
+@pytest.mark.asyncio
+async def test_parse_leetcode_successful_no_extra_data(endpoint):
+    question = {
+        "source": "leetcode",
+        "link": "https://example.com",
+        "difficulty": "",
+        "status": "completed",
+        "title": "",
+        "prompt": "",
+        "notes": [],
+        "hints": [],
+        "tags": []
+    }
+
+    with patch(
+        "app.managers.web_scrape_manager.WebScrapeManager.parse_question",
+        return_value={
+            "title": "ABC",
+            "prompt": "ABC",
+            "difficulty": "easy",
+            "hints": ["H1", "H2"],
+            "tags": ["array"],
+        }
+    ) as mock_parse:
+        response = endpoint.post(f"{API}", content=json.dumps(question))
+        assert response.status_code == 200
+        q = Question(**response.json())
+        assert q.title == "ABC"
+        assert q.prompt == "ABC"
+        assert q.difficulty.value == "easy"
+        assert q.hints == ["H1", "H2"]
+        assert all(True for t in q.tags if t.value in  ["array"])
+        mock_parse.assert_called_once()
+
+
+@pytest.mark.asyncio
+async def test_parse_leetcode_successful_extra_data(endpoint):
+    question = {
+        "source": "leetcode",
+        "link": "https://example.com",
+        "difficulty": "medium",
+        "status": "completed",
+        "title": "A",
+        "prompt": "ABC",
+        "notes": [],
+        "hints": ["H3"],
+        "tags": ["array"]
+    }
+
+    with patch(
+        "app.managers.web_scrape_manager.WebScrapeManager.parse_question",
+        return_value={
+            "title": "ABC",
+            "prompt": "ABC",
+            "difficulty": "easy",
+            "hints": ["H1", "H2"],
+            "tags": ["array", "graph"],
+        }
+    ) as mock_parse:
+        response = endpoint.post(f"{API}", content=json.dumps(question))
+        assert response.status_code == 200
+        q = Question(**response.json())
+        assert q.title == "A"
+        assert q.prompt == "ABC\n\n\nABC"
+        assert q.difficulty.value == "medium"
+        assert all(True for h in q.hints if h in ["H1", "H2", "H3"])
+        assert all(True for t in q.tags if t.value in  ["array", "graph"])
+        mock_parse.assert_called_once()
+
+
+@pytest.mark.asyncio
+async def test_parse_leetcode_invalid_link(endpoint):
+    question = {
+        "source": "leetcode",
+        "link": "invalid.com",
+        "difficulty": "",
+        "status": "completed",
+        "title": "",
+        "prompt": "",
+        "notes": [],
+        "hints": [],
+        "tags": []
+    }
+
+    response = endpoint.post(f"{API}", content=json.dumps(question))
+    assert response.status_code == 400
 
 
 # Updating questions
