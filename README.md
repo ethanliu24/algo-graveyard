@@ -43,12 +43,12 @@ The project uses Gemini to generate analyses for solutions.
 
 
 ### Create virtual environment
-Create a Python virtual environment with the command `python -m venv .venv`
+Create a Python virtual environment with the command `python3 -m venv .venv`
 
 Notes:
 1. Change the Python interpreter to the .venv folder that's created. In VS Code, do `Ctrl/Cmd + Shift + P`, type in `Python: Select Interpreter` and select the current environment.
-2. Optional, but if you don't want `__pycache__/` directories, go to `.venv/bin/activate` and paste in `export PYTHONDONTWRITEBYTECODE=1` somewhere
-3. Check if you are in the right virtual environment with command: `which python3`. This should return a path to the virtual environment
+2. Optional, but if you don't want `__pycache__/` directories, go to `.venv/bin/activate` and paste in `export PYTHONDONTWRITEBYTECODE=1` somewhere.
+3. Check if you are in the right virtual environment with command: `which python3`. This should return a path to the virtual environment.
 
 
 ### Installing dependencies
