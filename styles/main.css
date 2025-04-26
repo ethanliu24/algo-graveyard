@@ -41,6 +41,14 @@
     @apply bg-gray-200 px-2 py-0.5 rounded-full text-[11px] mr-0.5 flex justify-center items-center gap-1;
   }
 
+  .markdown-content {
+    @apply prose prose-sm text-[0.7rem];
+  }
+
+  .markdown-content :not(pre) > code {
+    @apply bg-gray-300 rounded px-1 py-0.5 mx-0.5;
+  }
+
   /* Toast */
 
   .p-toast-message {

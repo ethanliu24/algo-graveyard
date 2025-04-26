@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faHourglassEnd, faClock, faMinus } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faHourglassEnd, faClock, faMinus, faX } from "@fortawesome/free-solid-svg-icons";
 import { Tooltip } from "react-tooltip";
 import { capitalizeFirst, getLanguageHighlighter } from "./utils";
 
@@ -37,4 +37,8 @@ export function getLanguageIcon(language) {
   filename += ".svg";
   return <img src={`../static/res/languages/${filename}`} alt={language}
     className="w-6 h-6 brightness-105 select-none" />
+}
+
+export function getAcceptedIcon(accepted) {
+  return <FontAwesomeIcon icon={accepted ? faCheck : faX} size="lg" color={accepted ? "#6bd177" : "#eb4b63"} />;
 }
