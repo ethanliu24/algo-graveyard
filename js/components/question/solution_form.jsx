@@ -14,8 +14,8 @@ export default function SolutionForm(props) {
   const [summary, setSummary] = useState(props.data.summary || "");
   const [explanation, setExplanation] = useState(props.data.explanation || "");
   const [language, setLanguage] = useState(props.data.language || "");
-  const [timeComplexity, setTimeComplexity] = useState(props.data.timeComplexity || "");
-  const [spaceComplexity, setSpaceComplexity] = useState(props.data.spaceComplexity || "");
+  const [timeComplexity, setTimeComplexity] = useState(props.data.time_complexity || "");
+  const [spaceComplexity, setSpaceComplexity] = useState(props.data.space_complexity || "");
   const [code, setCode] = useState(props.data.code || "");
   const [accepted, setAccepted] = useState(props.data.accepted || true);
   const [languages, setLanguages] = useState([]);
