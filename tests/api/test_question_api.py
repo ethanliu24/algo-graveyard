@@ -572,3 +572,80 @@ async def test_sorting_default(endpoint):
     assert response.status_code == 200
     questions = response.json()["data"]
     assert all([questions[i-1]["last_modified"] >= questions[i]["last_modified"] for i in range(1, len(questions))])
+
+
+# Reparsing
+@pytest.mark.asyncio
+async def test_reparse_question_basic(endpoint):
+    """ Test creating a question with basic inputs. """
+    question = {
+        "source": "leetcode",
+        "link": "",
+        "difficulty": "easy",
+        "status": "completed",
+        "title": "Create Question Basic",
+        "prompt": "create a basic question",
+        "notes": [],
+        "hints": ["h1"],
+        "tags": ["array"]
+    }
+
+    response = endpoint.post(f"{API}", json=question)
+    assert response.status_code == 200
+    q = Question(**response.json())
+
+    response = endpoint.put(f"{API}/{q.id}", json={"link": "https://example.com"})
+    assert response.status_code == 200
+
+    with patch(
+        "app.managers.web_scrape_manager.WebScrapeManager.parse_question",
+        return_value=ParseResult(**WEB_SCRAPE_DATA[0])
+    ) as mock_parse:
+        response = endpoint.put(f"{API}/{q.id}/parse")
+        assert response.status_code == 200
+        q = Question(**response.json())
+        assert q.title == "Title"
+        assert q.prompt == "Description"
+        assert q.difficulty.value == "easy"
+        assert not q.hints
+        assert not q.tags
+
+        # parse again
+        response = endpoint.put(f"{API}/{q.id}/parse")
+        assert response.status_code == 200
+        q = Question(**response.json())
+        assert q.title == "Title"
+        assert q.prompt == "Description"
+        assert q.difficulty.value == "easy"
+        assert not q.hints
+        assert not q.tags
+
+
+@pytest.mark.asyncio
+async def test_reparse_question_dne(endpoint):
+    """ Test creating a question with basic inputs. """
+    question = {
+        "source": "leetcode",
+        "link": "",
+        "difficulty": "easy",
+        "status": "completed",
+        "title": "",
+        "prompt": "",
+        "notes": [],
+        "hints": ["h1"],
+        "tags": ["array"]
+    }
+
+    response = endpoint.post(f"{API}", json=question)
+    assert response.status_code == 200
+    q = Question(**response.json())
+
+    response = endpoint.put(f"{API}/{q.id}", json={"link": "https://example.com"})
+    assert response.status_code == 200
+
+    with patch(
+        "app.managers.web_scrape_manager.WebScrapeManager.parse_question",
+        return_value=ParseResult(**WEB_SCRAPE_DATA[0])
+    ) as mock_parse:
+        response = endpoint.put(f"{API}/question_dne/parse")
+        assert response.status_code == 404
