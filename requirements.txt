@@ -1,4 +1,4 @@
-# Flask framework & extensions
+# FastAPI framework & extensions
 fastapi[standard]>=0.115.12
 pydantic==2.10.5
 starlette>=0.46.1
@@ -21,3 +21,6 @@ playwright
 
 # Authentication & Authorization
 PyJWT>=2.10.0
+
+# Utils
+markdownify

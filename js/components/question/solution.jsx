@@ -3,11 +3,12 @@ import { Editor } from "@monaco-editor/react";
 import { faRotate, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Tooltip } from "react-tooltip";
-import TextDisplay from "../common/text_display";
+import Markdown from "react-markdown";
 import ModalContainer from "../common/modal";
 import SolutionForm from "./solution_form";
 import { useToastContext } from "../../contexts/toast_context";
 import { formatDate, getLanguageHighlighter, getReqHeader } from "../../utils/utils";
+import { getAcceptedIcon } from "../../utils/assets";
 
 export default function Solution(props) {
   const [openForm, setOpenForm] = useState(false);
@@ -16,24 +17,6 @@ export default function Solution(props) {
 
   const containerRef = useRef(null);
   const editorRef = useRef(null);
-
-  const handleEditorDidMount = (editor) => {
-    editorRef.current = editor;
-
-    const updateHeight = () => {
-      const contentHeight = editor.getContentHeight();
-      setEditorHeight(contentHeight);
-      editor.layout(); // re-layout the editor
-    };
-
-    // Update height on mount
-    updateHeight();
-
-    // Update height on content change
-    editor.onDidContentSizeChange(() => {
-      updateHeight();
-    });
-  };
 
   useEffect(() => {
     if (editorRef.current) {
@@ -78,6 +61,37 @@ export default function Solution(props) {
     toast.show({ severity: "success", summary: "Success", className: "success", detail: "Solution updated!" });
   };
 
+  const formatExplanation = (data) => {
+    let res = [];
+    res.push("### Explaination");
+    res.push(`- Time: O(${data.time_complexity})`);
+    res.push(`- Space: O(${data.space_complexity})`);
+    res.push(`\n${data.explanation}`);
+    res.push("### AI Analysis");
+    res.push(`- Time: O(${data.ai_analysis.time_complexity})`);
+    res.push(`- Space: O(${data.ai_analysis.space_complexity})`);
+    res.push(`\n${data.ai_analysis.feedback}`);
+    return res.join("\n");
+  }
+
+  const handleEditorDidMount = (editor) => {
+    editorRef.current = editor;
+
+    const updateHeight = () => {
+      const contentHeight = editor.getContentHeight();
+      setEditorHeight(contentHeight);
+      editor.layout(); // re-layout the editor
+    };
+
+    // Update height on mount
+    updateHeight();
+
+    // Update height on content change
+    editor.onDidContentSizeChange(() => {
+      updateHeight();
+    });
+  };
+
   return (!props.data
     ? (
       <div className="flex justify-center items-center w-full h-full">
@@ -86,7 +100,10 @@ export default function Solution(props) {
     )
     : (
       <div>
-        <h1 className="text-xl text-wrap mb-2">{props.data.summary}</h1>
+        <div className="flex justify-start items-center gap-4 mb-2">
+          {getAcceptedIcon(props.data.accepted)}
+          <h1 className="text-xl text-wrap">{props.data.summary}</h1>
+        </div>
         <div className="flex justify-start items-stretch gap-2 mb-4">
           <div className="chip w-fit text-nowrap">{formatDate(props.data.last_modified)}</div>
           <button className="chip p-1 hover:bg-gray-300 text-black"
@@ -102,13 +119,10 @@ export default function Solution(props) {
             <Tooltip id="delete-solution" />
           </button>
         </div>
-        <h2 className="text-md first-letter:text-primary">{`Time: O(${props.data.time_complexity})`}</h2>
-        <h2 className="text-md first-letter:text-primary mb-4">{`Space: O(${props.data.space_complexity})`}</h2>
-        <TextDisplay content={props.data.explanation} />
-        <div className="text-[14px] mb-8">
-          <h1 className="text-[18px] mb-2 first-letter:text-primary">Ai Analysis</h1>
-          <p>{`Time: O(${props.data.ai_analysis.time_complexity}) Space: O(${props.data.ai_analysis.space_complexity})`}</p>
-          <p>{props.data.ai_analysis.feedback}</p>
+        <div className="markdown-content">
+          <Markdown children={
+            formatExplanation(props.data)
+          } />
         </div>
         <div ref={containerRef} className="w-full">
           <Editor
