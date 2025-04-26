@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from 'primereact/inputtextarea';
 import Verify from "../auth/verify.jsx";
+import Loader from "../common/loader.jsx";
 import { Dropdown } from "../common/drop_down.jsx";
 import { useToastContext } from "../../contexts/toast_context.jsx";
 import { formatQueries, getReqHeader, getLanguageHighlighter } from "../../utils/utils.js";
@@ -19,6 +20,8 @@ export default function SolutionForm(props) {
   const [accepted, setAccepted] = useState(props.data.accepted || true);
   const [languages, setLanguages] = useState([]);
   const [showVerify, setShowVerify] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const toast = useToastContext();
 
   useEffect(() => {
@@ -39,6 +42,8 @@ export default function SolutionForm(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
+
     const data = {
       summary: summary,
       explanation: explanation,
@@ -53,6 +58,8 @@ export default function SolutionForm(props) {
 
     if (isFormValid(data)) {
       props.create ? createSolution(data) : updateSolution(data);
+    } else {
+      setIsSubmitting(false);
     }
   };
 
@@ -98,11 +105,14 @@ export default function SolutionForm(props) {
           toast.show({ severity: "success", summary: "Success", className: "success", detail: "Solution created!" });
           props.methodSuccessful(json);
         } else {
-          toast.show({ severity: "danger", summary: "Error", className: "error", detail: json.detail });
+          toast.show({ severity: "danger", summary: "Error", life: 7000, className: "error", detail: json.detail });
         }
       })
       .catch(err => {
         throw err;
+      })
+      .finally(() => {
+        setIsSubmitting(false);
       });
   };
 
@@ -124,7 +134,7 @@ export default function SolutionForm(props) {
       .then(res => res.json())
       .then(json => {
         if (json.detail) {
-          toast.show({ severity: "danger", summary: "Error", className: "error", detail: json.detail });
+          toast.show({ severity: "danger", summary: "Error", life: 7000, className: "error", detail: json.detail });
         } else {
           toast.show({ severity: "success", summary: "Success", className: "success", detail: "Solution created!" });
           props.methodSuccessful(json);
@@ -133,6 +143,9 @@ export default function SolutionForm(props) {
       .catch(err => {
         throw err;
       })
+      .finally(() => {
+        setIsSubmitting(false);
+      });
   };
 
   return (
@@ -176,9 +189,9 @@ export default function SolutionForm(props) {
         <Editor height="400px" language={getLanguageHighlighter(language) || "plaintext"}
           onChange={(c) => setCode(c)} value={code} options={{ wordWrap: "on" }} theme="vs-dark" />
       </div>
-      <button onClick={handleSubmit} className="my-3 text-base">
-        <FontAwesomeIcon icon={props.create ? faPlus : faRotate} className="mr-2" />
-        {props.create ? "Create" : "Update"}
+      <button onClick={handleSubmit} className="text-base flex justify-center items-center gap-1 flex-nowrap">
+        <div className="mr-2">{isSubmitting ? <Loader /> : <FontAwesomeIcon icon={props.create ? faPlus : faRotate} />}</div>
+        <h3>{props.create ? "Create" : "Update"}</h3>
       </button>
     </div>
   );

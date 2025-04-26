@@ -10,6 +10,7 @@ from .managers.ai_analysis_manager import AiAnalysisManager
 from .managers.metadata_manager import MetadataManager
 from .managers.question_manager import QuestionManager
 from .managers.solution_manager import SolutionManager
+from .managers.web_scrape_manager import WebScrapeManager
 
 class Configs:
     instance: Configs = None
@@ -39,18 +40,18 @@ class Configs:
             cls.solution_collection = "Solutions"
 
             cls.firebase_manager = FirebaseManager()
+
             cls.question_dao = QuestionDAO(
                 cls.firebase_manager.get_client(),
                 cls.question_collection,
                 cls.solution_collection
             )
+
             cls.solution_dao = SolutionDAO(
                 cls.firebase_manager.get_client(),
                 cls.question_collection,
                 cls.solution_collection
             )
-
-            cls.metadata_manager = MetadataManager()
 
             cls.auth_manager = AuthManager(
                 ENV_VARS.get("APP_SECRET"),
@@ -85,7 +86,10 @@ class Configs:
                 ENV_VARS.get("GEMINI_API_KEY"), ENV_VARS.get("GEMINI_MODEL"), ai_ctx
             )
 
-            cls.question_manager = QuestionManager(cls.question_dao, cls.metadata_manager)
+            cls.metadata_manager = MetadataManager()
+            cls.web_scrape_manager = WebScrapeManager(cls.metadata_manager)
+
+            cls.question_manager = QuestionManager(cls.question_dao, cls.metadata_manager, cls.web_scrape_manager)
             cls.solution_manager = SolutionManager(cls.solution_dao, cls.ai_analysis_manager)
 
         return cls.instance
@@ -113,6 +117,10 @@ def get_auth_service(configs: Annotated[Configs, Depends(init_config)]):
 
 def get_ai_analysis_service(configs: Annotated[Configs, Depends(init_config)]):
     return configs.ai_analysis_manager
+
+
+def get_web_scrape_service(configs: Annotated[Configs, Depends(init_config)]):
+    return configs.web_scrape_manager
 
 
 auth_user_jwt = JWTBearer(Configs().auth_manager)

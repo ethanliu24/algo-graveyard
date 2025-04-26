@@ -29,12 +29,12 @@ class SolutionManager(object):
 
         solution["language"] = solution["language"].value
 
-        solution.update({"ai_analysis": self.ai_analysis_service.get_feedback(
+        solution.update({"ai_analysis": (await self.ai_analysis_service.get_feedback(
             solution["question_title"],
             solution["question_prompt"],
             solution["language"],
             solution["code"]
-        ).model_dump()})
+        )).model_dump()})
 
         del solution["question_title"]
         del solution["question_prompt"]
@@ -59,12 +59,12 @@ class SolutionManager(object):
             if "question_title" not in data or "question_prompt" not in data:
                 raise ValueError("Question title and prompt must be provided")
 
-            data.update({ "ai_analysis": self.ai_analysis_service.get_feedback(
+            data.update({ "ai_analysis": (await self.ai_analysis_service.get_feedback(
                 data["question_title"],
                 data["question_prompt"],
                 language,
                 edited_code
-            ).model_dump()})
+            )).model_dump()})
 
         data.pop("question_prompt", None)
         data.pop("question_title", None)

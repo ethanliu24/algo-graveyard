@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 from .metadata_manager import MetadataManager
+from .web_scrape_manager import WebScrapeManager
 from ..daos.question_dao import QuestionDAO
 from ..exceptions.entity_not_found import EntityNotFoundError
 from ..schemas.pagination import Pagination
@@ -8,10 +9,12 @@ from ..schemas.question import Question, QuestionCreate, Source, Difficulty, Sta
 class QuestionManager(object):
     question_dao: QuestionDAO
     metadata_manager: MetadataManager
+    web_scrap_service: WebScrapeManager
 
-    def __init__(self, question_dao: QuestionDAO, metadata_manager: MetadataManager):
+    def __init__(self, question_dao: QuestionDAO, metadata_manager: MetadataManager, web_scrap_service: WebScrapeManager):
         self.question_dao = question_dao
         self.metadata_manager = metadata_manager
+        self.web_scrap_service = web_scrap_service
 
     async def get_all_questions(
         self,
@@ -42,25 +45,44 @@ class QuestionManager(object):
             source, difficulty, status, tags, search, sort_by, order, page, per_page
         )
 
-
     async def get_question(self, id: str) -> Question:
         question = self.question_dao.get_question(id)
         if not question:
             raise EntityNotFoundError("Invalid question ID.")
         return question
 
-    async def create_question(self, data: QuestionCreate, id: str = None) -> Question:
-        question = data.model_dump()
-        question["source"] = question["source"].value
-        question["difficulty"] = question["difficulty"].value
-        question["status"] = question["status"].value
-        question["tags"] = [tag.value for tag in question["tags"]]
-        question["solutions"] = []
+    async def create_question(self, data: dict, id: str = None) -> Question:
+        link = data.get("link", "")
+        source = data.get("source", "")
+        scraped_data = {}
+        if link != "":
+            scraped_data = await self.web_scrap_service.parse_question(link, source)
 
+            if not scraped_data["title"] or not scraped_data["prompt"]:
+                raise ValueError("Parsing failed.")
+
+            self._merge_data(data, scraped_data)
+
+        # validate data
+        data = QuestionCreate(**data).model_dump()
+        data["solutions"] = []
+        data["source"] = data["source"].value
+        data["difficulty"] = data["difficulty"].value
+        data["status"] = data["status"].value
+        data["tags"] = [t.value for t in data["tags"]]
         creation_time = datetime.now(timezone.utc)
-        question.update({ "created_at": creation_time, "last_modified": creation_time })
+        data.update({ "created_at": creation_time, "last_modified": creation_time })
 
-        return self.question_dao.create_question(question, id)
+        return self.question_dao.create_question(data, id)
+
+    def _merge_data(self, data: dict, scraped_data: dict):
+        title = data.get("title", "")
+        data["title"] = title if title else scraped_data["title"]
+        data["prompt"] = data.get("prompt", "") + "\n\n\n" + scraped_data["prompt"]
+        difficulty = data.get("difficulty", "")
+        data["difficulty"] = difficulty if difficulty else scraped_data["difficulty"]
+        data["hints"] = data.get("hints", []) + scraped_data["hints"]
+        data["tags"] = list(set(data.get("tags", []) + scraped_data["tags"]))
 
     async def update_question(self, data: dict, id: str) -> Question:
         question = await self.get_question(id)

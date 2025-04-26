@@ -34,7 +34,7 @@ class MetadataManager:
         return [status.value for status in Status]
 
     def get_tags(self) -> list[str]:
-        return [tag.value for tag in Tag]
+        return sorted([tag.value for tag in Tag])
 
     def get_languages(self) -> list[str]:
         return [language.value for language in Language]

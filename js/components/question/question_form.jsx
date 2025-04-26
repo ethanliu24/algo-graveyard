@@ -8,6 +8,7 @@ import { getReqHeader, formatQueries } from "../../utils/utils";
 import QuestionHelper, { HelperStrTemplate } from "./question_helpers.jsx";
 import { useToastContext } from "../../contexts/toast_context.jsx";
 import Verify from "../auth/verify.jsx";
+import Loader from "../common/loader.jsx";
 
 export default function QuestionForm(props) {
   const [link, setLink] = useState(props.link || "");
@@ -22,6 +23,7 @@ export default function QuestionForm(props) {
   // const [testCases, setTestCases] = useState([]);
   const [metadata, setMetadata] = useState({});
   const [showVerify, setShowVerify] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const toast = useToastContext();
 
@@ -81,6 +83,8 @@ export default function QuestionForm(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
+
     const data = {
       source: source,
       link: link,
@@ -95,6 +99,8 @@ export default function QuestionForm(props) {
 
     if (isFormValid(data)) {
       props.create ? createQuestion(data) : updateQuestion(data);
+    } else {
+      setIsSubmitting(false);
     }
   };
 
@@ -155,11 +161,14 @@ export default function QuestionForm(props) {
         if (data.id) {  // This means creation was successful
           window.location.href = `/questions/${data.id}`;
         } else {
-          toast.show({ severity: "danger", summary: "Error", className: "error", detail: data.detail });
+          toast.show({ severity: "danger", summary: "Error", life: 7000, className: "error", detail: data.detail });
         }
       })
       .catch(err => {
         throw err;
+      })
+      .finally(() => {
+        setIsSubmitting(false);
       });
   };
 
@@ -186,12 +195,15 @@ export default function QuestionForm(props) {
         }
 
         if (data.detail) {
-          toast.show({ severity: "danger", summary: "Error", className: "error", detail: data.detail });
+          toast.show({ severity: "danger", summary: "Error", life: 7000, className: "error", detail: data.detail });
         }
       })
       .catch(err => {
         throw err
       })
+      .finally(() => {
+        setIsSubmitting(false);
+      });
   };
 
   return (
@@ -232,9 +244,9 @@ export default function QuestionForm(props) {
         list={hints} updateList={updateHints} setList={(l) => setHints(l)} />
       {/* <QuestionHelper title="Test Cases" helperTemplate={HelperTestCaseTemplate} defaultValue={{ parameters: [], explanation: "" }}
         list={testCases} updateList={updateTestCases} setList={(l) => setTestCases(l)} /> */}
-      <button onClick={handleSubmit} className="my-3 text-base">
-        <FontAwesomeIcon icon={props.create ? faPlus : faRotate} className="mr-2" />
-        {props.create ? "Create" : "Update"}
+      <button onClick={handleSubmit} className="text-base flex justify-center items-center gap-1 flex-nowrap">
+        <div className="mr-2">{isSubmitting ? <Loader /> : <FontAwesomeIcon icon={props.create ? faPlus : faRotate} />}</div>
+        <h3>{props.create ? "Create" : "Update"}</h3>
       </button>
     </div>
   )

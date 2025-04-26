@@ -223,3 +223,13 @@ QUERY_Q = [
         "last_modified": datetime(2006, 1, 1, 1, 1, 1, 1, tzinfo=timezone.utc),
     },
 ]
+
+WEB_SCRAPE_DATA = [
+    {
+        "title": "Title",
+        "prompt": "Description",
+        "difficulty": "easy",
+        "hints": [],
+        "tags": [],
+    }
+]

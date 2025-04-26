@@ -36,6 +36,11 @@ def auth_service(setup):
 
 
 @pytest.fixture()
+def web_scrape_service(setup):
+    yield setup.web_scrape_manager
+
+
+@pytest.fixture()
 def endpoint():
     client = TestClient(app)
     client.cookies.set(ENV_VARS.get("JWT_COOKIE"), utils.create_jwt_token())

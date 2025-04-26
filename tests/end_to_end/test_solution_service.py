@@ -1,6 +1,5 @@
 import pytest
 
-from app.schemas.question import QuestionCreate
 from app.schemas.solution import SolutionCreate
 
 @pytest.mark.asyncio
@@ -12,7 +11,7 @@ async def test_all_crud_solution_no_errors(question_service, solution_service):
               "time_complexity": "n!", "space_complexity": "n!", "code": "", "accepted": True, "question_title": "A",
               "question_prompt": "A"}
 
-    q = await question_service.create_question(QuestionCreate(**q_data))
+    q = await question_service.create_question(q_data)
     q_id = q.id
     s = await solution_service.create_solution(q_id, SolutionCreate(**s_data))
     s_id = s.id
