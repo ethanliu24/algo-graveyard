@@ -114,7 +114,7 @@ export default function Question() {
           <Sidebar open={false} />
           <div className="w-full h-full text-sm bg-white
             flex flex-row max-md:flex-col justify-between items-center">
-            <div className="w-3/7 h-full max-md:w-full max-md:h-2/5 p-8 pt-2 overflow-y-auto hide-scrollbar" ref={questionPanel}>
+            <div className="w-4/9 h-full max-md:w-full max-md:h-2/5 p-8 pt-2 overflow-y-auto hide-scrollbar" ref={questionPanel}>
               <div className="flex justify-around items-center mb-4">{
                 ["Description", "Solutions"].map((label) => {
                   return (

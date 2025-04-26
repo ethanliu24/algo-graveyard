@@ -7,7 +7,6 @@ import {
   faHouse,
   faSquarePlus,
   faLock,
-  faChartSimple,
   faCode,
   faCircleInfo
 } from "@fortawesome/free-solid-svg-icons";

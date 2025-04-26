@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## Version 0.0.1
+- Update question's last_modified field when managing solutions (#52)
+- Add button to navigate to the question source (#52)
 - Add reparse functionality to front end (#49)
 - Add endpoint for parsing questions (#49)
 - Render question prompts and solution analyses in markdown (#48)
