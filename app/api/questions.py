@@ -3,9 +3,10 @@ import fastapi
 from fastapi import APIRouter, Depends, HTTPException, status, Query, Request
 from pydantic import ValidationError
 from typing import Annotated
-from ..config import get_question_service, auth_user_jwt
+from ..config import get_question_service, auth_user_jwt, get_web_scrape_service
 from ..exceptions.entity_not_found import EntityNotFoundError
 from ..managers.question_manager import QuestionManager
+from ..managers.web_scrape_manager import WebScrapeManager
 from ..schemas.pagination import Pagination
 from ..schemas.question import Question, Source, Difficulty, Status, Tag
 
@@ -88,3 +89,18 @@ async def delete_quesiton(
         await question_service.delete_question(question_id)
     except EntityNotFoundError as e:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
+
+@router.put("/{question_id}/parse", status_code=status.HTTP_200_OK, dependencies=[Depends(auth_user_jwt)])
+async def parse_question(
+    question_id: str,
+    question_service: Annotated[QuestionManager, Depends(get_question_service)],
+    web_scrape_service: Annotated[WebScrapeManager, Depends(get_web_scrape_service)],
+) -> Question:
+    try:
+        question = (await question_service.get_question(question_id))
+        parsed_data = await web_scrape_service.parse_question(question.link, question.source.value)
+        return await question_service.update_question(parsed_data, question_id)
+    except EntityNotFoundError as e:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
+    except ValueError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
