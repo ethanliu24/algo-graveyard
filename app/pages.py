@@ -17,6 +17,7 @@ def get_static_path(name: str):
         "auth": manifest["components/auth/main.js"],
         "create": manifest["components/create/main.js"],
         "question": manifest["components/question/main.js"],
+        "about": manifest["components/about/main.js"],
         "styles": manifest["../styles/main.css"],
     }
 
@@ -61,4 +62,11 @@ async def question_creation_page(request: Request):
 async def question_page(request: Request, question_id: str):
     return templates.TemplateResponse(
         "base.html", create_context(request, f"{question_id}", "questionDiv", get_static_path("question"))
+    )
+
+
+@router.get("/about", response_class=HTMLResponse)
+async def about_page(request: Request):
+    return templates.TemplateResponse(
+        "base.html", create_context(request, "About", "aboutDiv", get_static_path("about"))
     )

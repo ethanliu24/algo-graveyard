@@ -14,6 +14,7 @@ export default defineConfig({
         auth: resolve(__dirname, 'js/components/auth/main.js'),
         create: resolve(__dirname, 'js/components/create/main.js'),
         question: resolve(__dirname, 'js/components/question/main.js'),
+        about: resolve(__dirname, 'js/components/about/main.js'),
         styles: resolve(__dirname, 'styles/main.css'),
       },
       output: {
@@ -29,4 +30,5 @@ export default defineConfig({
     port: 3000,
   },
   plugins: [react(), tailwindcss()],
+  assetsInclude: ['**/*.md']
 });
