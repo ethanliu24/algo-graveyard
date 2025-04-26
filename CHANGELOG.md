@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## Version 0.0.1
+- Add reparse functionality to front end (#49)
+- Add endpoint for parsing questions (#49)
 - Render question prompts and solution analyses in markdown (#48)
 - Add README and about page that loads it (#47)
 - Web parse LeetCode questions to fill out question data (#45)
