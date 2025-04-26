@@ -27,7 +27,7 @@ class WebScrapeManager:
                     raise ValueError("Invalid link, parsing failed.")
 
                 if src == Source.LEETCODE.value:
-                    data = await self._parse_leetcode(page)
+                    data = await self.parse_leetcode(page)
                 else:
                     data = None
             except Error as e:
@@ -39,7 +39,7 @@ class WebScrapeManager:
             raise ValueError("Parsing unsupported for source: " + src)
         return data
 
-    async def _parse_leetcode(self, page: Any) -> dict:
+    async def parse_leetcode(self, page: Any) -> dict:
         await page.wait_for_selector("#__next", timeout=self.timeout)
 
         title = (await page.title()).strip().removesuffix("- LeetCode")
@@ -84,15 +84,15 @@ class WebScrapeManager:
             elif (tag == "shortest path" or
                 tag == "topological sort" or
                 tag == "minimum spanning tree"):
-                tag.append(Tag.GRAPH)
+                tags.append(Tag.GRAPH)
 
             if "stack" in tag:
-                tag.append(Tag.STACK)
+                tags.append(Tag.STACK)
             if "queue" in tag:
-                tag.append(Tag.QUEUE)
+                tags.append(Tag.QUEUE)
             if "sort" in tag:
-                tag.append(Tag.SORTING)
+                tags.append(Tag.SORTING)
             if "tree" in tag:
-                tag.append(Tag.TREE)
+                tags.append(Tag.TREE)
 
         data["tags"] = tags
