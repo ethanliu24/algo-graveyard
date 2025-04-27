@@ -85,8 +85,8 @@ class QuestionManager(object):
     async def update_question(self, new_data: dict, id: str) -> Question:
         question = await self.get_question(id)
         question_data = question.model_dump()
-        new_data.update({ "last_modified": datetime.now() })
         question_data.update(new_data)
+        question_data.update({ "last_modified": datetime.now(timezone.utc) })
         self._question_enums_to_value(question_data)
         _ = Question(**question_data) # validate data
         return self.question_dao.update_question(id, question_data)

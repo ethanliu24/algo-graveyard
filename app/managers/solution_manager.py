@@ -69,7 +69,7 @@ class SolutionManager(object):
         data.pop("question_prompt", None)
         data.pop("question_title", None)
 
-        data.update({ "last_modified": datetime.now() })
+        data.update({ "last_modified": datetime.now(timezone.utc) })
         solution_data.update(data)
         _ = Solution(**solution_data) # validate data
         res = self.solution_dao.update_solution(question_id, solution_id, data)

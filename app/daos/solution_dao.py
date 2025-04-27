@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from google.cloud import firestore
 from typing import Any
 from ..schemas.solution import Solution
@@ -57,7 +57,7 @@ class SolutionDAO:
         if not q_ref:
             return False
 
-        q_ref.update({"last_modified": datetime.now()})
+        q_ref.update({"last_modified": datetime.now(timezone.utc)})
         s_ref = q_ref.collection(self.solution_collection).document(solution_id)
 
         res = s_ref.get().exists
