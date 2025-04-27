@@ -1,7 +1,8 @@
 # CHANGELOG
 
 ## Version 0.0.1
-- Fix last_modified incorrect ordering (#53)
+- Fix last_modified field inconsistent time (#54)
+- Fix admin log not showing for reparsing questions when token expired (#53)
 - Update question's last_modified field when managing solutions (#52)
 - Add button to navigate to the question source (#52)
 - Add reparse functionality to front end (#49)
