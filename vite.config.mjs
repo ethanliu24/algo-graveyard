@@ -15,6 +15,7 @@ export default defineConfig({
         create: resolve(__dirname, 'js/components/create/main.js'),
         question: resolve(__dirname, 'js/components/question/main.js'),
         about: resolve(__dirname, 'js/components/about/main.js'),
+        not_found: resolve(__dirname, 'js/components/not_found/main.js'),
         styles: resolve(__dirname, 'styles/main.css'),
       },
       output: {

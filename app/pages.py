@@ -18,6 +18,7 @@ def get_static_path(name: str):
         "create": manifest["components/create/main.js"],
         "question": manifest["components/question/main.js"],
         "about": manifest["components/about/main.js"],
+        "not_found": manifest["components/not_found/main.js"],
         "styles": manifest["../styles/main.css"],
     }
 
@@ -69,4 +70,11 @@ async def question_page(request: Request, question_id: str):
 async def about_page(request: Request):
     return templates.TemplateResponse(
         "base.html", create_context(request, "About", "aboutDiv", get_static_path("about"))
+    )
+
+
+@router.get("/not-found", response_class=HTMLResponse)
+async def not_found_page(request: Request):
+    return templates.TemplateResponse(
+        "base.html", create_context(request, "Not Found", "notFoundDiv", get_static_path("not_found"))
     )
