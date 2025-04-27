@@ -53,6 +53,16 @@
     @apply p-1 hover:bg-gray-300 text-black
   }
 
+  #not-found-title {
+    color: transparent;
+    background: url("/static/res/not_found.jpg");
+    filter: brightness(1.4);
+    background-size: cover;
+    background-position: center;
+    background-clip: text;
+    -webkit-background-clip: text;
+  }
+
   /* Toast */
 
   .p-toast-message {

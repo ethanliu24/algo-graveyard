@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## Version 0.0.1
+- Add not found route and page (#55)
 - Fix last_modified field inconsistent time (#54)
 - Fix admin log not showing for reparsing questions when token expired (#53)
 - Update question's last_modified field when managing solutions (#52)

@@ -30,7 +30,13 @@ export default function Question() {
     }
 
     fetch(`/api/questions/${document.title}`, req)
-      .then(res => res.json())
+      .then(res => {
+        if (res.status == 404) {
+          window.location.href = "/not-found";
+        }
+
+        return res.json();
+      })
       .then(data => {
         document.title = data.title;
         setSolutions(data.solutions);
