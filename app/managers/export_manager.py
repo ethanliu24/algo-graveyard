@@ -1,4 +1,5 @@
 import markdown
+from io import BytesIO
 from weasyprint import HTML, CSS
 from ..managers.question_manager import QuestionManager
 from ..schemas.question import Question
@@ -10,7 +11,7 @@ class ExportManager:
     def __init__(self, question_mamager: QuestionManager):
         self.question_mamager = question_mamager
 
-    async def export_question(self, question_id: str, solution_ids: list[str]):
+    async def export_question(self, question_id: str, solution_ids: list[str]) -> BytesIO:
         question = await self.question_mamager.get_question(question_id)
 
         html = ""
@@ -23,8 +24,11 @@ class ExportManager:
                 html += sln_html
 
         html = html.replace("```", "")
-        HTML(string=html).write_pdf("z.pdf", stylesheets=[CSS("app/templates/export.css")])
-        return html
+
+        pdf = BytesIO()
+        HTML(string=html).write_pdf(pdf, stylesheets=[CSS("app/templates/export.css")])
+        pdf.seek(0)
+        return pdf
 
     def _format_question_md(self, question: Question) -> str:
         md = ""
