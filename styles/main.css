@@ -22,7 +22,7 @@
   }
 
   .drop-down {
-    @apply bg-gray-50 p-2 rounded-xs focus:outline-none shadow-sm grow;
+    @apply bg-gray-50 p-2 rounded-xs focus:outline-none shadow-sm grow cursor-pointer;
   }
 
   .multiselect-dropdown {
