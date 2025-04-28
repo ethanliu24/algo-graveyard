@@ -22,6 +22,7 @@ First clone the [repository](https://github.com/ethanliu24/algo-graveyard) and s
 ### Software dependencies
 - [Python 3.11+](https://www.python.org/downloads/)
 - [Node.js](https://nodejs.org/en/download)
+- [Weasyprint](https://doc.courtbouillon.org/weasyprint/stable/first_steps.html)
 
 
 ### Database set up
