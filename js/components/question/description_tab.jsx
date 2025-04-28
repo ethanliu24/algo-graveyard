@@ -1,18 +1,21 @@
 import { useState } from "react";
 import { Tooltip } from "react-tooltip";
 import {
-  faRotate, faTrash, faPen, faLightbulb, faHashtag, faPenToSquare, faUpRightFromSquare
+  faRotate, faTrash, faPen, faLightbulb, faHashtag, faPenToSquare, faUpRightFromSquare, faDownload
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Markdown from "react-markdown";
 import ModalContainer from "../common/modal.jsx";
 import QuestionForm from "./question_form.jsx";
+import ExportForm from "../export/export_form.jsx";
 import { useToastContext } from "../../contexts/toast_context.jsx";
 import { getStatusIcon, getDifficultyStyle } from "../../utils/assets.jsx";
 import { formatDate, capitalizeFirst, getReqHeader } from "../../utils/utils.js";
 
 export default function DescriptionTab(props) {
-  const [openModal, setOpenModal] = useState(false);
+  const [openQuestionForm, setOpenQuestionForm] = useState(false);
+  const [openExportForm, setOpenExportForm] = useState(false);
+
   const toast = useToastContext();
 
   const handleDelete = () => {
@@ -44,7 +47,7 @@ export default function DescriptionTab(props) {
   };
 
   const handleUpdate = (newData) => {
-    setOpenModal(false);
+    setOpenQuestionForm(false);
     props.updateQuestion(newData);
     toast.show({ severity: "success", summary: "Success", className: "success", detail: "Question updated!" });
   };
@@ -98,7 +101,7 @@ export default function DescriptionTab(props) {
           <div className="chip">{capitalizeFirst(props.data.source)}</div>
           <div className="chip text-nowrap">{formatDate(props.data.created_at)}</div>
           <button className="chip chip-btn"
-            onClick={() => setOpenModal(true)}
+            onClick={() => setOpenQuestionForm(true)}
             data-tooltip-id="edit-question" data-tooltip-content="Edit question">
             <FontAwesomeIcon icon={faPenToSquare} />
             <Tooltip id="edit-question" />
@@ -114,6 +117,12 @@ export default function DescriptionTab(props) {
             data-tooltip-id="reparse-question" data-tooltip-content="Reparse question">
             <FontAwesomeIcon icon={faRotate} />
             <Tooltip id="reparse-question" />
+          </button>
+          <button className="chip chip-btn"
+            onClick={() => setOpenExportForm(true)}
+            data-tooltip-id="download-report" data-tooltip-content="Download report">
+            <FontAwesomeIcon icon={faDownload} />
+            <Tooltip id="download-report" />
           </button>
           <a href={props.data.link} target="_blank" rel="noreferrer noopener" className="chip chip-btn"
             data-tooltip-id="navigate-to-source" data-tooltip-content="Navigate to source">
@@ -148,13 +157,17 @@ export default function DescriptionTab(props) {
           );
         })}
       </div>
-      {openModal
-        ? <ModalContainer closeModal={() => setOpenModal(false)} title="Edit Question"
+      {openQuestionForm
+        ? <ModalContainer closeModal={() => setOpenQuestionForm(false) } title="Edit Question"
             content={
               <QuestionForm create={false} link={props.data.link} source={props.data.source} difficulty={props.data.difficulty}
                 status={props.data.status} tags={props.data.tags} title={props.data.title} prompt={props.data.prompt} notes={props.data.notes}
                 hints={props.data.hints} questionId={props.data.id} updateSuccessful={handleUpdate} />
             } />
+        : null}
+      {openExportForm
+        ? <ModalContainer closeModal={() => setOpenExportForm(false) } title="Download"
+            content={<ExportForm question={props.data} />} />
         : null}
     </div>
   );
