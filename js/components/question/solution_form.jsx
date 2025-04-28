@@ -162,7 +162,7 @@ export default function SolutionForm(props) {
       <div className="form-section">
         <label className="section-title">Information</label>
         <div className="space-x-4">
-          <Dropdown title="Language" value={accepted} options={["Accepted", "Denied"]} values={[true, false]} updateValue={(a) => setAccepted(a === "Accepted")} />
+          <Dropdown title="Acceptance" value={accepted} options={["Accepted", "Denied"]} values={[true, false]} updateValue={(a) => setAccepted(a)} />
           <Dropdown title="Language" value={language} options={languages} values={languages} updateValue={(l) => setLanguage(l)} />
         </div>
       </div>
