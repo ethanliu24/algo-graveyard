@@ -1,9 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.responses import StreamingResponse
 from typing import Annotated
-from ..config import get_export_service
+from ..config import get_export_service, get_question_service
 from ..exceptions.entity_not_found import EntityNotFoundError
 from ..managers.export_manager import ExportManager
+from ..managers.question_manager import QuestionManager
 
 router = APIRouter(
     prefix="/export",
@@ -14,14 +15,17 @@ router = APIRouter(
 async def export_question(
     request: Request,
     question_id: str,
+    question_service: Annotated[QuestionManager, Depends(get_question_service)],
     export_service: Annotated[ExportManager, Depends(get_export_service)]
 ):
     try:
+        question = await question_service.get_question(question_id)
+
         solution_ids = (await request.json())["solution_ids"]
         if not isinstance(solution_ids, list) or not all(isinstance(item, str) for item in solution_ids):
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="<solution_ids> must be a list of strings.")
 
-        pdf = await export_service.export_question(question_id, solution_ids)
+        pdf = await export_service.export_question(question, solution_ids)
         return StreamingResponse(
             pdf,
             media_type="application/pdf",

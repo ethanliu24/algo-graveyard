@@ -1,19 +1,11 @@
 import markdown
 from io import BytesIO
 from weasyprint import HTML, CSS
-from ..managers.question_manager import QuestionManager
 from ..schemas.question import Question
 from ..schemas.solution import Solution
 
 class ExportManager:
-    question_mamager: QuestionManager
-
-    def __init__(self, question_mamager: QuestionManager):
-        self.question_mamager = question_mamager
-
-    async def export_question(self, question_id: str, solution_ids: list[str]) -> BytesIO:
-        question = await self.question_mamager.get_question(question_id)
-
+    async def export_question(self, question: Question, solution_ids: list[str]) -> BytesIO:
         html = ""
         html += markdown.markdown(self._format_question_md(question))
         html += "# Solutions"
