@@ -23,5 +23,6 @@ playwright
 PyJWT>=2.10.0
 
 # Utils
-markdownify
+markdownify  # converts html to md
 weasyprint
+markdown  # converts md to html
