@@ -167,7 +167,10 @@ export default function DescriptionTab(props) {
         : null}
       {openExportForm
         ? <ModalContainer closeModal={() => setOpenExportForm(false) } title="Download"
-            content={<ExportForm question={props.data} />} />
+            content={
+              <ExportForm question={props.data}
+                solutionSummaries={props.data.solutions.map(sln => sln.summary)}
+            />} />
         : null}
     </div>
   );

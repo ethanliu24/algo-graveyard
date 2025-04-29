@@ -36,7 +36,11 @@ export function MultiSelect(props) {
       selections[props.options.indexOf(s)] = 1;
     })
     setItemStates(selections);
-  }, [props.options])
+  }, [props.options]);
+
+  useEffect(() => {
+    setSelected(props.selected);
+  }, [props.selected]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
