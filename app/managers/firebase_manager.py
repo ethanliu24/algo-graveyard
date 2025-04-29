@@ -9,9 +9,14 @@ class FirebaseManager(object):
     client: Any  # should be Firebase Client type
 
     def __init__(self):
-        if ENV_VARS.get("APP_ENV") == "production":
+        env = ENV_VARS.get("APP_ENV")
+        if env == "production" or env == "staging":
             if not firebase_admin._apps:
-                cred = credentials.Certificate("/etc/secrets/firebase-key.json")  # Assuming on Render
+                # Assuming on Render
+                cred = credentials.Certificate(
+                    "/etc/secrets/firebase-key.json" if env == "production" else
+                    join(dirname(__file__), "..", "..", "firebase-key.json")
+                )
         else:
             cred = credentials.Certificate(join(dirname(__file__), "..", "..", "firebase-key.json"))
 
