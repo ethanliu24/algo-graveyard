@@ -17,7 +17,7 @@ app.include_router(page_router)
 
 app.add_middleware(JWTCookieToHeaderMiddleware)
 
-allow_origins = ["http://127.0.0.1:8000/", "http://0.0.0.0/"]
+allow_origins = ["http://127.0.0.1:8000", "http://0.0.0.0"]
 prod_domain = ENV_VARS.get("PROD_DOMAIN", "")
 if prod_domain != "": allow_origins.append(prod_domain)
 app.add_middleware(
