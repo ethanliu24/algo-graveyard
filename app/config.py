@@ -32,7 +32,7 @@ class Configs:
             cls.instance = cls.instance = super(Configs, cls).__new__(cls)
 
             app_env = ENV_VARS.get("APP_ENV")
-            if app_env == "production":
+            if app_env == "production" or app_env == "staging":
                 cls.question_collection = "Questions"
             elif app_env == "development":
                 cls.question_collection = "dev_questions"
