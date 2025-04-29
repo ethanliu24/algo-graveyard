@@ -29,7 +29,7 @@ async def authenticate_user(
         key=ENV_VARS.get("JWT_COOKIE"),
         value=token,
         httponly=True,
-        secure=(ENV_VARS.get("APP_ENV") == "production"),
+        secure=True,
         samesite="strict",
         max_age=int(auth_service.exp_time * 60 * 60)  # exp_time in hours, max_age takes seconds
     )
