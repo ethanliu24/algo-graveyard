@@ -70,6 +70,7 @@ export default function ExportForm(props) {
           a.click();
           a.remove();
           window.URL.revokeObjectURL(url);
+          props.exportSuccessful();
         } else {
           if (res.detail) {
             toast.show({ severity: "danger", summary: "Error", className: "error", detail: res.detail })

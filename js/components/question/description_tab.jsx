@@ -170,6 +170,7 @@ export default function DescriptionTab(props) {
             content={
               <ExportForm question={props.data}
                 solutionSummaries={props.data.solutions.map(sln => sln.summary)}
+                exportSuccessful={() => setOpenExportForm(false)}
             />} />
         : null}
     </div>
