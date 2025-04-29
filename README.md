@@ -128,11 +128,13 @@ $ pytest tests/<dir_to_file_or_dir>
 ```
 
 
-## Building Production
-Just a note for myself. This is for production.
+## Testing in Staging
+Local tests and checks before deploying to production.
 
 Notes:
 - At staging enviornment, hosts on port 0.0.0.0.80, which is not HTTPS. Since the JWT in cookie is set to `Secure=True`, it won't save any cookie. Set it to false to test, but remember to set it back to true.
+- Set `APP_ENV` to `staging` so the app looks at the correct path for firebase secret key (The file location is different on Render).
+- Use `.env.staging` env file. The content should be the same as `.env.production` except `APP_ENV`.
 
 ```
 # build an image

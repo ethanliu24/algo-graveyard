@@ -3,7 +3,7 @@ import os
 from os.path import join, dirname
 
 environment = os.environ.get("APP_ENV", "development")
-if environment not in ["production", "development", "test"]:
+if environment not in ["production", "development", "test", "staging"]:
     raise RuntimeError(f"Invalid app environment {environment} - should be production, development or test.")
 
 dotenv_path = join(dirname(__file__), '..', f'.env.{environment}')

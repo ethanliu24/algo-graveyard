@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## Version 1.0.0
+- Config Firebase secret key directory for Render (#60)
 - Set up project and Dockerfile for deployment (#59)
 - Fix incorrect cookie expiration time (#58)
 - Add export service and endpoint and add the funtionality to frontend (#57)
