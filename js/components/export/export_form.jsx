@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { Dropdown } from "../common/drop_down";
 import { MultiSelect } from "../common/drop_down";
+import { useToastContext } from "../../contexts/toast_context";
 
 export default function ExportForm(props) {
   const [exportGroup, setExportGroup] = useState(0);
   const [selectedSlnSummaries, setSelectedSlnSummaries] = useState([]);
+  const toast = useToastContext();
 
   useEffect(() => {
     setExportGroup(1);  // export all by default
@@ -42,7 +44,43 @@ export default function ExportForm(props) {
   }
 
   const exportQuestion = () => {
-    
+    const solution_ids = selectedSlnSummaries.reduce((arr, summary, i) => {
+      const sln = props.question.solutions[i];
+      if (sln.summary === summary) arr.push(sln.id);
+      return arr;
+    }, []);
+
+    const req = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/pdf",
+      },
+      body: JSON.stringify({ solution_ids: solution_ids })
+    }
+
+    fetch(`/api/export/${props.question.id}`, req)
+      .then((response) => !response.ok ? response.json() : response.blob())
+      .then((res) => {
+        if (res instanceof Blob) {
+          const url = window.URL.createObjectURL(res);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `${props.question.id}.pdf`;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          window.URL.revokeObjectURL(url);
+        } else {
+          if (res.detail) {
+            toast.show({ severity: "danger", summary: "Error", className: "error", detail: res.detail })
+          } else {
+            toast.show({ severity: "danger", summary: "Error", className: "error", detail: "Something went wrong..." })
+          }
+        }
+      })
+      .catch(err => {
+        throw err;
+      });
   }
 
   return (
