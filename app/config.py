@@ -5,6 +5,7 @@ from .daos.question_dao import QuestionDAO
 from .daos.solution_dao import SolutionDAO
 from .env_vars import ENV_VARS
 from .managers.auth_manager import AuthManager, JWTBearer
+from .managers.export_manager import ExportManager
 from .managers.firebase_manager import FirebaseManager
 from .managers.ai_analysis_manager import AiAnalysisManager
 from .managers.metadata_manager import MetadataManager
@@ -22,6 +23,7 @@ class Configs:
     auth_manager: AuthManager = None
     metadata_manager: MetadataManager = None
     ai_analysis_manager = None
+    export_manager: ExportManager = None
     question_collection: str = ""
     solution_collection: str = ""
 
@@ -88,7 +90,7 @@ class Configs:
 
             cls.metadata_manager = MetadataManager()
             cls.web_scrape_manager = WebScrapeManager(cls.metadata_manager)
-
+            cls.export_manager = ExportManager()
             cls.question_manager = QuestionManager(cls.question_dao, cls.metadata_manager, cls.web_scrape_manager)
             cls.solution_manager = SolutionManager(cls.solution_dao, cls.ai_analysis_manager)
 
@@ -121,6 +123,10 @@ def get_ai_analysis_service(configs: Annotated[Configs, Depends(init_config)]):
 
 def get_web_scrape_service(configs: Annotated[Configs, Depends(init_config)]):
     return configs.web_scrape_manager
+
+
+def get_export_service(configs: Annotated[Configs, Depends(init_config)]):
+    return configs.export_manager
 
 
 auth_user_jwt = JWTBearer(Configs().auth_manager)

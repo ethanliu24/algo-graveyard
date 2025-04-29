@@ -12,10 +12,10 @@ export function Dropdown(props) {
 
   return (
     <select value={props.value ? props.value : ""} onChange={handleChange}
-      className={`drop-down cursor-pointer ${props.className ? props.className : ""}`}>
+      className={`drop-down ${props.className ? props.className : ""}`}>
       {!props.value ? <option value="" disabled>{props.title}</option> : null}
       {props.options.map((option, index) => {
-        return <option key={index} value={option}>{capitalizeFirst(option)}</option>
+        return <option key={index} value={props.values[index]}>{capitalizeFirst(option)}</option>
       })}
       <option value="clear">Clear</option>
     </select>
@@ -36,7 +36,11 @@ export function MultiSelect(props) {
       selections[props.options.indexOf(s)] = 1;
     })
     setItemStates(selections);
-  }, [props.options])
+  }, [props.options]);
+
+  useEffect(() => {
+    setSelected(props.selected);
+  }, [props.selected]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -85,8 +89,10 @@ export function MultiSelect(props) {
 
   const updateSelection = (newSelected, newStates) => {
     setItemStates(newStates);
-    setSelected(() => {
-      props.updateValue(newSelected);
+    setSelected((_) => {
+      let values = [];
+      newStates.forEach((state, idx) => { if (state) values.push(props.values[idx]) });
+      props.updateValue(values);
       return newSelected;
     });
   }

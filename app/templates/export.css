@@ -1,0 +1,206 @@
+/* from Tailwind Typography */
+
+body {
+  font-size: 0.875rem; /* 14/16 */
+  line-height: 1.71;   /* 24/14 */
+}
+
+p {
+  margin-top: 0.5em; /* 16/14 */
+  margin-bottom: 0.5em;
+}
+
+.lead {
+  font-size: 1.29em; /* 18/14 */
+  line-height: 1.56; /* 28/18 */
+  margin-top: 0.89em; /* 16/18 */
+  margin-bottom: 0.89em;
+}
+
+blockquote {
+  margin-top: 1.33em; /* 24/18 */
+  margin-bottom: 1.33em;
+  padding-inline-start: 1.11em; /* 20/18 */
+}
+
+h1 {
+  font-size: 2.14em; /* 30/14 */
+  margin-top: 0;
+  margin-bottom: 0.8em; /* 24/30 */
+  line-height: 1.2; /* 36/30 */
+}
+
+h2 {
+  font-size: 1.43em; /* 20/14 */
+  margin-top: 1.6em; /* 32/20 */
+  margin-bottom: 0.8em;
+  line-height: 1.4; /* 28/20 */
+}
+
+h3 {
+  font-size: 1.29em; /* 18/14 */
+  margin-top: 1.56em; /* 28/18 */
+  margin-bottom: 0.44em;
+  line-height: 1.56; /* 28/18 */
+}
+
+h4 {
+  margin-top: 1.43em; /* 20/14 */
+  margin-bottom: 0.57em;
+  line-height: 1.43; /* 20/14 */
+}
+
+img, picture, video {
+  margin-top: 1.71em; /* 24/14 */
+  margin-bottom: 1.71em;
+}
+
+picture > img {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+kbd {
+  font-size: 0.86em; /* 12/14 */
+  border-radius: 0.3125rem; /* 5/16 */
+  padding: 0.14em 0.36em; /* 2/14 top-bottom, 5/14 left-right */
+}
+
+code {
+  font-size: 0.86em; /* 12/14 */
+  padding: 0.2rem;
+}
+
+h2 code {
+  font-size: 0.9em; /* 18/20 */
+}
+
+h3 code {
+  font-size: 0.89em; /* 16/18 */
+}
+
+pre {
+  font-size: 0.86em; /* 12/14 */
+  line-height: 1.67; /* 20/12 */
+  margin-top: 1.67em;
+  margin-bottom: 1.67em;
+  padding: 0.67em 1em; /* 8/12, 12/12 */
+}
+
+pre, code {
+  background-color: rgb(48, 46, 46);
+  color: white;
+  border-radius: 0.25rem; /* 4/16 */
+}
+
+ol, ul {
+  margin-top: 1.14em; /* 16/14 */
+  margin-bottom: 1.14em;
+  padding-inline-start: 1.57em; /* 22/14 */
+}
+
+li {
+  margin-top: 0.29em; /* 4/14 */
+  margin-bottom: 0.29em;
+}
+
+ol > li, ul > li {
+  padding-inline-start: 0.43em; /* 6/14 */
+}
+
+/* > ul > li p, > ol > li p {
+  margin-top: 0.57em;
+  margin-bottom: 0.57em;
+}
+
+> ul > li > p:first-child,
+> ol > li > p:first-child {
+  margin-top: 1.14em;
+}
+
+> ul > li > p:last-child,
+> ol > li > p:last-child {
+  margin-bottom: 1.14em;
+} */
+
+ul ul, ul ol, ol ul, ol ol {
+  margin-top: 0.57em;
+  margin-bottom: 0.57em;
+}
+
+dl {
+  margin-top: 1.14em;
+  margin-bottom: 1.14em;
+}
+
+dt {
+  margin-top: 1.14em;
+}
+
+dd {
+  margin-top: 0.29em;
+  padding-inline-start: 1.57em;
+}
+
+hr {
+  margin-top: 2.86em; /* 40/14 */
+  margin-bottom: 2.86em;
+}
+
+hr + *, h2 + *, h3 + *, h4 + * {
+  margin-top: 0;
+}
+
+table {
+  font-size: 0.86em; /* 12/14 */
+  line-height: 1.5; /* 18/12 */
+}
+
+thead th {
+  padding: 0 0.86em 0.57em 0.86em;
+}
+
+thead th:first-child {
+  padding-inline-start: 0;
+}
+
+thead th:last-child {
+  padding-inline-end: 0;
+}
+
+tbody td, tfoot td {
+  padding: 0.67em 0.86em;
+}
+
+tbody td:first-child, tfoot td:first-child {
+  padding-inline-start: 0;
+}
+
+tbody td:last-child, tfoot td:last-child {
+  padding-inline-end: 0;
+}
+
+figure {
+  margin-top: 1.71em;
+  margin-bottom: 1.71em;
+}
+
+figure > * {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+figcaption {
+  font-size: 0.86em;
+  line-height: 1.33; /* 16/12 */
+  margin-top: 0.67em;
+}
+
+/* Block first and last child spacing */
+/* > :first-child {
+  margin-top: 0;
+}
+
+> :last-child {
+  margin-bottom: 0;
+} */
