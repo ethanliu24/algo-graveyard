@@ -47,7 +47,6 @@ RUN playwright install chromium
 COPY . .
 COPY --from=frontend /frontend/static /algograveyard//static
 
-ENV APP_ENV=production
 
 EXPOSE 80
 
