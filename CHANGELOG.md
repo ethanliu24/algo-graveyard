@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## Version 1.0.0
+- Add more configurations for staging environment (#64)
 - Config Firebase secret key directory for Render (#60)
 - Set up project and Dockerfile for deployment (#59)
 - Fix incorrect cookie expiration time (#58)
