@@ -138,12 +138,12 @@ Notes:
 
 ```
 # build an image
-docker build -t algograveyard
+docker build -t algograveyard .
 
 # run the container
 docker run -d \
    --name algograveyard \
-   --env-file=./.env.production \
+   --env-file=./.env.staging \
    -v ./firebase-key.json:/algograveyard/firebase-key.json \
    -p 80:80 algograveyard
 ```
