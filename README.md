@@ -65,7 +65,7 @@ $ npm install
 npm install -g firebase-tools@latest
 
 # web parsing dependencies
-$ playwright install chromium chrome
+$ playwright install chromium
 ```
 
 
