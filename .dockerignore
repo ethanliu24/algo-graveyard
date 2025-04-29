@@ -1,0 +1,12 @@
+node_modules/
+.venv/
+.vscode/
+.db_seeds/
+
+firebase-key.json
+firebase-debug.log
+firestore-debug.log
+
+.env.production
+.env.development
+.env.test

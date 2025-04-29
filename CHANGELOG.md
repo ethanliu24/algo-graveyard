@@ -1,6 +1,7 @@
 # CHANGELOG
 
-## Version 0.0.1
+## Version 1.0.0
+- Set up project and Dockerfile for deployment (#59)
 - Fix incorrect cookie expiration time (#58)
 - Add export service and endpoint and add the funtionality to frontend (#57)
 - Add not found route and page (#55)
