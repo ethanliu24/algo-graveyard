@@ -65,7 +65,7 @@ $ npm install
 npm install -g firebase-tools@latest
 
 # web parsing dependencies
-$ playwright install chromium
+$ playwright install chromium chrome
 ```
 
 
@@ -125,6 +125,25 @@ $ pytest
 
 # run all tests in the given directory or file
 $ pytest tests/<dir_to_file_or_dir>
+```
+
+
+## Building Production
+Just a note for myself. This is for production.
+
+Notes:
+- At staging enviornment, hosts on port 0.0.0.0.80, which is not HTTPS. Since the JWT in cookie is set to `Secure=True`, it won't save any cookie. Set it to false to test, but remember to set it back to true.
+
+```
+# build an image
+docker build -t algograveyard
+
+# run the container
+docker run -d \
+   --name algograveyard \
+   --env-file=./.env.production \
+   -v ./firebase-key.json:/algograveyard/firebase-key.json \
+   -p 80:80 algograveyard
 ```
 
 
