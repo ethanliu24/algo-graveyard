@@ -31,7 +31,7 @@ async def authenticate_user(
         httponly=True,
         secure=True,
         samesite="strict",
-        max_age=(auth_service.exp_time * 60 * 60)  # exp_time in hours, max_age takes seconds
+        max_age=int(auth_service.exp_time * 60 * 60)  # exp_time in hours, max_age takes seconds
     )
 
     return { "message": "Authenticated." }
