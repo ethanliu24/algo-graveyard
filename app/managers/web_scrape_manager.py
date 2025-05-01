@@ -93,11 +93,11 @@ class WebScrapeManager:
             elif tag == "heap (priority queue)":
                 tags.append(Tag.HEAP)
             elif tag == "union find":
-                tag.append(Tag.DISJOINT_SET)
+                tags.append(Tag.DISJOINT_SET)
             elif tag == "doubly-linked list":
-                tag.append(Tag.LINKED_LIST)
+                tags.append(Tag.LINKED_LIST)
             elif tag == "binary search tree":
-                tag.append(Tag.BINARY_SEARCH_TREE)
+                tags.append(Tag.BINARY_SEARCH_TREE)
             elif (tag == "shortest path" or
                 tag == "topological sort" or
                 tag == "minimum spanning tree"):
